@@ -3,8 +3,21 @@ import "./style.scss";
 import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import LabelPages from "../../../../component/molecules/LabelPages";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Tag() {
+  const [data, setData] = useState();
+
+  useEffect(() => {
+    try {
+      const result = axios.get(`${process.env.REACT_APP_URL}/tag`);
+      setData(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [data]);
+
   const edit = ({ id, name }) => {
     Swal.fire({
       title: `edit tag "${name}"`,

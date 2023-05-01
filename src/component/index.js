@@ -15,4 +15,5 @@ export {
   Header,
   Container,
   Sidebar,
+  LabelPages,
 };
