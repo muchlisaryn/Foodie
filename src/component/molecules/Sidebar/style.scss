@@ -1,0 +1,28 @@
+@use "../../../index.scss" as style;
+
+.sidebar {
+  background-color: white;
+  min-width: 200px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  margin-top: 40px;
+
+  .btn-active {
+    @include style.primary-button;
+  }
+
+  .menu-item {
+    border-radius: 5px;
+    text-decoration: none;
+    color: black;
+
+    &:hover {
+      background-color: style.$primary-collor;
+      color: white;
+      transition: ease-in-out 0.2s;
+    }
+  }
+}

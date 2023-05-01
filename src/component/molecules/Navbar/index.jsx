@@ -21,7 +21,7 @@ export default function Navbar() {
       setBtnLogout(true);
     }
   };
-  const login = false;
+  const login = true;
 
   return (
     <nav class="navbar border-bottom fixed-top">
@@ -35,7 +35,7 @@ export default function Navbar() {
           onSubmit={searchProduct}
           className="search"
         />
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center ">
           <NavLink>
             <div className="position-relative">
               <HiOutlineShoppingCart size={22} color="black" />
@@ -44,24 +44,27 @@ export default function Navbar() {
               </span>
             </div>
           </NavLink>
-          <div className="border-start ps-2 ms-3">
-            <div>
-              <Button type="avatar" onClick={clickBtnLogout}>
-                <div className="d-flex align-items-center avatar">
-                  <img
-                    src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
-                    alt="avatar"
-                  />
-                  <div className="ms-2">Muchlis</div>
-                </div>
-              </Button>
-              {btnLogout && (
-                <div className="position-absolute mt-2 ">
-                  <Button>Logout</Button>
-                </div>
-              )}
-            </div>
-            {/* <Button>Login</Button> */}
+          <div className="mt-2 border-start ms-3 ps-1">
+            {login ? (
+              <div>
+                <Button type="avatar" onClick={clickBtnLogout}>
+                  <div className="d-flex align-items-center avatar">
+                    <img
+                      src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
+                      alt="avatar"
+                    />
+                    <div className="ms-2">Muchlis</div>
+                  </div>
+                </Button>
+                {btnLogout && (
+                  <div className="position-absolute mt-2 ">
+                    <Button>Logout</Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Button>Login</Button>
+            )}
           </div>
         </div>
       </div>

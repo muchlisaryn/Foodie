@@ -1,0 +1,10 @@
+@use "../../../../index.scss" as style;
+
+table.table {
+  background-color: white;
+
+  thead {
+    background-color: style.$primary-collor;
+    color: white;
+  }
+}
