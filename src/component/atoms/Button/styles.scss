@@ -1,5 +1,12 @@
 @use "../../../index.scss" as style;
 
-button.btn-orange {
+.btn-orange {
   @include style.primary-button;
+}
+
+.btn-custom {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
 }

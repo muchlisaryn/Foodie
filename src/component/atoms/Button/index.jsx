@@ -1,10 +1,12 @@
 import "./styles.scss";
 
 export default function Button({ type, children, onClick, className }) {
-  if (type === "custom") {
-    <button className="d-flex" onClick={onClick}>
-      {children}
-    </button>;
+  if (type === "avatar") {
+    return (
+      <button className="btn-custom" onClick={onClick}>
+        {children}
+      </button>
+    );
   }
 
   return (

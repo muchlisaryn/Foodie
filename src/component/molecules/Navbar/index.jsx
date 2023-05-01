@@ -14,11 +14,18 @@ export default function Navbar() {
     e.preventDefault();
   };
 
+  const clickBtnLogout = () => {
+    if (btnLogout) {
+      setBtnLogout(false);
+    } else {
+      setBtnLogout(true);
+    }
+  };
   const login = false;
 
   return (
-    <nav class="navbar navbar-light bg-light">
-      <div class="container-fluid">
+    <nav class="navbar border-bottom fixed-top">
+      <div class="container-fluid ">
         <div class="navbar-brand">
           <Logo />
         </div>
@@ -39,13 +46,15 @@ export default function Navbar() {
           </NavLink>
           <div className="border-start ps-2 ms-3">
             <div>
-              <div className="d-flex align-items-center avatar">
-                <img
-                  src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
-                  alt="avatar"
-                />
-                <div className="ms-2">Muchlis</div>
-              </div>
+              <Button type="avatar" onClick={clickBtnLogout}>
+                <div className="d-flex align-items-center avatar">
+                  <img
+                    src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
+                    alt="avatar"
+                  />
+                  <div className="ms-2">Muchlis</div>
+                </div>
+              </Button>
               {btnLogout && (
                 <div className="position-absolute mt-2 ">
                   <Button>Logout</Button>

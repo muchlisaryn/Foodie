@@ -1,6 +1,8 @@
 @use "../../../index.scss" as style;
 
 nav {
+  background-color: white;
+
   .navbar-brand {
     width: 90px;
   }
