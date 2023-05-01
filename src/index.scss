@@ -1,0 +1,14 @@
+$primary-collor: #fd4d05;
+$secondary-collor: #ca410b;
+$grey: #aaaaaa;
+
+@mixin primary-button {
+  background-color: $primary-collor;
+  border: none;
+  color: white;
+
+  &:hover {
+    background-color: $secondary-collor;
+    color: white;
+  }
+}

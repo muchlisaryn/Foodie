@@ -1,0 +1,6 @@
+@use "../../../index.scss" as style;
+
+.icon-search {
+  color: aqua;
+  color: style.$grey;
+}

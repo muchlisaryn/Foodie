@@ -1,0 +1,5 @@
+@use "../../../index.scss" as style;
+
+button.btn-orange {
+  @include style.primary-button;
+}
