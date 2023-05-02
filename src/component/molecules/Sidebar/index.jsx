@@ -9,11 +9,11 @@ import {
 } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { BsArchive } from "react-icons/bs";
-import Button from "../../atoms/Button";
+import { RiUserSettingsLine } from "react-icons/ri";
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
-  const [showConfig, setConfig] = useState(false);
+  const [showConfig, setConfig] = useState(true);
 
   const clickConfig = () => {
     if (showConfig) {
@@ -33,6 +33,7 @@ export default function Sidebar() {
   const itemMenuActive = ({ isActive }) => {
     return {
       fontWeight: isActive ? "Bold" : "",
+      color: isActive ? "#fd4d05" : "",
     };
   };
 
@@ -58,18 +59,32 @@ export default function Sidebar() {
                 <AiOutlineDashboard />
                 <div className="ms-2">Dashboard</div>
               </NavLink>
-              <NavLink className="menu-item p-1 my-2 d-flex align-items-center">
+              <NavLink
+                className="menu-item p-1 my-2 d-flex align-items-center"
+                style={menuActive}
+                to="/admin/kelola-product"
+              >
                 <BsArchive />
                 <div className="ms-2">Kelola Product</div>
               </NavLink>
-              <NavLink className="menu-item p-1 my-2 d-flex align-items-center">
+              <NavLink
+                className="menu-item p-1 my-2 d-flex align-items-center"
+                style={menuActive}
+                to="/admin/kelola-pemesanan"
+              >
                 <IoClipboardOutline />
                 <div className="ms-2">Kelola Pemesanan</div>
               </NavLink>
               <NavLink
-                className={`menu-item p-1 my-2 d-flex align-items-center ${
-                  showConfig ? "btn-active text-light" : ""
-                }`}
+                className="menu-item p-1 my-2 d-flex align-items-center"
+                to="/admin/kelola-user"
+                style={menuActive}
+              >
+                <RiUserSettingsLine />
+                <div className="ms-2">Kelola User</div>
+              </NavLink>
+              <NavLink
+                className={`menu-item p-1 my-2 d-flex align-items-center`}
                 onClick={clickConfig}
               >
                 <IoSettingsOutline />
@@ -79,14 +94,14 @@ export default function Sidebar() {
               {showConfig && (
                 <>
                   <NavLink
-                    className="menu-item p-1 mx-4 d-flex align-items-center"
+                    className="list-item p-1 mx-4 d-flex align-items-center"
                     style={itemMenuActive}
                     to="/admin/configurasi/category"
                   >
                     <div>Category</div>
                   </NavLink>
                   <NavLink
-                    className="menu-item p-1 mx-4 d-flex align-items-center"
+                    className="list-item p-1 mx-4 d-flex align-items-center"
                     style={itemMenuActive}
                     to="/admin/configurasi/tag"
                   >

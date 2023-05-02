@@ -9,8 +9,16 @@ export default function Button({ type, children, onClick, className }) {
     );
   }
 
+  if (type === "button-primary") {
+    return (
+      <button onClick={onClick} className={`btn btn-orange ${className}`}>
+        {children}
+      </button>
+    );
+  }
+
   return (
-    <button onClick={onClick} className={`btn px-4 btn-orange ${className}`}>
+    <button onClick={onClick} className={`btn ${className}`}>
       {children}
     </button>
   );

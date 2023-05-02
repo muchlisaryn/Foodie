@@ -3,76 +3,129 @@ import "./style.scss";
 import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import LabelPages from "../../../../component/molecules/LabelPages";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Tag() {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    try {
-      const result = axios.get(`${process.env.REACT_APP_URL}/tag`);
-      setData(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [data]);
+  const deleteProduct = async ({ id }) => {
+    await axios.delete(`${process.env.REACT_APP_URL}/tag/${id}`);
+  };
 
-  const edit = ({ id, name }) => {
+  const tambah = () => {
     Swal.fire({
-      title: `edit tag "${name}"`,
+      title: `Tambah Tag`,
       input: "text",
       inputAttributes: {
         autocapitalize: "off",
       },
       showCancelButton: true,
-      confirmButtonText: "Look up",
+      confirmButtonText: "Edit",
       showLoaderOnConfirm: true,
-      preConfirm: (login) => {
-        return fetch(`//api.github.com/users/${login}`)
+      preConfirm: (name) => {
+        return axios
+          .post(`${process.env.REACT_APP_URL}/tag`, { name })
           .then((response) => {
-            if (!response.ok) {
+            console.log(response);
+            if (!response.statusText === "OK") {
               throw new Error(response.statusText);
             }
-            return response.json();
+            Swal.fire({
+              title: `Berhasil Menambahkan Data`,
+            });
           })
           .catch((error) => {
             Swal.showValidationMessage(`Request failed: ${error}`);
           });
       },
-      allowOutsideClick: () => !Swal.isLoading(),
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: `${result.value.login}'s avatar`,
-          imageUrl: result.value.avatar_url,
-        });
-      }
     });
   };
 
+  const edit = ({ id, name }) => {
+    Swal.fire({
+      title: `Edit Tag "${name}"`,
+      input: "text",
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "Edit",
+      showLoaderOnConfirm: true,
+      preConfirm: (name) => {
+        return axios
+          .put(`${process.env.REACT_APP_URL}/tag/${id}`, { name })
+          .then((response) => {
+            console.log(response);
+            if (!response.statusText === "OK") {
+              throw new Error(response.statusText);
+            }
+            Swal.fire({
+              title: `Berhasil merubah data`,
+            });
+          })
+          .catch((error) => {
+            Swal.showValidationMessage(`Request failed: ${error}`);
+          });
+      },
+    });
+  };
+
+  const getData = useCallback(async () => {
+    try {
+      const result = await axios.get(`${process.env.REACT_APP_URL}/tag`);
+      setData(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <ContainerAdmin>
-      <LabelPages label="Konfigurasi Tag"></LabelPages>
-      <table className="table table-borderless border">
+      <LabelPages label="Konfigurasi Tag">
+        <Button onClick={tambah} className="btn-success">
+          Tambah
+        </Button>
+      </LabelPages>
+      <table className="table  table-borderless border">
         <thead>
           <tr>
             <th scope="col">No</th>
-            <th scope="col">Name Tag</th>
-            <th scope="col">Action</th>
+            <th scope="col " className="w-100">
+              Name Tag
+            </th>
+            <th scope="col" className="text-center">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td className="w-75">Terlaris</td>
-            <td className="d-flex">
-              <>
-                <Button className="btn-sm">Edit</Button>
-                <Button className="btn-sm ms-2">Delete</Button>
-              </>
-            </td>
-          </tr>
+          {data?.map((list, index) => (
+            <tr>
+              <th scope="row">{++index}</th>
+              <td className="w-100">{list?.name}</td>
+              <td className="d-flex">
+                <>
+                  <Button
+                    className="btn-sm bg-warning"
+                    onClick={() => edit({ id: list._id, name: list?.name })}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    className="btn-sm bg-danger text-light ms-2"
+                    onClick={() => deleteProduct({ id: list?._id })}
+                  >
+                    Delete
+                  </Button>
+                </>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </ContainerAdmin>

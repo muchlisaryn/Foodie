@@ -5,7 +5,7 @@ export default function ContainerAdmin({ children }) {
   return (
     <div>
       <Sidebar />
-      <div className="content">{children}</div>
+      <div className="content ">{children}</div>
     </div>
   );
 }

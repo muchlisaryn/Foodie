@@ -25,4 +25,13 @@
       transition: ease-in-out 0.2s;
     }
   }
+
+  .list-item {
+    text-decoration: none;
+    color: black;
+
+    &:hover {
+      color: style.$primary-collor;
+    }
+  }
 }
