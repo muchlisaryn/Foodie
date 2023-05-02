@@ -6,6 +6,7 @@ import Container from "./container/Container";
 import Header from "./molecules/Header";
 import Sidebar from "./molecules/Sidebar";
 import LabelPages from "./molecules/LabelPages";
+import Select from "./atoms/Select";
 
 export {
   Navbar,
@@ -16,4 +17,5 @@ export {
   Container,
   Sidebar,
   LabelPages,
+  Select,
 };

@@ -7,7 +7,10 @@ export default function ProductCard() {
       <div className="product-card mb-2 border">
         <div className="position-relative">
           <div className="discount position-absolute">Diskon 50%</div>
-          <img src="https://img.freepik.com/free-vector/cheese-snack-food-product-ad_52683-34031.jpg?w=360" />
+          <img
+            src="https://img.freepik.com/free-vector/cheese-snack-food-product-ad_52683-34031.jpg?w=360"
+            alt="product"
+          />
         </div>
         <div className="desc-product py-2 px-2">
           <div>Cheese Snack</div>

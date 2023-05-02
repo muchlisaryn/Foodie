@@ -28,11 +28,11 @@ export default function Input({
   }
 
   return (
-    <form>
+    <form className="w-100">
       <input
         type={type}
         placeholder={placeholder}
-        className={`default-form form-control ${className}`}
+        className={`form-control  ${className}`}
         onChange={onChage}
         value={value}
       />

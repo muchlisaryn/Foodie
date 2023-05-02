@@ -3,7 +3,6 @@ import Button from "../../atoms/Button";
 import Input from "../../atoms/Input";
 import Logo from "../../atoms/Logo";
 import { HiOutlineShoppingCart } from "react-icons/hi";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import "./styles.scss";
 import { useState } from "react";
 
