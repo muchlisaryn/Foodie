@@ -6,17 +6,20 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addTag, deleteTag, fetchTag } from "../../../../features/TagSlice";
+import {
+  addTag,
+  deleteTag,
+  fetchTag,
+  updateTag,
+} from "../../../../features/TagSlice";
+import Input from "../../../../component/atoms/Input";
 
 export default function Tag() {
   const dispatch = useDispatch();
   const data = useSelector((data) => data.tag.tag);
   const loading = useSelector((data) => data.tag.pending);
   const err = useSelector((data) => data.tag.errorMessage);
-
-  console.log("ini error", err);
 
   const deleteData = (id) => {
     dispatch(deleteTag({ id }));
@@ -63,34 +66,39 @@ export default function Tag() {
       confirmButtonText: "Edit",
       showLoaderOnConfirm: true,
       preConfirm: (name) => {
-        return axios
-          .put(`${process.env.REACT_APP_URL}/tag/${id}`, { name })
-          .then((response) => {
-            console.log(response);
-            if (!response.statusText === "OK") {
-              throw new Error(response.statusText);
-            }
-            Swal.fire({
-              title: `Berhasil merubah data`,
-            });
-          })
-          .catch((error) => {
-            Swal.showValidationMessage(`Request failed: ${error}`);
-          });
+        dispatch(updateTag({ id, name }));
+        // return axios
+        //   .put(`${process.env.REACT_APP_URL}/tag/${id}`, { name })
+        //   .then((response) => {
+        //     console.log(response);
+        //     if (!response.statusText === "OK") {
+        //       throw new Error(response.statusText);
+        //     }
+        //     Swal.fire({
+        //       title: `Berhasil merubah data`,
+        //     });
+        //   })
+        //   .catch((error) => {
+        //     Swal.showValidationMessage(`Request failed: ${error}`);
+        //   });
       },
     });
   };
 
   useEffect(() => {
     dispatch(fetchTag());
-  }, []);
+  }, [dispatch]);
 
   return (
     <ContainerAdmin>
       <LabelPages label="Konfigurasi Tag">
-        <Button onClick={tambah} className="btn-success">
-          Tambah
-        </Button>
+        <div className="d-flex">
+          <Input placeholder="Search Tag.." />
+          <div className="border-end mx-3"></div>
+          <Button onClick={tambah} className="btn-success">
+            Tambah
+          </Button>
+        </div>
       </LabelPages>
 
       <table className="table  table-borderless border">

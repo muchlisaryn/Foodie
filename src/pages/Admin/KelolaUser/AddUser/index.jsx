@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Button, LabelPages, Select } from "../../../../component";
+import { Button, Input, LabelPages, Select } from "../../../../component";
 import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import "./style.scss";
-import Input from "../../../../component/atoms/Input";
 
 export default function AddUser() {
   const [fullName, setFullName] = useState("");

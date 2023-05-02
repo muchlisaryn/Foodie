@@ -7,6 +7,7 @@ import Header from "./molecules/Header";
 import Sidebar from "./molecules/Sidebar";
 import LabelPages from "./molecules/LabelPages";
 import Select from "./atoms/Select";
+import Input from "./atoms/Input";
 
 export {
   Navbar,
@@ -18,4 +19,5 @@ export {
   Sidebar,
   LabelPages,
   Select,
+  Input,
 };
