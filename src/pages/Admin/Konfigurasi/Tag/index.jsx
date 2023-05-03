@@ -5,7 +5,7 @@ import LabelPages from "../../../../component/molecules/LabelPages";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Swal from "sweetalert2";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTag,
@@ -14,15 +14,22 @@ import {
   updateTag,
 } from "../../../../features/TagSlice";
 import Input from "../../../../component/atoms/Input";
+import { useNavigate } from "react-router-dom";
 
 export default function Tag() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const data = useSelector((data) => data.tag.tag);
   const loading = useSelector((data) => data.tag.pending);
   const err = useSelector((data) => data.tag.errorMessage);
+  const [valueSearch, setValueSearch] = useState("");
 
   const deleteData = (id) => {
     dispatch(deleteTag({ id }));
+  };
+
+  const search = () => {
+    navigate(`/admin/configurasi/tag?q=${valueSearch}`);
   };
 
   const tambah = () => {
@@ -93,7 +100,11 @@ export default function Tag() {
     <ContainerAdmin>
       <LabelPages label="Konfigurasi Tag">
         <div className="d-flex">
-          <Input placeholder="Search Tag.." />
+          <Input
+            placeholder="Search Tag.."
+            onChage={(e) => setValueSearch(e.target.value)}
+            onSubmit={search}
+          />
           <div className="border-end mx-3"></div>
           <Button onClick={tambah} className="btn-success">
             Tambah

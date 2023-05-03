@@ -72,7 +72,7 @@ export default function Category() {
   const getData = async () => {
     try {
       const result = await axios.get(`${process.env.REACT_APP_URL}/category`);
-      setData(result.data);
+      setData(result.data.data);
     } catch (error) {
       console.log(error);
     }
