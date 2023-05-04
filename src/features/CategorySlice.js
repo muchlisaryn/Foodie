@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { addTag } from "./TagSlice";
 
 const initialState = {
   pending: false,
@@ -15,7 +14,7 @@ export const fetchCategory = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_URL}/category`);
-      return response.data;
+      return response.data.data;
     } catch (e) {
       throw e;
     }
@@ -145,7 +144,7 @@ const categorySlice = createSlice({
         const { _id, name } = action.payload;
         const findCategory = state.categories.find((data) => data._id === _id);
         if (findCategory) {
-          findTag.name = name;
+          findCategory.name = name;
         }
         state.errorMessage = "";
       });

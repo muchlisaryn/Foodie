@@ -8,6 +8,8 @@ import Sidebar from "./molecules/Sidebar";
 import LabelPages from "./molecules/LabelPages";
 import Select from "./atoms/Select";
 import Input from "./atoms/Input";
+import Skeleton from "./atoms/Skeleton";
+import Switcher from "./atoms/Switcher";
 
 export {
   Navbar,
@@ -20,4 +22,6 @@ export {
   LabelPages,
   Select,
   Input,
+  Skeleton,
+  Switcher,
 };

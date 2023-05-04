@@ -2,17 +2,52 @@ import { useState } from "react";
 import { Button, Input, LabelPages, Select } from "../../../../component";
 import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import "./style.scss";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../../features/UserSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function AddUser() {
-  const [fullName, setFullName] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [selectRole, setSelectRole] = useState("");
+  const [selectRole, setSelectRole] = useState("user");
+
+  const register = async ({ first_name, last_name, email, password, role }) => {
+    try {
+      const actionResult = await dispatch(
+        registerUser({ first_name, last_name, email, password, role })
+      );
+      const result = unwrapResult(actionResult);
+      console.log(result);
+      if (result.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: result.message,
+        });
+      } else {
+        navigate("/admin/kelola-user");
+        Swal.fire("Success!", "Berhasil Menambahkan User", "success");
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message,
+      });
+    }
+  };
 
   const tambahUser = () => {
     if (
-      fullName === "" ||
+      firstName === "" ||
+      lastName === "" ||
       email === "" ||
       password === "" ||
       confirmPassword === ""
@@ -20,17 +55,25 @@ export default function AddUser() {
       alert("Semua form wajib diisi");
     } else if (password !== confirmPassword) {
       alert("Confirm password tidak sama");
+    } else {
+      register({
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+        role: selectRole,
+      });
     }
   };
 
   const role = [
     {
       id: 1,
-      name: "User",
+      name: "user",
     },
     {
       id: 2,
-      name: "Admin",
+      name: "admin",
     },
   ];
 
@@ -39,12 +82,22 @@ export default function AddUser() {
       <LabelPages type="back" label="Add User" to="/admin/kelola-user" />
       <div className="add-user p-3 border rounded">
         <div className="form-input d-flex align-items-center pb-2">
-          <div className="label">Full Name</div>
+          <div className="label">First Name</div>
           <div className="me-2">:</div>
           <Input
             type="text"
-            onChage={(e) => setFullName(e?.target?.value)}
-            value={fullName}
+            onChage={(e) => setFirstName(e?.target?.value)}
+            value={firstName}
+            className="form-control-sm"
+          />
+        </div>
+        <div className="form-input d-flex align-items-center pb-2">
+          <div className="label">Last Name</div>
+          <div className="me-2">:</div>
+          <Input
+            type="text"
+            onChage={(e) => setLastName(e?.target?.value)}
+            value={lastName}
             className="form-control-sm"
           />
         </div>

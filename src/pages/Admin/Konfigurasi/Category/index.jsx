@@ -1,14 +1,48 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ContainerAdmin from "../../../../component/container/ContainerAdmin";
-import axios from "axios";
 import Swal from "sweetalert2";
-import { LabelPages, Button } from "../../../../component";
+import { LabelPages, Button, Skeleton } from "../../../../component";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addCategory,
+  deleteCategory,
+  fetchCategory,
+  updateCategory,
+} from "../../../../features/CategorySlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Category() {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const data = useSelector((data) => data.category.categories);
+  const loading = useSelector((data) => data.category.pending);
 
-  const deleteProduct = async ({ id }) => {
-    await axios.delete(`${process.env.REACT_APP_URL}/category/${id}`);
+  const deleteData = (id) => {
+    console.log("id", id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const actionResult = await dispatch(deleteCategory({ id }));
+          const result = unwrapResult(actionResult);
+          if (result) {
+            Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          }
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal menghapus category",
+          });
+        }
+      }
+    });
   };
 
   const tambah = () => {
@@ -19,23 +53,22 @@ export default function Category() {
         autocapitalize: "off",
       },
       showCancelButton: true,
-      confirmButtonText: "Edit",
+      confirmButtonText: "Tambah",
       showLoaderOnConfirm: true,
-      preConfirm: (name) => {
-        return axios
-          .post(`${process.env.REACT_APP_URL}/category`, { name })
-          .then((response) => {
-            console.log(response);
-            if (!response.statusText === "OK") {
-              throw new Error(response.statusText);
-            }
-            Swal.fire({
-              title: `Berhasil Menambahkan Data`,
-            });
-          })
-          .catch((error) => {
-            Swal.showValidationMessage(`Request failed: ${error}`);
+      preConfirm: async (name) => {
+        try {
+          const actionResult = await dispatch(addCategory({ name }));
+          const result = unwrapResult(actionResult);
+          if (result) {
+            Swal.fire("Success!", "Berhasil Menambahkan Category", "success");
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal menambahkan Category",
           });
+        }
       },
     });
   };
@@ -50,37 +83,27 @@ export default function Category() {
       showCancelButton: true,
       confirmButtonText: "Edit",
       showLoaderOnConfirm: true,
-      preConfirm: (name) => {
-        return axios
-          .put(`${process.env.REACT_APP_URL}/category/${id}`, { name })
-          .then((response) => {
-            console.log(response);
-            if (!response.statusText === "OK") {
-              throw new Error(response.statusText);
-            }
-            Swal.fire({
-              title: `Berhasil merubah data`,
-            });
-          })
-          .catch((error) => {
-            Swal.showValidationMessage(`Request failed: ${error}`);
+      preConfirm: async (name) => {
+        try {
+          const actionResult = await dispatch(updateCategory({ id, name }));
+          const result = unwrapResult(actionResult);
+          if (result) {
+            Swal.fire("Success!", "Berhasil Merubah Category", "success");
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal Merubah Category",
           });
+        }
       },
     });
   };
 
-  const getData = async () => {
-    try {
-      const result = await axios.get(`${process.env.REACT_APP_URL}/category`);
-      setData(result.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getData();
-  }, []);
+    dispatch(fetchCategory());
+  }, [dispatch]);
 
   return (
     <ContainerAdmin>
@@ -92,34 +115,49 @@ export default function Category() {
       <table className="table  table-borderless border">
         <thead>
           <tr>
-            <th scope="col">No</th>
+            <th scope="col">
+              {loading ? <Skeleton height={22} width={20} /> : "No"}
+            </th>
             <th scope="col " className="w-100">
-              Name Category
+              {loading ? <Skeleton height={22} /> : "Name Category"}
             </th>
             <th scope="col" className="text-center">
-              Action
+              {loading ? <Skeleton height={22} /> : "Action"}
             </th>
           </tr>
         </thead>
         <tbody>
           {data?.map((list, index) => (
-            <tr>
-              <th scope="row">{++index}</th>
-              <td className="w-100">{list?.name}</td>
+            <tr key={++index}>
+              <th scope="row">
+                {loading ? <Skeleton height={22} width={20} /> : ++index}
+              </th>
+              <td className="w-100">
+                {" "}
+                {loading ? <Skeleton height={22} /> : list?.name}
+              </td>
               <td className="d-flex">
                 <>
-                  <Button
-                    className="btn-sm bg-warning"
-                    onClick={() => edit({ id: list._id, name: list?.name })}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    className="btn-sm bg-danger text-light ms-2"
-                    onClick={() => deleteProduct({ id: list?._id })}
-                  >
-                    Delete
-                  </Button>
+                  {loading ? (
+                    <Skeleton width={45} height={22} />
+                  ) : (
+                    <Button
+                      className="btn-sm bg-warning"
+                      onClick={() => edit({ id: list._id, name: list?.name })}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  {loading ? (
+                    <Skeleton width={45} height={22} className="ms-2" />
+                  ) : (
+                    <Button
+                      className="btn-sm bg-danger text-light ms-2"
+                      onClick={() => deleteData(list?._id)}
+                    >
+                      Delete
+                    </Button>
+                  )}
                 </>
               </td>
             </tr>

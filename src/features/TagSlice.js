@@ -9,10 +9,9 @@ const initialState = {
   totalResult: 0,
 };
 
-export const fetchTag = createAsyncThunk("tag/fetchTag", async () => {
+export const fetchTag = createAsyncThunk("tag/fetchTag", async (url) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL}/tag`);
-
+    const response = await axios.get(url);
     return response.data.data;
   } catch (e) {
     throw e;

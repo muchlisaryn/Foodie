@@ -1,9 +1,8 @@
-.content {
-  padding-left: 220px;
-  padding-right: 12px;
-  padding-top: 70px;
+.bg-content {
   width: 100%;
-  height: 100vh;
+  height: 100%;
 
-  background-color: rgb(243, 243, 243);
+  .content {
+    padding: 70px 12px 70px 220px;
+  }
 }

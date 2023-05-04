@@ -1,9 +1,6 @@
-import { Button } from "../../../../component";
+import { Button, Skeleton, Input, LabelPages } from "../../../../component";
 import "./style.scss";
 import ContainerAdmin from "../../../../component/container/ContainerAdmin";
-import LabelPages from "../../../../component/molecules/LabelPages";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,23 +10,23 @@ import {
   fetchTag,
   updateTag,
 } from "../../../../features/TagSlice";
-import Input from "../../../../component/atoms/Input";
-import { useNavigate } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Tag() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const data = useSelector((data) => data.tag.tag);
   const loading = useSelector((data) => data.tag.pending);
-  const err = useSelector((data) => data.tag.errorMessage);
   const [valueSearch, setValueSearch] = useState("");
+  const [limit, setLimit] = useState();
+  const [skip, setSkip] = useState();
 
   const deleteData = (id) => {
     dispatch(deleteTag({ id }));
   };
 
-  const search = () => {
-    navigate(`/admin/configurasi/tag?q=${valueSearch}`);
+  const search = (e) => {
+    e.preventDefault();
+    dispatch(fetchTag(`${process.env.REACT_APP_URL}/tag?q=${valueSearch}`));
   };
 
   const tambah = () => {
@@ -40,24 +37,23 @@ export default function Tag() {
         autocapitalize: "off",
       },
       showCancelButton: true,
-      confirmButtonText: "Edit",
+      confirmButtonText: "Tambah",
       showLoaderOnConfirm: true,
-      preConfirm: (name) => {
-        dispatch(addTag({ name }));
-        // return axios
-        //   .post(`${process.env.REACT_APP_URL}/tag`, { name })
-        //   .then((response) => {
-        //     console.log(response);
-        //     if (!response.statusText === "OK") {
-        //       throw new Error(response.statusText);
-        //     }
-        //     Swal.fire({
-        //       title: `Berhasil Menambahkan Data`,
-        //     });
-        //   })
-        //   .catch((error) => {
-        //     Swal.showValidationMessage(`Request failed: ${error}`);
-        //   });
+      preConfirm: async (name) => {
+        try {
+          const actionResult = await dispatch(addTag({ name }));
+          const result = unwrapResult(actionResult);
+
+          if (result) {
+            Swal.fire("Success!", "Berhasil Menambahkan Tag", "success");
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal menambahkan Tag",
+          });
+        }
       },
     });
   };
@@ -72,29 +68,34 @@ export default function Tag() {
       showCancelButton: true,
       confirmButtonText: "Edit",
       showLoaderOnConfirm: true,
-      preConfirm: (name) => {
-        dispatch(updateTag({ id, name }));
-        // return axios
-        //   .put(`${process.env.REACT_APP_URL}/tag/${id}`, { name })
-        //   .then((response) => {
-        //     console.log(response);
-        //     if (!response.statusText === "OK") {
-        //       throw new Error(response.statusText);
-        //     }
-        //     Swal.fire({
-        //       title: `Berhasil merubah data`,
-        //     });
-        //   })
-        //   .catch((error) => {
-        //     Swal.showValidationMessage(`Request failed: ${error}`);
-        //   });
+      preConfirm: async (name) => {
+        try {
+          const actionResult = await dispatch(updateTag({ id, name }));
+          const result = unwrapResult(actionResult);
+
+          if (result) {
+            Swal.fire("Success!", "Berhasil Merubah Tag", "success");
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal Merubah Tag",
+          });
+        }
       },
     });
   };
 
   useEffect(() => {
-    dispatch(fetchTag());
-  }, [dispatch]);
+    if (valueSearch === "") {
+      dispatch(
+        fetchTag(
+          `${process.env.REACT_APP_URL}/tag?q=${valueSearch}&limit=${limit}&skip=${skip}`
+        )
+      );
+    }
+  }, [dispatch, valueSearch, limit, skip]);
 
   return (
     <ContainerAdmin>

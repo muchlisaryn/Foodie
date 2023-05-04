@@ -28,7 +28,7 @@ export default function Input({
   }
 
   return (
-    <form className="w-100">
+    <form className="w-100" onSubmit={onSubmit}>
       <input
         type={type}
         placeholder={placeholder}

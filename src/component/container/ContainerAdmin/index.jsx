@@ -3,9 +3,9 @@ import "./style.scss";
 
 export default function ContainerAdmin({ children }) {
   return (
-    <div>
+    <div className="bg-content">
       <Sidebar />
-      <div className="content ">{children}</div>
+      <div className="content">{children}</div>
     </div>
   );
 }
