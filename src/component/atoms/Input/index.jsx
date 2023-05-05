@@ -7,6 +7,7 @@ export default function Input({
   onSubmit,
   onChage,
   value,
+  rows,
 }) {
   if (type === "search") {
     return (
@@ -23,6 +24,33 @@ export default function Input({
             <BiSearch size={22} className="icon-search" />
           </div>
         </div>
+      </form>
+    );
+  }
+
+  if (type === "textarea") {
+    return (
+      <form className="w-100" onSubmit={onSubmit}>
+        <textarea
+          className={`form-control ${className}`}
+          rows={rows}
+          onChange={onChage}
+          value={value}
+        />
+      </form>
+    );
+  }
+
+  if (type === "file") {
+    return (
+      <form className="w-100" onSubmit={onSubmit}>
+        <input
+          type="file"
+          className={`form-control ${className}`}
+          id="inputGroupFile04"
+          aria-describedby="inputGroupFileAddon04"
+          aria-label="Upload"
+        />
       </form>
     );
   }

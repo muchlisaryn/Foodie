@@ -1,7 +1,7 @@
 import { Button, LabelPages, Skeleton, Switcher } from "../../../component";
 import ContainerAdmin from "../../../component/container/ContainerAdmin";
 import { useEffect } from "react";
-
+import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProduct,
@@ -9,9 +9,12 @@ import {
   updateProduct,
 } from "../../../features/ProductSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 export default function KelolaProduct() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const loading = true;
   const loading = useSelector((state) => state.product.pending);
   const data = useSelector((state) => state.product.products);
 
@@ -41,7 +44,12 @@ export default function KelolaProduct() {
   return (
     <ContainerAdmin>
       <LabelPages label="Kelola Product">
-        <Button className="btn-success">Tambah</Button>
+        <Button
+          className="btn-success"
+          onClick={() => navigate("/admin/kelola-product/add-product")}
+        >
+          Tambah
+        </Button>
       </LabelPages>
       <table className="table  table-borderless border">
         <thead>
@@ -68,15 +76,40 @@ export default function KelolaProduct() {
           {data.length ? (
             <>
               {data?.map((list, index) => (
-                <tr key={++index}>
+                <tr key={++index} className="product">
                   <td className="w-25">
-                    {loading ? <Skeleton height={22} /> : list?.name}
+                    <div className="d-flex align-items-center">
+                      {loading ? (
+                        <Skeleton width={50} height={50} />
+                      ) : (
+                        <img
+                          src="https://img.freepik.com/free-vector/cheese-snack-food-product-ad_52683-34031.jpg?w=360"
+                          alt="photo product"
+                        />
+                      )}
+                      {loading ? (
+                        <div className="w-100 ms-2">
+                          <Skeleton height={22} />
+                          <Skeleton height={22} />
+                        </div>
+                      ) : (
+                        <div className="ms-2 fw-bold text-break title ">
+                          {list?.name}
+                        </div>
+                      )}
+                    </div>
                   </td>
-                  <td>{loading ? <Skeleton height={22} /> : list?.sold}</td>
-                  <td className="w-25">
+                  <td className="w-25 align-middle">
+                    {loading ? (
+                      <Skeleton height={22} />
+                    ) : (
+                      <div>{`${list?.sold} Tejual`}</div>
+                    )}
+                  </td>
+                  <td className="w-25 align-middle">
                     {loading ? <Skeleton height={22} /> : list?.price}
                   </td>
-                  <td className="w-25">
+                  <td className="align-middle">
                     {loading ? (
                       <Skeleton height={22} />
                     ) : (
@@ -88,16 +121,16 @@ export default function KelolaProduct() {
                       />
                     )}
                   </td>
-                  <td className="d-flex">
-                    <>
+                  <td className=" align-middle">
+                    <div className="d-flex">
                       {loading ? (
-                        <Skeleton width={45} height={22} />
+                        <Skeleton height={22} />
                       ) : (
                         <Button className="btn-sm bg-warning">Edit</Button>
                       )}
 
                       {loading ? (
-                        <Skeleton width={45} height={22} className="ms-2" />
+                        <Skeleton height={22} />
                       ) : (
                         <Button
                           className="btn-sm bg-danger text-light ms-2"
@@ -106,7 +139,7 @@ export default function KelolaProduct() {
                           Delete
                         </Button>
                       )}
-                    </>
+                    </div>
                   </td>
                 </tr>
               ))}

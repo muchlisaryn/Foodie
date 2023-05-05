@@ -9,6 +9,7 @@ import {
   Tag,
 } from "./pages";
 import Dashboard from "./pages/Admin/Dashboard";
+import AddProduct from "./pages/Admin/KelolaProduct/AddProduct";
 
 function App() {
   return (
@@ -18,7 +19,10 @@ function App() {
 
         <Route path="/admin/">
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="kelola-product" element={<KelolaProduct />} />
+          <Route path="kelola-product/">
+            <Route path="" element={<KelolaProduct />} />
+            <Route path="add-product" element={<AddProduct />} />
+          </Route>
           <Route path="kelola-user" element={<KelolaUser />} />
           <Route path="kelola-user/">
             <Route path="" element={<KelolaUser />} />
