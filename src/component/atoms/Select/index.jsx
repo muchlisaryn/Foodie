@@ -20,7 +20,11 @@ export default function Select({ type, data, onChange, className, value }) {
       onChange={onChange}
       className={`form-select w-100 ${className}`}
       value={value}
+      defaultValue={"DEFAULT"}
     >
+      <option value="DEFAULT" disabled>
+        Pilih...
+      </option>
       {data?.map((item) => (
         <option value={item.name}>{item.name}</option>
       ))}

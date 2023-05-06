@@ -8,6 +8,10 @@ import KelolaUser from "./Admin/KelolaUser";
 import AddUser from "./Admin/KelolaUser/AddUser";
 import KelolaPemesanan from "./Admin/KelolaPemesanan";
 import KelolaProduct from "./Admin/KelolaProduct";
+import AddProduct from "./Admin/KelolaProduct/AddProduct";
+import Alamat from "./User/Alamat";
+import Biodata from "./User/Biodata";
+import Pemesanan from "./User/Pemesanan";
 
 export {
   Home,
@@ -20,4 +24,8 @@ export {
   AddUser,
   KelolaPemesanan,
   KelolaProduct,
+  AddProduct,
+  Alamat,
+  Biodata,
+  Pemesanan,
 };

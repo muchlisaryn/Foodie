@@ -1,11 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   AddUser,
+  Alamat,
+  Biodata,
   Category,
   Home,
   KelolaPemesanan,
   KelolaProduct,
   KelolaUser,
+  Pemesanan,
   Tag,
 } from "./pages";
 import Dashboard from "./pages/Admin/Dashboard";
@@ -16,6 +19,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+
+        <Route path="/user/">
+          <Route path="biodata" element={<Biodata />} />
+          <Route path="alamat" element={<Alamat />} />
+          <Route path="pemesanan" element={<Pemesanan />} />
+        </Route>
 
         <Route path="/admin/">
           <Route path="dashboard" element={<Dashboard />} />

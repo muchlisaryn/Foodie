@@ -14,7 +14,9 @@ export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
   async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_URL}/products`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_API}/products`
+      );
       return response.data.data;
     } catch (error) {
       throw error;
@@ -26,7 +28,9 @@ export const getDetailProduct = createAsyncThunk(
   "product/getDetailProduct",
   async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_URL}/products`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_API}/products`
+      );
       return response.data.data;
     } catch (error) {
       throw error;
@@ -40,7 +44,7 @@ export const addProduct = createAsyncThunk(
     const { name, description, price, discount, category, tags } = props;
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_URL}/products`,
+        `${process.env.REACT_APP_URL_API}/products`,
         {
           name,
           description,
@@ -48,6 +52,11 @@ export const addProduct = createAsyncThunk(
           discount,
           category,
           tags,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       return response.data;
@@ -64,7 +73,7 @@ export const updateProduct = createAsyncThunk(
 
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_URL}/products/${id}`,
+        `${process.env.REACT_APP_URL_API}/products/${id}`,
         { name, description, price, discount, status, category }
       );
       return response.data;
@@ -80,7 +89,7 @@ export const deleteProduct = createAsyncThunk(
     const { id } = props;
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_URL}/products/${id}`
+        `${process.env.REACT_APP_URL_API}/products/${id}`
       );
       return response.data;
     } catch (error) {

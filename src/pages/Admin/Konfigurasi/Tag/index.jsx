@@ -14,7 +14,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Tag() {
   const dispatch = useDispatch();
-  const data = useSelector((data) => data.tag.tag);
+  const tags = useSelector((data) => data.tag.tag);
   const loading = useSelector((data) => data.tag.pending);
   const [valueSearch, setValueSearch] = useState("");
   const [limit, setLimit] = useState();
@@ -91,7 +91,7 @@ export default function Tag() {
     if (valueSearch === "") {
       dispatch(
         fetchTag(
-          `${process.env.REACT_APP_URL}/tag?q=${valueSearch}&limit=${limit}&skip=${skip}`
+          `${process.env.REACT_APP_URL_API}/tag?q=${valueSearch}&limit=${limit}&skip=${skip}`
         )
       );
     }
@@ -128,7 +128,7 @@ export default function Tag() {
           </tr>
         </thead>
         <tbody>
-          {data?.map((list, index) => (
+          {tags?.map((list, index) => (
             <tr key={++index}>
               <th scope="row">
                 {loading ? <Skeleton height={22} width={20} /> : ++index}

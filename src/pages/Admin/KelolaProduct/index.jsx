@@ -82,10 +82,7 @@ export default function KelolaProduct() {
                       {loading ? (
                         <Skeleton width={50} height={50} />
                       ) : (
-                        <img
-                          src="https://img.freepik.com/free-vector/cheese-snack-food-product-ad_52683-34031.jpg?w=360"
-                          alt="photo product"
-                        />
+                        <img src={list?.image_url} alt="photo product" />
                       )}
                       {loading ? (
                         <div className="w-100 ms-2">

@@ -1,0 +1,7 @@
+@use "../../../index.scss" as style;
+
+.btn-change {
+  font-size: 12px;
+  font-weight: 600;
+  color: style.$secondary-collor;
+}

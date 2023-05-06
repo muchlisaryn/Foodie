@@ -13,7 +13,9 @@ export const fetchCategory = createAsyncThunk(
   "category/fetchCategory",
   async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_URL}/category`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_API}/category`
+      );
       return response.data.data;
     } catch (e) {
       throw e;
@@ -27,7 +29,7 @@ export const addCategory = createAsyncThunk(
     const { name } = props;
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_URL}/category`,
+        `${process.env.REACT_APP_URL_API}/category`,
         {
           name,
         }
@@ -45,7 +47,7 @@ export const deleteCategory = createAsyncThunk(
     const { id } = props;
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_URL}/category/${id}`
+        `${process.env.REACT_APP_URL_API}/category/${id}`
       );
       return response.data;
     } catch (e) {
@@ -60,7 +62,7 @@ export const updateCategory = createAsyncThunk(
     const { id, name } = props;
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_URL}/category/${id}`,
+        `${process.env.REACT_APP_URL_API}/category/${id}`,
         {
           name,
         }

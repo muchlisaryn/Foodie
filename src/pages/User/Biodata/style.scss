@@ -1,0 +1,103 @@
+.biodata {
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+
+  .photo-profile {
+    width: 25%;
+  }
+
+  .select-photo {
+    width: 100%;
+    margin-top: 10px;
+
+    &::-webkit-file-upload-button {
+      visibility: hidden;
+    }
+
+    &::before {
+      content: "Pilih Foto";
+      width: 100%;
+      display: inline-block;
+      background-color: white;
+      border: 1px solid #999;
+      border-radius: 5px;
+      padding: 5px 8px;
+      cursor: pointer;
+      text-shadow: 1px 1px #fff;
+      text-align: center;
+      font-size: 10pt;
+    }
+  }
+
+  .bio {
+    margin-left: 10px;
+  }
+
+  img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  .key-bio {
+    width: 150px;
+  }
+  .btn-ubah {
+    background-color: rgb(219, 250, 173);
+    font-size: 10px;
+    padding: 2px 4px 2px 4px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .biodata {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+
+    .photo-profile {
+      width: 100%;
+    }
+
+    .select-photo {
+      width: 100%;
+      margin-top: 10px;
+      &::-webkit-file-upload-button {
+        visibility: hidden;
+      }
+
+      &::before {
+        content: "Pilih Foto";
+        width: 100%;
+        display: inline-block;
+        background: white;
+        border: 1px solid #999;
+        border-radius: 5px;
+        padding: 5px 8px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 10pt;
+      }
+    }
+
+    .bio {
+      margin-left: 10px;
+    }
+
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .key-bio {
+      width: 150px;
+    }
+    .btn-ubah {
+      background-color: rgb(219, 250, 173);
+      font-size: 10px;
+      padding: 2px 4px 2px 4px;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+  }
+}

@@ -16,21 +16,44 @@ import "./style.scss";
 export default function AddProduct() {
   const dispatch = useDispatch();
   const data = useSelector((data) => data.category.categories);
-  const dataTags = useSelector((data) => data.tag.tag);
+  const tags = useSelector((data) => data.tag.tag);
+  const [btnDisable, setBtnDisable] = useState(false);
+  const [name, setName] = useState("");
   const [categories, setCategories] = useState("");
   const [tag, setTag] = useState([]);
-
-  console.log(dataTags);
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
 
   const selectTags = (e) => {
     setTag([...tag, e.target.value]);
   };
+
+  console.log(categories);
+
+  useEffect(() => {
+    if (
+      name === "" ||
+      categories === "" ||
+      tag === [] ||
+      description === "" ||
+      price === 0 ||
+      stock === 0
+    ) {
+      setBtnDisable(true);
+    } else {
+      setBtnDisable(false);
+    }
+  }, [name, categories, tag, description, price, stock, btnDisable]);
+
+  const submitProduct = () => {};
 
   const deleteTag = (select) => {
     setTag(tag.filter((item) => item !== select));
   };
 
   useEffect(() => {
+    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
     dispatch(fetchCategory());
   }, [dispatch]);
 
@@ -77,13 +100,12 @@ export default function AddProduct() {
             data={data}
             label="Select Role"
             className="form-select-sm"
-            value={categories}
             onChange={(e) => setCategories(e.target.value)}
           />
         </Form>
         <Form label="Tags">
           <Select
-            data={dataTags?.filter((item) => item.name !== tag)}
+            data={tags}
             label="Select Role"
             className="form-select-sm"
             onChange={selectTags}
@@ -103,7 +125,7 @@ export default function AddProduct() {
 
       <Box label="Detail Product" className="mt-2">
         <Form label="Photo Product" className="mb-2">
-          <Input type="file" className="form-select-sm" />
+          <Input type="file" className="form-select-sm" accept="image/*" />
         </Form>
         <Form
           label="Description"

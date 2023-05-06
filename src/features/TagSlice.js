@@ -21,7 +21,7 @@ export const fetchTag = createAsyncThunk("tag/fetchTag", async (url) => {
 export const addTag = createAsyncThunk("tag/addTag", async (props) => {
   const { name } = props;
   try {
-    const response = await axios.post(`${process.env.REACT_APP_URL}/tag`, {
+    const response = await axios.post(`${process.env.REACT_APP_URL_API}/tag`, {
       name,
     });
     return response.data;
@@ -34,7 +34,7 @@ export const deleteTag = createAsyncThunk("tag/deleteTag", async (props) => {
   const { id } = props;
   try {
     const response = await axios.delete(
-      `${process.env.REACT_APP_URL}/tag/${id}`
+      `${process.env.REACT_APP_URL_API}/tag/${id}`
     );
     return response.data;
   } catch (e) {
@@ -45,9 +45,12 @@ export const deleteTag = createAsyncThunk("tag/deleteTag", async (props) => {
 export const updateTag = createAsyncThunk("tag/upadteTag", async (props) => {
   const { id, name } = props;
   try {
-    const response = await axios.put(`${process.env.REACT_APP_URL}/tag/${id}`, {
-      name,
-    });
+    const response = await axios.put(
+      `${process.env.REACT_APP_URL_API}/tag/${id}`,
+      {
+        name,
+      }
+    );
     return response.data;
   } catch (e) {
     throw e;

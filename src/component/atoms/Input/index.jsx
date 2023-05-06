@@ -8,7 +8,28 @@ export default function Input({
   onChage,
   value,
   rows,
+  onInput,
+  accept,
 }) {
+  if (type === "number") {
+    return (
+      <form className="w-100" onSubmit={onSubmit}>
+        <input
+          type={type}
+          placeholder={placeholder}
+          className={`form-control   ${className}`}
+          onChange={onChage}
+          value={value}
+          onKeyDown={(e) => {
+            if (e.key === ",") {
+              e.preventDefault();
+            }
+          }}
+        />
+      </form>
+    );
+  }
+
   if (type === "search") {
     return (
       <form className={className} onSubmit={onSubmit}>
@@ -50,6 +71,7 @@ export default function Input({
           id="inputGroupFile04"
           aria-describedby="inputGroupFileAddon04"
           aria-label="Upload"
+          accept={accept}
         />
       </form>
     );
@@ -63,6 +85,7 @@ export default function Input({
         className={`form-control  ${className}`}
         onChange={onChage}
         value={value}
+        onInput={onInput}
       />
     </form>
   );

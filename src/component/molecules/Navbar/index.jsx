@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Button from "../../atoms/Button";
 import Input from "../../atoms/Input";
 import Logo from "../../atoms/Logo";
@@ -7,6 +7,7 @@ import "./styles.scss";
 import { useState } from "react";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const [btnLogout, setBtnLogout] = useState(false);
 
   const searchProduct = (e) => {
@@ -46,7 +47,7 @@ export default function Navbar() {
           <div className="mt-2 border-start ms-3 ps-1">
             {login ? (
               <div>
-                <Button type="avatar" onClick={clickBtnLogout}>
+                <Button type="avatar" onClick={() => navigate("/user/biodata")}>
                   <div className="d-flex align-items-center avatar">
                     <img
                       src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"

@@ -12,7 +12,7 @@ const initialState = {
 
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL}/user`);
+    const response = await axios.get(`${process.env.REACT_APP_URL_API}/user`);
     return response.data.data;
   } catch (e) {
     throw e;
@@ -22,7 +22,9 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
 export const getOneUser = createAsyncThunk("user/getOneUser", async (props) => {
   const { id } = props;
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL}/user/${id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}/user/${id}`
+    );
     return response.data.data;
   } catch (e) {
     throw e;
@@ -52,7 +54,7 @@ export const deleteUser = createAsyncThunk("user/deleteUser", async (props) => {
   const { id } = props;
   try {
     const response = await axios.delete(
-      `${process.env.REACT_APP_URL}/user/${id}`
+      `${process.env.REACT_APP_URL_API}/user/${id}`
     );
     return response.data;
   } catch (e) {
