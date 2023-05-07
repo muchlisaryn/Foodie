@@ -24,12 +24,31 @@ export default function AddProduct() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
+  const [photo, setPhoto] = useState();
 
   const selectTags = (e) => {
-    setTag([...tag, e.target.value]);
+    if (e.target.value !== tag.find((item) => item === e.target.value)) {
+      setTag([...tag, e.target.value]);
+    }
   };
 
-  console.log(categories);
+  const handleChangePhoto = (e) => {
+    if (
+      e?.target?.files[0].type === "image/jpg" ||
+      e?.target?.files[0].type === "image/png" ||
+      e?.target?.files[0].type === "image/jpeg"
+    ) {
+      const size = parseFloat(e.target.files[0].size / 3145728).toFixed(2);
+
+      if (size > 2) {
+        alert("please select image size less than 3 MB");
+      } else {
+        setPhoto(e.target.files[0]);
+      }
+    } else {
+      alert("Please input Image format PNG / JPG / JPEG");
+    }
+  };
 
   useEffect(() => {
     if (
@@ -44,16 +63,19 @@ export default function AddProduct() {
     } else {
       setBtnDisable(false);
     }
-  }, [name, categories, tag, description, price, stock, btnDisable]);
+  }, [btnDisable]);
 
-  const submitProduct = () => {};
+  const submitProduct = () => {
+    if (name > 40) {
+      alert("please input name product max 40 character");
+    }
+  };
 
   const deleteTag = (select) => {
     setTag(tag.filter((item) => item !== select));
   };
 
   useEffect(() => {
-    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
     dispatch(fetchCategory());
   }, [dispatch]);
 
@@ -93,7 +115,12 @@ export default function AddProduct() {
           description="*Nama product maksimal 40 character"
           className="mb-2"
         >
-          <Input type="text" className="form-control-sm " />
+          <Input
+            type="text"
+            className="form-control-sm "
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </Form>
         <Form label="Kategori" className="mb-2">
           <Select
@@ -101,6 +128,7 @@ export default function AddProduct() {
             label="Select Role"
             className="form-select-sm"
             onChange={(e) => setCategories(e.target.value)}
+            value={categories}
           />
         </Form>
         <Form label="Tags">
@@ -125,7 +153,12 @@ export default function AddProduct() {
 
       <Box label="Detail Product" className="mt-2">
         <Form label="Photo Product" className="mb-2">
-          <Input type="file" className="form-select-sm" accept="image/*" />
+          <Input
+            type="file"
+            className="form-select-sm"
+            accept="image/*"
+            onChange={handleChangePhoto}
+          />
         </Form>
         <Form
           label="Description"
@@ -151,7 +184,9 @@ export default function AddProduct() {
         </Form>
       </Box>
       <div className="d-flex justify-content-end mt-2">
-        <Button type="button-primary">Tambah Product</Button>
+        <Button type="btn-add" disabled={btnDisable} onClick={submitProduct}>
+          Tambah Product
+        </Button>
       </div>
     </ContainerAdmin>
   );

@@ -1,0 +1,12 @@
+@use "../../index.scss" as style;
+
+.serach-result {
+  .tag {
+    background-color: style.$primary-collor;
+
+    .btn-close {
+      background-color: white;
+      color: black;
+    }
+  }
+}

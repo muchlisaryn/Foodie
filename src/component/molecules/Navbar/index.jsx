@@ -6,21 +6,9 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import "./styles.scss";
 import { useState } from "react";
 
-export default function Navbar() {
+export default function Navbar({ onChange, onSubmit }) {
   const navigate = useNavigate();
-  const [btnLogout, setBtnLogout] = useState(false);
 
-  const searchProduct = (e) => {
-    e.preventDefault();
-  };
-
-  const clickBtnLogout = () => {
-    if (btnLogout) {
-      setBtnLogout(false);
-    } else {
-      setBtnLogout(true);
-    }
-  };
   const login = true;
 
   return (
@@ -32,7 +20,8 @@ export default function Navbar() {
         <Input
           placeholder="Search From more than 10,000 products"
           type="search"
-          onSubmit={searchProduct}
+          onSubmit={onSubmit}
+          onChage={onChange}
           className="search"
         />
         <div className="d-flex align-items-center ">
@@ -46,22 +35,15 @@ export default function Navbar() {
           </NavLink>
           <div className="mt-2 border-start ms-3 ps-1">
             {login ? (
-              <div>
-                <Button type="avatar" onClick={() => navigate("/user/biodata")}>
-                  <div className="d-flex align-items-center avatar">
-                    <img
-                      src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
-                      alt="avatar"
-                    />
-                    <div className="ms-2">Muchlis</div>
-                  </div>
-                </Button>
-                {btnLogout && (
-                  <div className="position-absolute mt-2 ">
-                    <Button>Logout</Button>
-                  </div>
-                )}
-              </div>
+              <Button type="avatar" onClick={() => navigate("/user/biodata")}>
+                <div className="d-flex align-items-center avatar">
+                  <img
+                    src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
+                    alt="avatar"
+                  />
+                  <div className="ms-2">Muchlis</div>
+                </div>
+              </Button>
             ) : (
               <Button>Login</Button>
             )}

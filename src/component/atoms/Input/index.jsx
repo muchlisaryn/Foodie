@@ -5,7 +5,7 @@ export default function Input({
   placeholder,
   className,
   onSubmit,
-  onChage,
+  onChange,
   value,
   rows,
   onInput,
@@ -18,7 +18,7 @@ export default function Input({
           type={type}
           placeholder={placeholder}
           className={`form-control   ${className}`}
-          onChange={onChage}
+          onChange={onChange}
           value={value}
           onKeyDown={(e) => {
             if (e.key === ",") {
@@ -38,7 +38,7 @@ export default function Input({
             type={type}
             placeholder={placeholder}
             className={`form-control ps-5`}
-            onChange={onChage}
+            onChange={onChange}
             value={value}
           />
           <div className="icon-search position-absolute top-50 p-3 d-flex align-items-center translate-middle-y">
@@ -55,7 +55,7 @@ export default function Input({
         <textarea
           className={`form-control ${className}`}
           rows={rows}
-          onChange={onChage}
+          onChange={onChange}
           value={value}
         />
       </form>
@@ -72,6 +72,7 @@ export default function Input({
           aria-describedby="inputGroupFileAddon04"
           aria-label="Upload"
           accept={accept}
+          onChange={onChange}
         />
       </form>
     );
@@ -83,7 +84,7 @@ export default function Input({
         type={type}
         placeholder={placeholder}
         className={`form-control  ${className}`}
-        onChange={onChage}
+        onChange={onChange}
         value={value}
         onInput={onInput}
       />

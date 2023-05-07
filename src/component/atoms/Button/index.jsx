@@ -33,6 +33,7 @@ export default function Button({
       <button
         onClick={onClick}
         className={`btn bg-success text-light ${className}`}
+        disabled={disabled}
       >
         <div className="d-flex align-items-center">
           <AiOutlinePlus />

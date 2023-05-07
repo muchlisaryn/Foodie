@@ -4,11 +4,13 @@ import {
   Alamat,
   Biodata,
   Category,
+  DetailProduct,
   Home,
   KelolaPemesanan,
   KelolaProduct,
   KelolaUser,
   Pemesanan,
+  SearchResult,
   Tag,
 } from "./pages";
 import Dashboard from "./pages/Admin/Dashboard";
@@ -18,7 +20,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/">
+          <Route path="" element={<Home />} />
+          <Route path="search" element={<SearchResult />} />
+          <Route path="product/:id" element={<DetailProduct />} />
+        </Route>
 
         <Route path="/user/">
           <Route path="biodata" element={<Biodata />} />

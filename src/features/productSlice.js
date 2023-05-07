@@ -42,17 +42,11 @@ export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (props) => {
     const { name, description, price, discount, category, tags } = props;
+    let formData = new FormData();
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_URL_API}/products`,
-        {
-          name,
-          description,
-          price,
-          discount,
-          category,
-          tags,
-        },
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
