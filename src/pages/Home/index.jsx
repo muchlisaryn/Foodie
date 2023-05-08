@@ -5,10 +5,12 @@ import {
   ProductCard,
   Container,
 } from "../../component";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("query"));
   const [value, setValue] = useState("");
 
   const submitSearch = (e) => {
@@ -16,13 +18,8 @@ export default function Home() {
     navigate(`/search`);
   };
 
-  console.log(value);
-
   return (
-    <Container
-      onChange={(e) => setValue(e.target.value)}
-      onSubmit={submitSearch}
-    >
+    <Container value={query} setValue={setValue} onSubmit={submitSearch}>
       <Header title="Product" />
       <ContainerProduct>
         <ProductCard />

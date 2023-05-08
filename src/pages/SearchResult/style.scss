@@ -1,12 +1,16 @@
 @use "../../index.scss" as style;
 
-.serach-result {
-  .tag {
-    background-color: style.$primary-collor;
+.tag {
+  padding: 7px;
+  margin-right: 5px;
 
-    .btn-close {
-      background-color: white;
-      color: black;
-    }
+  .close {
+    cursor: pointer;
+    font-size: 10px;
+    background-color: white;
+    color: black;
+    padding: 1px 6px 0px 6px;
+    border-radius: 100%;
+    margin: 0px 5px 0px 5px;
   }
 }

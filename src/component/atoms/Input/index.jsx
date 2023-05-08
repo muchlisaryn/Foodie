@@ -10,6 +10,7 @@ export default function Input({
   rows,
   onInput,
   accept,
+  name,
 }) {
   if (type === "number") {
     return (
@@ -40,6 +41,7 @@ export default function Input({
             className={`form-control ps-5`}
             onChange={onChange}
             value={value}
+            name={name}
           />
           <div className="icon-search position-absolute top-50 p-3 d-flex align-items-center translate-middle-y">
             <BiSearch size={22} className="icon-search" />

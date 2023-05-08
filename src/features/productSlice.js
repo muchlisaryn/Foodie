@@ -41,7 +41,7 @@ export const getDetailProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (props) => {
-    const { name, description, price, discount, category, tags } = props;
+    const { photo, name, description, price, discount, category, tags } = props;
     let formData = new FormData();
     try {
       const response = await axios.post(

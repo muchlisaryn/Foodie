@@ -107,7 +107,7 @@ export default function Tag() {
             onSubmit={search}
           />
           <div className="border-end mx-3"></div>
-          <Button onClick={tambah} className="btn-success">
+          <Button type="btn-add" onClick={tambah}>
             Tambah
           </Button>
         </div>

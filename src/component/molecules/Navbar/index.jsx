@@ -4,9 +4,8 @@ import Input from "../../atoms/Input";
 import Logo from "../../atoms/Logo";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import "./styles.scss";
-import { useState } from "react";
 
-export default function Navbar({ onChange, onSubmit }) {
+export default function Navbar({ onChange, onSubmit, value, setValue }) {
   const navigate = useNavigate();
 
   const login = true;
@@ -21,7 +20,7 @@ export default function Navbar({ onChange, onSubmit }) {
           placeholder="Search From more than 10,000 products"
           type="search"
           onSubmit={onSubmit}
-          onChage={onChange}
+          onChage={(e) => setValue(e.target.value)}
           className="search"
         />
         <div className="d-flex align-items-center ">

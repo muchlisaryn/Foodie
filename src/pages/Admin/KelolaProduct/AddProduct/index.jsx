@@ -32,6 +32,14 @@ export default function AddProduct() {
     }
   };
 
+  const deleteTag = (select) => {
+    setTag(
+      tag
+        .splice(0, tag.indexOf(select))
+        .concat(tag.slice(tag.indexOf(select) + 1))
+    );
+  };
+
   const handleChangePhoto = (e) => {
     if (
       e?.target?.files[0].type === "image/jpg" ||
@@ -50,6 +58,21 @@ export default function AddProduct() {
     }
   };
 
+  console.log(
+    "name",
+    name,
+    "categories",
+    categories,
+    "tag",
+    tag,
+    "desc",
+    description,
+    "price",
+    price,
+    "stock",
+    stock
+  );
+
   useEffect(() => {
     if (
       name === "" ||
@@ -63,7 +86,7 @@ export default function AddProduct() {
     } else {
       setBtnDisable(false);
     }
-  }, [btnDisable]);
+  }, [name, categories, tag, description, price, stock, btnDisable]);
 
   const submitProduct = () => {
     if (name > 40) {
@@ -71,33 +94,16 @@ export default function AddProduct() {
     }
   };
 
-  const deleteTag = (select) => {
-    setTag(tag.filter((item) => item !== select));
-  };
-
   useEffect(() => {
     dispatch(fetchCategory());
   }, [dispatch]);
 
-  const Box = ({ children, label, className }) => {
+  const Label = ({ label }) => {
     return (
-      <div className={`p-3 border rounded ${className}`}>
-        <div className="mb-3 fw-bold">{label}</div>
-        <div>{children}</div>
-      </div>
-    );
-  };
-
-  const Form = ({ children, label, description, className }) => {
-    return (
-      <div className={`form-input d-flex ${className}`}>
+      <>
         <div className="label">{label}</div>
         <div className="me-2">:</div>
-        <div className="w-100">
-          <div>{children}</div>
-          <div className="desc">{description}</div>
-        </div>
-      </div>
+      </>
     );
   };
 
@@ -109,80 +115,137 @@ export default function AddProduct() {
         to="/admin/kelola-product"
       />
 
-      <Box label="Informasi Product">
-        <Form
-          label="Nama Product"
-          description="*Nama product maksimal 40 character"
-          className="mb-2"
-        >
-          <Input
-            type="text"
-            className="form-control-sm "
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Form>
-        <Form label="Kategori" className="mb-2">
-          <Select
-            data={data}
-            label="Select Role"
-            className="form-select-sm"
-            onChange={(e) => setCategories(e.target.value)}
-            value={categories}
-          />
-        </Form>
-        <Form label="Tags">
-          <Select
-            data={tags}
-            label="Select Role"
-            className="form-select-sm"
-            onChange={selectTags}
-          />
-          <div className="d-flex">
-            {tag?.map((item) => (
-              <div className="tag p-1 px-2 me-2 mt-1 d-flex ">
-                <div>{item}</div>
-                <div className="tag-close" onClick={() => deleteTag(item)}>
-                  x
-                </div>
-              </div>
-            ))}
+      <div className="p-3 border rounded">
+        <div className="mb-3 fw-bold">Informasi Product</div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Nama Product" />
+          <div className="w-100">
+            <div>
+              <Input
+                type="text"
+                className="form-control-sm "
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="desc">*Nama product maksimal 40 character</div>
           </div>
-        </Form>
-      </Box>
+        </div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Kategori" />
+          <div className="w-100">
+            <div>
+              <Select
+                data={data}
+                label="Select Role"
+                className="form-select-sm"
+                onChange={(e) => setCategories(e.target.value)}
+                value={categories}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Tag" />
+          <div className="w-100">
+            <div>
+              <Select
+                data={tags}
+                label="Select Role"
+                className="form-select-sm"
+                onChange={selectTags}
+              />
+              <div className="d-flex">
+                {tag?.map((item, index) => (
+                  <div className="tag p-1 px-2 me-2 mt-1 d-flex " key={++index}>
+                    <div>{item}</div>
+                    <div className="tag-close" onClick={() => deleteTag(item)}>
+                      x
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Box label="Detail Product" className="mt-2">
-        <Form label="Photo Product" className="mb-2">
-          <Input
-            type="file"
-            className="form-select-sm"
-            accept="image/*"
-            onChange={handleChangePhoto}
-          />
-        </Form>
-        <Form
-          label="Description"
-          description="*Description Product Maksimal 100 Character"
-        >
-          <Input type="textarea" rows="5" />
-        </Form>
-      </Box>
+      <div className="mt-2 p-3 border rounded">
+        <div className="mb-3 fw-bold">Detail Product</div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Photo Product" />
+          <div className="w-100">
+            <div>
+              <Input
+                type="file"
+                className="form-select-sm"
+                accept="image/*"
+                onChange={handleChangePhoto}
+              />
+            </div>
+            <div className="desc">
+              Please input Image format PNG / JPG / JPEG
+            </div>
+          </div>
+        </div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Description" />
+          <div className="w-100">
+            <div>
+              <Input
+                type="textarea"
+                rows="5"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            <div className="desc">
+              Description Product Maksimal 100 Character
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Box label="Pengelolaan Product" className="mt-2">
-        <Form label="Harga" className="mb-2">
-          {" "}
-          <Input type="number" className="form-select-sm" />
-        </Form>
-        <Form
-          label="Status Product"
-          description="Jika status Aktif, Produk dapat dicari pembeli"
-        >
-          <Switcher checked="true" label="Aktif" disabled="true" />
-        </Form>
-        <Form label="Stock" className="mt-2">
-          <Input type="number" className="form-select-sm" />
-        </Form>
-      </Box>
+      <div className="mt-2 p-3 border rounded">
+        <div className="mb-3 fw-bold">Detail Product</div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Harga" />
+          <div className="w-100">
+            <div>
+              <Input
+                type="number"
+                className="form-select-sm"
+                onChange={(e) => setPrice(e.target.value)}
+                value={price}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Description" />
+          <div className="w-100">
+            <div>
+              <Switcher checked="true" label="Aktif" disabled="true" />
+            </div>
+            <div className="desc">
+              Jika status Aktif, Produk dapat dicari pembeli
+            </div>
+          </div>
+        </div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Stock" />
+          <div className="w-100">
+            <div>
+              <Input
+                type="number"
+                className="form-select-sm"
+                onChange={(e) => setStock(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="d-flex justify-content-end mt-2">
         <Button type="btn-add" disabled={btnDisable} onClick={submitProduct}>
           Tambah Product

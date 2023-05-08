@@ -8,11 +8,16 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTag } from "../../features/TagSlice";
 import { useState } from "react";
+import "./style.scss";
+import { useParams } from "react-router-dom";
 
 export default function SearchResult() {
   const dispatch = useDispatch();
   const tags = useSelector((data) => data.tag.tag);
   const [tag, setTag] = useState([]);
+  const { value } = useParams();
+
+  console.log(value);
 
   const selectTag = (e) => {
     if (tag.length >= 3) {
@@ -25,7 +30,11 @@ export default function SearchResult() {
   };
 
   const deleteTag = (select) => {
-    setTag(tag.filter((item) => item !== select));
+    setTag(
+      tag
+        .splice(0, tag.indexOf(select))
+        .concat(tag.slice(tag.indexOf(select) + 1))
+    );
   };
 
   useEffect(() => {
@@ -42,7 +51,9 @@ export default function SearchResult() {
           {tag?.map((list, index) => (
             <div className="tag d-flex">
               <div key={++index}>{list}</div>
-              <div onClick={() => deleteTag(list)}>x</div>
+              <div onClick={() => deleteTag(list)} className="close">
+                x
+              </div>
             </div>
           ))}
         </div>

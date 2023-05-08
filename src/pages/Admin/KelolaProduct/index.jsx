@@ -45,10 +45,10 @@ export default function KelolaProduct() {
     <ContainerAdmin>
       <LabelPages label="Kelola Product">
         <Button
-          className="btn-success"
+          type="btn-add"
           onClick={() => navigate("/admin/kelola-product/add-product")}
         >
-          Tambah
+          Tambah Product
         </Button>
       </LabelPages>
       <table className="table  table-borderless border">
@@ -96,11 +96,11 @@ export default function KelolaProduct() {
                       )}
                     </div>
                   </td>
-                  <td className="w-25 align-middle">
+                  <td className="align-middle">
                     {loading ? (
                       <Skeleton height={22} />
                     ) : (
-                      <div>{`${list?.sold} Tejual`}</div>
+                      <div>{`${list?.sold} Terjual`}</div>
                     )}
                   </td>
                   <td className="w-25 align-middle">
