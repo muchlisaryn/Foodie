@@ -1,0 +1,18 @@
+@use "../../index.scss" as style;
+
+.detail-product {
+  .title {
+    font-size: 20px;
+  }
+  .price {
+    font-size: 30px;
+  }
+
+  .detail {
+    color: style.$primary-collor;
+  }
+  .value {
+    font-weight: 600;
+    color: style.$primary-collor;
+  }
+}

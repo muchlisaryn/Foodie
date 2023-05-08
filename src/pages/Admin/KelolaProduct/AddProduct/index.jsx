@@ -12,11 +12,14 @@ import { fetchCategory } from "../../../../features/CategorySlice";
 import { useState } from "react";
 import { fetchTag } from "../../../../features/TagSlice";
 import "./style.scss";
+import { addProduct } from "../../../../features/ProductSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((data) => data.category.categories);
-  const tags = useSelector((data) => data.tag.tag);
+  const dataTags = useSelector((data) => data.tag.tag);
   const [btnDisable, setBtnDisable] = useState(false);
   const [name, setName] = useState("");
   const [categories, setCategories] = useState("");
@@ -24,19 +27,25 @@ export default function AddProduct() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
-  const [photo, setPhoto] = useState();
+  const [photo, setPhoto] = useState("");
+
+  console.log(tag);
 
   const selectTags = (e) => {
     if (e.target.value !== tag.find((item) => item === e.target.value)) {
-      setTag([...tag, e.target.value]);
+      setTag([...tag, { tags: e.target.value }]);
     }
   };
 
   const deleteTag = (select) => {
+    console.log(tag.findIndex((key) => key.tags === select));
     setTag(
       tag
-        .splice(0, tag.indexOf(select))
-        .concat(tag.slice(tag.indexOf(select) + 1))
+        .splice(
+          0,
+          tag.findIndex((key) => key.tags === select)
+        )
+        .concat(tag.slice(tag.findIndex((key) => key.tags === select) + 1))
     );
   };
 
@@ -58,21 +67,6 @@ export default function AddProduct() {
     }
   };
 
-  console.log(
-    "name",
-    name,
-    "categories",
-    categories,
-    "tag",
-    tag,
-    "desc",
-    description,
-    "price",
-    price,
-    "stock",
-    stock
-  );
-
   useEffect(() => {
     if (
       name === "" ||
@@ -91,17 +85,33 @@ export default function AddProduct() {
   const submitProduct = () => {
     if (name > 40) {
       alert("please input name product max 40 character");
+    } else {
+      dispatch(
+        addProduct({
+          photo,
+          name,
+          description,
+          price,
+          category: categories,
+          tags: tag,
+        })
+      );
+      navigate("/admin/kelola-product");
     }
   };
 
   useEffect(() => {
+    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
     dispatch(fetchCategory());
   }, [dispatch]);
 
-  const Label = ({ label }) => {
+  const Label = ({ label, required }) => {
     return (
       <>
-        <div className="label">{label}</div>
+        <div className="label">
+          {label}
+          {required && <span className="ms-2 required">(Wajib)</span>}
+        </div>
         <div className="me-2">:</div>
       </>
     );
@@ -118,7 +128,7 @@ export default function AddProduct() {
       <div className="p-3 border rounded">
         <div className="mb-3 fw-bold">Informasi Product</div>
         <div className="form-input d-flex mb-2">
-          <Label label="Nama Product" />
+          <Label label="Nama Product" required />
           <div className="w-100">
             <div>
               <Input
@@ -132,15 +142,14 @@ export default function AddProduct() {
           </div>
         </div>
         <div className="form-input d-flex mb-2">
-          <Label label="Kategori" />
+          <Label label="Kategori" required />
           <div className="w-100">
             <div>
               <Select
                 data={data}
-                label="Select Role"
                 className="form-select-sm"
                 onChange={(e) => setCategories(e.target.value)}
-                value={categories}
+                defaultValue="Pilih Category"
               />
             </div>
           </div>
@@ -150,16 +159,20 @@ export default function AddProduct() {
           <div className="w-100">
             <div>
               <Select
-                data={tags}
+                data={dataTags}
                 label="Select Role"
                 className="form-select-sm"
                 onChange={selectTags}
+                defaultValue="Pilih Tag"
               />
               <div className="d-flex">
                 {tag?.map((item, index) => (
                   <div className="tag p-1 px-2 me-2 mt-1 d-flex " key={++index}>
-                    <div>{item}</div>
-                    <div className="tag-close" onClick={() => deleteTag(item)}>
+                    <div>{item.tags}</div>
+                    <div
+                      className="tag-close"
+                      onClick={() => deleteTag(item.tags)}
+                    >
                       x
                     </div>
                   </div>
@@ -189,7 +202,7 @@ export default function AddProduct() {
           </div>
         </div>
         <div className="form-input d-flex mb-2">
-          <Label label="Description" />
+          <Label label="Description" required />
           <div className="w-100">
             <div>
               <Input
@@ -209,7 +222,7 @@ export default function AddProduct() {
       <div className="mt-2 p-3 border rounded">
         <div className="mb-3 fw-bold">Detail Product</div>
         <div className="form-input d-flex mb-2">
-          <Label label="Harga" />
+          <Label label="Harga" required />
           <div className="w-100">
             <div>
               <Input
@@ -222,7 +235,22 @@ export default function AddProduct() {
           </div>
         </div>
         <div className="form-input d-flex mb-2">
-          <Label label="Description" />
+          <Label label="Discount" />
+          <div className="w-25">
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control form-control-sm"
+                placeholder="Discount"
+              />
+              <span className="input-group-text" id="basic-addon2">
+                %
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="form-input d-flex mb-2">
+          <Label label="Status" />
           <div className="w-100">
             <div>
               <Switcher checked="true" label="Aktif" disabled="true" />
@@ -233,13 +261,14 @@ export default function AddProduct() {
           </div>
         </div>
         <div className="form-input d-flex mb-2">
-          <Label label="Stock" />
+          <Label label="Stock" required />
           <div className="w-100">
             <div>
               <Input
                 type="number"
                 className="form-select-sm"
                 onChange={(e) => setStock(e.target.value)}
+                value={stock}
               />
             </div>
           </div>

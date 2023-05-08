@@ -1,4 +1,11 @@
-export default function Select({ type, data, onChange, className, value }) {
+export default function Select({
+  type,
+  data,
+  onChange,
+  className,
+  value,
+  defaultValue,
+}) {
   if (type === "select id") {
     return (
       <select
@@ -23,7 +30,7 @@ export default function Select({ type, data, onChange, className, value }) {
       defaultValue={"DEFAULT"}
     >
       <option value="DEFAULT" disabled>
-        Pilih...
+        {defaultValue}
       </option>
       {data?.map((item) => (
         <option value={item.name}>{item.name}</option>

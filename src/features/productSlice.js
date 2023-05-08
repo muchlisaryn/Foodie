@@ -24,14 +24,15 @@ export const fetchProduct = createAsyncThunk(
   }
 );
 
-export const getDetailProduct = createAsyncThunk(
-  "product/getDetailProduct",
-  async () => {
+export const fetchDetailProduct = createAsyncThunk(
+  "product/fetchDetailProduct",
+  async (props) => {
+    const { id } = props;
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_URL_API}/products`
+        `${process.env.REACT_APP_URL_API}/products/${id}`
       );
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -41,8 +42,15 @@ export const getDetailProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (props) => {
-    const { photo, name, description, price, discount, category, tags } = props;
+    const { photo, name, description, price, category, tags } = props;
+    console.log("ini tags", tags);
     let formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("tags", tags);
+    formData.append("image_url", photo);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_URL_API}/products`,
@@ -114,6 +122,22 @@ const productSlice = createSlice({
         state.pending = false;
         state.errorMessage = "";
       })
+      .addCase(addProduct.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(addProduct.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(addProduct.fulfilled, (state, action) => {
+        state.success = true;
+        state.products.push(action.payload);
+        state.pending = false;
+        state.errorMessage = "";
+      })
       .addCase(updateProduct.pending, (state) => {
         state.pending = false;
         state.success = false;
@@ -157,20 +181,20 @@ const productSlice = createSlice({
         );
         state.errorMessage = "";
       })
-      .addCase(getDetailProduct.pending, (state) => {
+      .addCase(fetchDetailProduct.pending, (state) => {
         state.pending = true;
         state.success = false;
         state.errorMessage = "";
       })
-      .addCase(getDetailProduct.rejected, (state, action) => {
+      .addCase(fetchDetailProduct.rejected, (state, action) => {
         state.pending = false;
         state.success = false;
         state.errorMessage = action.error;
       })
-      .addCase(getDetailProduct.fulfilled, (state, action) => {
+      .addCase(fetchDetailProduct.fulfilled, (state, action) => {
         state.success = true;
         state.pending = false;
-        state.user = action.payload;
+        state.detail = action.payload;
         state.errorMessage = "";
       });
   },

@@ -10,14 +10,14 @@ import { fetchTag } from "../../features/TagSlice";
 import { useState } from "react";
 import "./style.scss";
 import { useParams } from "react-router-dom";
+import { fetchProduct } from "../../features/ProductSlice";
 
 export default function SearchResult() {
   const dispatch = useDispatch();
   const tags = useSelector((data) => data.tag.tag);
+  const data = useSelector((state) => state.product.products);
   const [tag, setTag] = useState([]);
   const { value } = useParams();
-
-  console.log(value);
 
   const selectTag = (e) => {
     if (tag.length >= 3) {
@@ -30,12 +30,17 @@ export default function SearchResult() {
   };
 
   const deleteTag = (select) => {
+    console.log(tag.indexOf(select));
     setTag(
       tag
         .splice(0, tag.indexOf(select))
         .concat(tag.slice(tag.indexOf(select) + 1))
     );
   };
+
+  useEffect(() => {
+    dispatch(fetchProduct());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
@@ -45,11 +50,11 @@ export default function SearchResult() {
     <Container>
       <div className="search-result d-flex align-items-center mb-2">
         <div>
-          <Select data={tags} onChange={selectTag} />
+          <Select data={tags} onChange={selectTag} defaultValue="Filter Tags" />
         </div>
         <div className="d-flex ms-2">
           {tag?.map((list, index) => (
-            <div className="tag d-flex">
+            <div className="tag d-flex" key={++index}>
               <div key={++index}>{list}</div>
               <div onClick={() => deleteTag(list)} className="close">
                 x
@@ -59,17 +64,9 @@ export default function SearchResult() {
         </div>
       </div>
       <ContainerProduct>
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        {data?.map((item, index) => (
+          <ProductCard data={item} index={index} />
+        ))}
       </ContainerProduct>
     </Container>
   );

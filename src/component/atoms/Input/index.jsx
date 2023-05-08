@@ -21,11 +21,13 @@ export default function Input({
           className={`form-control   ${className}`}
           onChange={onChange}
           value={value}
-          onKeyDown={(e) => {
-            if (e.key === ",") {
+          onKeyPress={(e) => {
+            if (!/[0-9]/.test(e.key)) {
               e.preventDefault();
             }
           }}
+          min="0"
+          max="999"
         />
       </form>
     );

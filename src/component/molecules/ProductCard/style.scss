@@ -1,6 +1,15 @@
+@use "../../../index.scss" as style;
+
 .product-card {
   width: 170px;
   border-radius: 11px;
+  text-decoration: none;
+  color: black;
+
+  &:hover {
+    color: style.$primary-collor;
+  }
+
   .discount {
     background-color: red;
     padding: 2px 8px 2px 8px;
