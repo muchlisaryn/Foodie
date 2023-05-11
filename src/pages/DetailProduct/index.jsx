@@ -1,25 +1,48 @@
 import { useParams } from "react-router-dom";
-import { Button, Container } from "../../component";
+import { Button, Container, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDetailProduct } from "../../features/ProductSlice";
 import { AiTwotoneStar } from "react-icons/ai";
+import Breadcrumb from "../../component/atoms/Breadcrumb";
+import { useState } from "react";
 
 export default function DetailProduct() {
   const data = useSelector((state) => state.product.detail);
+  const [quantity, setQuantity] = useState(undefined);
+  const currentPrice = data?.price * quantity;
   const { id } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
-  }, [dispatch]);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (quantity === undefined) {
+      setQuantity(1);
+    }
+  }, [quantity]);
+
+  const dataBreadCrumb = [
+    {
+      name: "Home",
+      url: "/",
+    },
+    {
+      name: "Detail Product",
+      url: `/product/${id}`,
+    },
+  ];
+
   return (
     <Container>
+      <Breadcrumb list={dataBreadCrumb} />
       <div className="detail-product d-flex justify-content-between ">
         <div className="w-75 d-flex">
           <div className="w-50 border">
-            <img src={data?.image_url} className="w-100" />
+            <img src={data?.image_url} className="w-100" alt="photo product" />
           </div>
           <div className="w-50 ms-2 ">
             <div className="title fw-bold text-break">{data?.name}</div>
@@ -44,21 +67,29 @@ export default function DetailProduct() {
           </div>
         </div>
         <div className="w-25">
-          <div className="border w-full rounded  p-2">
-            <div>Atur Jumlah</div>
-            <div className="d-flex">
-              <div></div>
+          <div className="border h-75 rounded  p-2">
+            <div className="h-100">
+              <div className="h-50 ">
+                <div>Atur Jumlah</div>
+                <div className="d-flex align-items-center h-100">
+                  <div className="w-100">
+                    <Quantity value={quantity} setValue={setQuantity} />
+                    <div className="d-flex justify-content-between mt-3">
+                      <div>Subtotal</div>
+                      <div className="fw-bold">Rp {currentPrice}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="h-50 d-flex align-items-end">
+                <div className="w-100">
+                  <Button type="btn-add">Keranjang</Button>
+                  <Button type="button-secondary" className="mt-2">
+                    Beli Langsung
+                  </Button>
+                </div>
+              </div>
             </div>
-            <div className="d-flex justify-content-between">
-              <div>Subtotal</div>
-              <div>Rp.290000</div>
-            </div>
-            <div className="w-full">
-              <Button type="btn-add" className="w-full">
-                Keranjang
-              </Button>
-            </div>
-            <Button>Beli Langsung</Button>
           </div>
         </div>
       </div>

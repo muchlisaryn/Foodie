@@ -108,9 +108,11 @@ export default function Category() {
   return (
     <ContainerAdmin>
       <LabelPages label="Konfigurasi Category">
-        <Button type="btn-add" onClick={tambah}>
-          Tambah Category
-        </Button>
+        <div>
+          <Button type="btn-add" onClick={tambah}>
+            Tambah Category
+          </Button>
+        </div>
       </LabelPages>
       <table className="table  table-borderless border">
         <thead>

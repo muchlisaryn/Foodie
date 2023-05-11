@@ -3,6 +3,7 @@ $secondary-collor: #ca410b;
 $grey: #aaaaaa;
 
 @mixin primary-button {
+  width: 100%;
   background-color: $primary-collor;
   border: none;
   color: white;
@@ -10,5 +11,36 @@ $grey: #aaaaaa;
   &:hover {
     background-color: $secondary-collor;
     color: white;
+  }
+
+  &:disabled {
+    background-color: $grey;
+    color: white;
+    cursor: not-allowed;
+  }
+}
+
+@mixin secondary-button {
+  width: 100%;
+  background-color: white;
+  border: 1px solid $primary-collor;
+  color: $primary-collor;
+
+  &:hover {
+    background-color: $primary-collor;
+    color: white;
+  }
+
+  &:disabled {
+    border: 1px solid $grey;
+    background-color: white;
+    color: $grey;
+    cursor: not-allowed;
+  }
+
+  &:active {
+    background-color: $primary-collor;
+    color: white;
+    border: none;
   }
 }

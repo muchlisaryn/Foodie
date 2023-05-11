@@ -12,6 +12,9 @@ import AddProduct from "./Admin/KelolaProduct/AddProduct";
 import Alamat from "./User/Alamat";
 import Biodata from "./User/Biodata";
 import Pemesanan from "./User/Pemesanan";
+import Login from "./Login";
+import Register from "./Register";
+import Error from "./Error";
 
 export {
   Home,
@@ -28,4 +31,7 @@ export {
   Alamat,
   Biodata,
   Pemesanan,
+  Login,
+  Register,
+  Error,
 };

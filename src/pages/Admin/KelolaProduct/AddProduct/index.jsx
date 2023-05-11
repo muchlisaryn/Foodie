@@ -276,9 +276,11 @@ export default function AddProduct() {
       </div>
 
       <div className="d-flex justify-content-end mt-2">
-        <Button type="btn-add" disabled={btnDisable} onClick={submitProduct}>
-          Tambah Product
-        </Button>
+        <div>
+          <Button type="btn-add" disabled={btnDisable} onClick={submitProduct}>
+            Tambah Product
+          </Button>
+        </div>
       </div>
     </ContainerAdmin>
   );

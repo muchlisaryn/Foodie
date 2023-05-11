@@ -11,6 +11,7 @@ import Select from "./atoms/Select";
 import Input from "./atoms/Input";
 import Skeleton from "./atoms/Skeleton";
 import Switcher from "./atoms/Switcher";
+import Quantity from "./molecules/Quantity";
 
 export {
   Navbar,
@@ -26,4 +27,5 @@ export {
   Input,
   Skeleton,
   Switcher,
+  Quantity,
 };

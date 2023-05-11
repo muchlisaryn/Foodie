@@ -44,12 +44,14 @@ export default function KelolaProduct() {
   return (
     <ContainerAdmin>
       <LabelPages label="Kelola Product">
-        <Button
-          type="btn-add"
-          onClick={() => navigate("/admin/kelola-product/add-product")}
-        >
-          Tambah Product
-        </Button>
+        <div>
+          <Button
+            type="btn-add"
+            onClick={() => navigate("/admin/kelola-product/add-product")}
+          >
+            Tambah Product
+          </Button>
+        </div>
       </LabelPages>
       <table className="table  table-borderless border">
         <thead>

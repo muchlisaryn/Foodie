@@ -10,9 +10,13 @@ import {
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { BsArchive } from "react-icons/bs";
 import { RiUserSettingsLine } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../features/AuthSlice";
 
 export default function Sidebar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showConfig, setConfig] = useState(true);
 
   const clickConfig = () => {
@@ -21,6 +25,11 @@ export default function Sidebar() {
     } else {
       setConfig(true);
     }
+  };
+
+  const signOut = () => {
+    dispatch(logout());
+    navigate("/login");
   };
 
   const menuActive = ({ isActive }) => {
@@ -109,7 +118,10 @@ export default function Sidebar() {
                   </NavLink>
                 </>
               )}
-              <NavLink className="menu-item p-1 d-flex align-items-center">
+              <NavLink
+                className="menu-item p-1 d-flex align-items-center"
+                onClick={signOut}
+              >
                 <IoLogOutOutline />
                 <div className="ms-2">Logout</div>
               </NavLink>

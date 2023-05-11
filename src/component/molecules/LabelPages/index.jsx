@@ -8,13 +8,15 @@ export default function LabelPages({ type, label, children, to }) {
   if (type === "back") {
     return (
       <div className="d-flex align-items-center mb-3">
-        <Button
-          type="button-primary"
-          className="d-flex align-items-center"
-          onClick={() => navigate(to)}
-        >
-          <IoIosArrowBack /> <span className="ms-1"> Back</span>
-        </Button>
+        <div>
+          <Button
+            type="button-primary"
+            className="d-flex align-items-center"
+            onClick={() => navigate(to)}
+          >
+            <IoIosArrowBack /> <span className="ms-1"> Back</span>
+          </Button>
+        </div>
         <div className="fw-bold ms-3">{label}</div>
       </div>
     );

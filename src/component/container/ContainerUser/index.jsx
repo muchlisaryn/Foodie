@@ -1,8 +1,19 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Container from "../Container";
 import "./style.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../../features/AuthSlice";
 
 export default function ContainerUser({ children }) {
+  const token = useSelector((state) => state?.auth?.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const signOut = async () => {
+    await dispatch(logout(token));
+    navigate("/login");
+  };
+
   const styleNavActive = ({ isActive }) => {
     return {
       color: isActive ? "#fd4d05" : "black",
@@ -36,6 +47,9 @@ export default function ContainerUser({ children }) {
                 className="menu-item"
               >
                 <div className=" rounded p-2">Pemesanan</div>
+              </NavLink>
+              <NavLink className="menu-item" onClick={signOut}>
+                <div className=" rounded p-2">Logout</div>
               </NavLink>
             </div>
           </div>

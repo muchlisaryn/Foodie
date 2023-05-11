@@ -10,7 +10,11 @@ export default function Button({
 }) {
   if (type === "custom") {
     return (
-      <button className={`btn-custom ${className}`} onClick={onClick}>
+      <button
+        className={`btn-custom ${className}`}
+        onClick={onClick}
+        disabled={disabled}
+      >
         {children}
       </button>
     );
@@ -20,7 +24,19 @@ export default function Button({
     return (
       <button
         onClick={onClick}
-        className={`btn btn-orange ${className}`}
+        className={`btn btn-orange   ${className}`}
+        disabled={disabled}
+      >
+        {children}
+      </button>
+    );
+  }
+
+  if (type === "button-secondary") {
+    return (
+      <button
+        onClick={onClick}
+        className={`btn btn-secondary  ${className}`}
         disabled={disabled}
       >
         {children}
@@ -32,10 +48,10 @@ export default function Button({
     return (
       <button
         onClick={onClick}
-        className={`btn bg-success text-light ${className}`}
+        className={`btn bg-success text-light w-100 ${className}`}
         disabled={disabled}
       >
-        <div className="d-flex align-items-center">
+        <div className="d-flex justify-content-center align-items-center">
           <AiOutlinePlus />
           <div className="ms-2">{children}</div>
         </div>

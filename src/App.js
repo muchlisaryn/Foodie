@@ -5,11 +5,14 @@ import {
   Biodata,
   Category,
   DetailProduct,
+  Error,
   Home,
   KelolaPemesanan,
   KelolaProduct,
   KelolaUser,
+  Login,
   Pemesanan,
+  Register,
   SearchResult,
   Tag,
 } from "./pages";
@@ -20,8 +23,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="*" element={<Error />} />
+
         <Route path="/">
           <Route path="" element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
           <Route path="search" element={<SearchResult />} />
           <Route path="product/:id" element={<DetailProduct />} />
         </Route>

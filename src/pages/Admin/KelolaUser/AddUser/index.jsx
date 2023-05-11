@@ -7,10 +7,12 @@ import { registerUser } from "../../../../features/UserSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 export default function AddUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [disabled, setDisabled] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,15 +47,7 @@ export default function AddUser() {
   };
 
   const tambahUser = () => {
-    if (
-      firstName === "" ||
-      lastName === "" ||
-      email === "" ||
-      password === "" ||
-      confirmPassword === ""
-    ) {
-      alert("Semua form wajib diisi");
-    } else if (password !== confirmPassword) {
+    if (password !== confirmPassword) {
       alert("Confirm password tidak sama");
     } else {
       register({
@@ -65,6 +59,19 @@ export default function AddUser() {
       });
     }
   };
+
+  useEffect(() => {
+    if (
+      firstName === "" ||
+      email === "" ||
+      password === "" ||
+      confirmPassword === ""
+    ) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+  }, [firstName, lastName, email, password, confirmPassword]);
 
   const role = [
     {
@@ -86,7 +93,7 @@ export default function AddUser() {
           <div className="me-2">:</div>
           <Input
             type="text"
-            onChage={(e) => setFirstName(e?.target?.value)}
+            onChange={(e) => setFirstName(e?.target?.value)}
             value={firstName}
             className="form-control-sm"
           />
@@ -96,7 +103,7 @@ export default function AddUser() {
           <div className="me-2">:</div>
           <Input
             type="text"
-            onChage={(e) => setLastName(e?.target?.value)}
+            onChange={(e) => setLastName(e?.target?.value)}
             value={lastName}
             className="form-control-sm"
           />
@@ -106,7 +113,7 @@ export default function AddUser() {
           <div className="me-2">:</div>
           <Input
             type="text"
-            onChage={(e) => setEmail(e?.target?.value)}
+            onChange={(e) => setEmail(e?.target?.value)}
             value={email}
             className="form-control-sm"
           />
@@ -119,7 +126,7 @@ export default function AddUser() {
             label="Select Role"
             className="form-select-sm"
             onChange={(e) => setSelectRole(e.target.value)}
-            value={selectRole}
+            defaultValue="Select Role"
           />
         </div>
         <div className="form-input d-flex align-items-center pb-2 ">
@@ -127,7 +134,7 @@ export default function AddUser() {
           <div className="me-2">:</div>
           <Input
             type="password"
-            onChage={(e) => setPassword(e?.target?.value)}
+            onChange={(e) => setPassword(e?.target?.value)}
             value={password}
             className="form-control-sm"
           />
@@ -137,14 +144,19 @@ export default function AddUser() {
           <div className="me-2">:</div>
           <Input
             type="password"
-            onChage={(e) => setConfirmPassword(e?.target?.value)}
+            onChange={(e) => setConfirmPassword(e?.target?.value)}
             value={confirmPassword}
             className="form-control-sm"
           />
         </div>
         <div className="d-flex justify-content-end">
           <div>
-            <Button className="bg-success text-light" onClick={tambahUser}>
+            <Button
+              type="btn-add"
+              className="bg-success text-light"
+              onClick={tambahUser}
+              disabled={disabled}
+            >
               Tambah User
             </Button>
           </div>

@@ -1,4 +1,5 @@
 import { BiSearch } from "react-icons/bi";
+import "./styles.scss";
 
 export default function Input({
   type,
@@ -11,12 +12,13 @@ export default function Input({
   onInput,
   accept,
   name,
+  style,
 }) {
   if (type === "number") {
     return (
-      <form className="w-100" onSubmit={onSubmit}>
+      <form className="w-100 number" onSubmit={onSubmit}>
         <input
-          type={type}
+          type="number"
           placeholder={placeholder}
           className={`form-control   ${className}`}
           onChange={onChange}
@@ -27,7 +29,7 @@ export default function Input({
             }
           }}
           min="0"
-          max="999"
+          style={style}
         />
       </form>
     );

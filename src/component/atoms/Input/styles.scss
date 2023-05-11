@@ -4,3 +4,16 @@
   color: aqua;
   color: style.$grey;
 }
+
+form.number {
+  input {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
