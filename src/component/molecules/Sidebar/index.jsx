@@ -11,10 +11,14 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { BsArchive } from "react-icons/bs";
 import { RiUserSettingsLine } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../features/AuthSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import Swal from "sweetalert2";
 
 export default function Sidebar() {
+  const token = localStorage.getItem("auth");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showConfig, setConfig] = useState(true);
@@ -27,9 +31,13 @@ export default function Sidebar() {
     }
   };
 
-  const signOut = () => {
-    dispatch(logout());
-    navigate("/login");
+  const signOut = async () => {
+    const actionSignOut = await dispatch(logout(token));
+    const result = await unwrapResult(actionSignOut);
+    if (result) {
+      navigate("/login");
+      Swal.fire("Success!", `${result.message}`, "success");
+    }
   };
 
   const menuActive = ({ isActive }) => {

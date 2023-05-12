@@ -32,14 +32,14 @@ export default function Login() {
     if (authResult.token) {
       const action = await dispatch(getToken(authResult?.token));
       const result = await unwrapResult(action);
+      console.log("=======>", result);
       if (result.role) {
         if (result.role === "admin") {
-          Swal.fire("Success!", `${result.message}`, "success");
           navigate("/admin/kelola-product");
         } else {
-          Swal.fire("Success!", `${result.message}`, "success");
           navigate("/");
         }
+        Swal.fire("Success!", "Login Success", "success");
       } else {
         Swal.fire({
           icon: "error",

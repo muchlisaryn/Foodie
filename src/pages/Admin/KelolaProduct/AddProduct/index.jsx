@@ -14,6 +14,8 @@ import { fetchTag } from "../../../../features/TagSlice";
 import "./style.scss";
 import { addProduct } from "../../../../features/ProductSlice";
 import { useNavigate } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
+import Swal from "sweetalert2";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -28,24 +30,22 @@ export default function AddProduct() {
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
   const [photo, setPhoto] = useState("");
+  const [discount, setDiscount] = useState("");
 
   console.log(tag);
 
   const selectTags = (e) => {
     if (e.target.value !== tag.find((item) => item === e.target.value)) {
-      setTag([...tag, { tags: e.target.value }]);
+      setTag([...tag, e.target.value]);
     }
   };
 
   const deleteTag = (select) => {
-    console.log(tag.findIndex((key) => key.tags === select));
+    console.log(tag.indexOf(select));
     setTag(
       tag
-        .splice(
-          0,
-          tag.findIndex((key) => key.tags === select)
-        )
-        .concat(tag.slice(tag.findIndex((key) => key.tags === select) + 1))
+        .splice(0, tag.indexOf(select))
+        .concat(tag.slice(tag.indexOf(select) + 1))
     );
   };
 
@@ -73,8 +73,7 @@ export default function AddProduct() {
       categories === "" ||
       tag === [] ||
       description === "" ||
-      price === 0 ||
-      stock === 0
+      price === 0
     ) {
       setBtnDisable(true);
     } else {
@@ -82,11 +81,11 @@ export default function AddProduct() {
     }
   }, [name, categories, tag, description, price, stock, btnDisable]);
 
-  const submitProduct = () => {
+  const submitProduct = async () => {
     if (name > 40) {
       alert("please input name product max 40 character");
     } else {
-      dispatch(
+      const createProduct = await dispatch(
         addProduct({
           photo,
           name,
@@ -94,9 +93,14 @@ export default function AddProduct() {
           price,
           category: categories,
           tags: tag,
+          discount,
         })
       );
-      navigate("/admin/kelola-product");
+      const result = unwrapResult(createProduct);
+      if (result) {
+        navigate("/admin/kelola-product");
+        Swal.fire("Success!", "Berhasil Menambahkan Product", "success");
+      }
     }
   };
 
@@ -168,11 +172,8 @@ export default function AddProduct() {
               <div className="d-flex">
                 {tag?.map((item, index) => (
                   <div className="tag p-1 px-2 me-2 mt-1 d-flex " key={++index}>
-                    <div>{item.tags}</div>
-                    <div
-                      className="tag-close"
-                      onClick={() => deleteTag(item.tags)}
-                    >
+                    <div>{item}</div>
+                    <div className="tag-close" onClick={() => deleteTag(item)}>
                       x
                     </div>
                   </div>
@@ -239,9 +240,11 @@ export default function AddProduct() {
           <div className="w-25">
             <div className="input-group mb-3">
               <input
-                type="text"
+                type="number"
                 className="form-control form-control-sm"
                 placeholder="Discount"
+                onChange={(e) => setDiscount(e.target.value)}
+                value={discount}
               />
               <span className="input-group-text" id="basic-addon2">
                 %

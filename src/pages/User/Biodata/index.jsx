@@ -21,7 +21,7 @@ export default function Biodata() {
       <div className="biodata mt-2">
         <div className="photo-profile">
           <img
-            src="https://img.freepik.com/free-vector/cheese-snack-food-product-ad_52683-34031.jpg?w=360"
+            src="https://assets.ayobandung.com/crop/0x0:0x0/750x500/webp/photo/2023/01/12/1119792131.jpg"
             alt="foto profile"
           />
           <input className="select-photo" type="file" />

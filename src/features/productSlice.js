@@ -10,6 +10,18 @@ const initialState = {
   totalResult: 0,
 };
 
+export const queryProduct = createAsyncThunk(
+  "product/queryProduct",
+  async (url) => {
+    try {
+      const response = await axios.get(url);
+      return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchProduct = createAsyncThunk(
   "product/fetchProduct",
   async () => {
@@ -42,15 +54,16 @@ export const fetchDetailProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (props) => {
-    const { photo, name, description, price, category, tags } = props;
+    const { photo, name, description, price, category, tags, discount } = props;
     console.log("ini tags", tags);
     let formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("price", price);
     formData.append("category", category);
-    formData.append("tags", tags);
+    tags?.map((item) => formData.append("tags[]", item));
     formData.append("image_url", photo);
+    formData.append("discount", discount);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_URL_API}/products`,
@@ -117,6 +130,22 @@ const productSlice = createSlice({
         state.errorMessage = action.error.message;
       })
       .addCase(fetchProduct.fulfilled, (state, action) => {
+        state.success = true;
+        state.products = action.payload;
+        state.pending = false;
+        state.errorMessage = "";
+      })
+      .addCase(queryProduct.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(queryProduct.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(queryProduct.fulfilled, (state, action) => {
         state.success = true;
         state.products = action.payload;
         state.pending = false;

@@ -2,6 +2,7 @@
 
 .product-card {
   width: 170px;
+
   border-radius: 11px;
   text-decoration: none;
   color: black;
@@ -54,19 +55,19 @@
 
 @media screen and (max-width: 1399px) {
   .product-card {
-    width: 170px;
+    width: 160px;
     border-radius: 11px;
     .discount {
       background-color: red;
       padding: 2px 8px 2px 8px;
-      border-radius: 10px 0px;
+      border-radius: 5px 0px;
       color: white;
       font-size: 12px;
     }
 
     img {
       width: 100%;
-      height: 170px;
+      height: 140px;
       border-radius: 10px 10px 0px 0px;
     }
 

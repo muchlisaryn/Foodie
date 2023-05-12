@@ -30,9 +30,10 @@ export const logout = createAsyncThunk("auth/logout", async (token) => {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_URL_AUTH}/logout`,
+      token,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: token,
         },
       }
     );
@@ -46,7 +47,7 @@ export const getToken = createAsyncThunk("auth/getToken", async (token) => {
   try {
     const response = await axios.get(`${process.env.REACT_APP_URL_AUTH}/me`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
     });
     return response.data;

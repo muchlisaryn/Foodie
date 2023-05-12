@@ -9,6 +9,8 @@ export default function ContainerUser({ children }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log(token);
+
   const signOut = async () => {
     await dispatch(logout(token));
     navigate("/login");

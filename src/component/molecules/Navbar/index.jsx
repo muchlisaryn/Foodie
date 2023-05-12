@@ -6,9 +6,9 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import "./styles.scss";
 
 export default function Navbar({ onChange, onSubmit, value, setValue }) {
+  const login = localStorage.getItem("auth");
+  console.log(login);
   const navigate = useNavigate();
-
-  const login = true;
 
   return (
     <nav class="navbar border-bottom fixed-top">
@@ -20,7 +20,8 @@ export default function Navbar({ onChange, onSubmit, value, setValue }) {
           placeholder="Search From more than 10,000 products"
           type="search"
           onSubmit={onSubmit}
-          onChage={(e) => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
+          value={value}
           className="search"
         />
         <div className="d-flex align-items-center ">
@@ -37,14 +38,16 @@ export default function Navbar({ onChange, onSubmit, value, setValue }) {
               <Button type="avatar" onClick={() => navigate("/user/biodata")}>
                 <div className="d-flex align-items-center avatar">
                   <img
-                    src="https://akcdn.detik.net.id/visual/2022/12/14/kiri-avatar-the-way-of-water_169.png?w=650"
+                    src="https://assets.ayobandung.com/crop/0x0:0x0/750x500/webp/photo/2023/01/12/1119792131.jpg"
                     alt="avatar"
                   />
                   <div className="ms-2">Muchlis</div>
                 </div>
               </Button>
             ) : (
-              <Button>Login</Button>
+              <Button type="button-primary" onClick={() => navigate("/login")}>
+                Login
+              </Button>
             )}
           </div>
         </div>

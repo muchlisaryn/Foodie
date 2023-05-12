@@ -7,6 +7,7 @@ import { fetchDetailProduct } from "../../features/ProductSlice";
 import { AiTwotoneStar } from "react-icons/ai";
 import Breadcrumb from "../../component/atoms/Breadcrumb";
 import { useState } from "react";
+import { formatRupiah } from "../../utils";
 
 export default function DetailProduct() {
   const data = useSelector((state) => state.product.detail);
@@ -14,6 +15,8 @@ export default function DetailProduct() {
   const currentPrice = data?.price * quantity;
   const { id } = useParams();
   const dispatch = useDispatch();
+
+  console.log(data);
 
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
@@ -42,7 +45,7 @@ export default function DetailProduct() {
       <div className="detail-product d-flex justify-content-between ">
         <div className="w-75 d-flex">
           <div className="w-50 border">
-            <img src={data?.image_url} className="w-100" alt="photo product" />
+            <img src={data?.image_url} className="w-100" alt="image" />
           </div>
           <div className="w-50 ms-2 ">
             <div className="title fw-bold text-break">{data?.name}</div>
@@ -55,13 +58,23 @@ export default function DetailProduct() {
                 <div className="ms-2">(6 Rating)</div>
               </div>
             </div>
-            <div className="price fw-bold py-3">Rp {data?.price}</div>
+            <div className="price fw-bold py-3">
+              {formatRupiah(data?.price)}
+            </div>
             <div>{data?.description}</div>
             <div className="mt-5">
               <div className="detail fw-bold mb-2">Detail</div>
               <div className="d-flex">
                 <div>Category :</div>
                 <div className="ms-2 value">{data?.category?.name}</div>
+              </div>
+              <div className="d-flex">
+                <div>Tags :</div>
+                <div className="d-flex ms-2 value">
+                  {data?.tags.map((item) => (
+                    <div>{item?.name} </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -76,7 +89,9 @@ export default function DetailProduct() {
                     <Quantity value={quantity} setValue={setQuantity} />
                     <div className="d-flex justify-content-between mt-3">
                       <div>Subtotal</div>
-                      <div className="fw-bold">Rp {currentPrice}</div>
+                      <div className="fw-bold">
+                        {formatRupiah(currentPrice)}
+                      </div>
                     </div>
                   </div>
                 </div>

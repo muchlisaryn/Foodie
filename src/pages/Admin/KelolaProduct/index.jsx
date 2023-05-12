@@ -10,6 +10,7 @@ import {
 } from "../../../features/ProductSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
+import { formatRupiah } from "../../../utils";
 
 export default function KelolaProduct() {
   const dispatch = useDispatch();
@@ -106,7 +107,11 @@ export default function KelolaProduct() {
                     )}
                   </td>
                   <td className="w-25 align-middle">
-                    {loading ? <Skeleton height={22} /> : list?.price}
+                    {loading ? (
+                      <Skeleton height={22} />
+                    ) : (
+                      formatRupiah(list?.price)
+                    )}
                   </td>
                   <td className="align-middle">
                     {loading ? (

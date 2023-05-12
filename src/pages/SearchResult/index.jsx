@@ -9,15 +9,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTag } from "../../features/TagSlice";
 import { useState } from "react";
 import "./style.scss";
-import { useParams } from "react-router-dom";
-import { fetchProduct } from "../../features/ProductSlice";
+import { queryProduct } from "../../features/ProductSlice";
 
 export default function SearchResult() {
   const dispatch = useDispatch();
+  const params = new URLSearchParams(document?.location.search);
+  const searchParams = params.get("q");
   const tags = useSelector((data) => data.tag.tag);
   const data = useSelector((state) => state.product.products);
+  const [value, setValue] = useState(searchParams);
   const [tag, setTag] = useState([]);
-  const { value } = useParams();
+
+  console.log("ini tag", tag);
+
+  const searchProduct = (e) => {
+    e.preventDefault();
+    dispatch(
+      queryProduct(`${process.env.REACT_APP_URL_API}/products?q=${value}`)
+    );
+  };
 
   const selectTag = (e) => {
     if (tag.length >= 3) {
@@ -39,15 +49,21 @@ export default function SearchResult() {
   };
 
   useEffect(() => {
-    dispatch(fetchProduct());
-  }, [dispatch]);
+    dispatch(
+      queryProduct(
+        `${
+          process.env.REACT_APP_URL_API
+        }/products?q=${value}&status=true&tags=${[tag]}`
+      )
+    );
+  }, [dispatch, value, tag]);
 
   useEffect(() => {
     dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container setValue={setValue} value={value} onSubmit={searchProduct}>
       <div className="search-result d-flex align-items-center mb-2">
         <div>
           <Select data={tags} onChange={selectTag} defaultValue="Filter Tags" />
@@ -64,9 +80,17 @@ export default function SearchResult() {
         </div>
       </div>
       <ContainerProduct>
-        {data?.map((item, index) => (
-          <ProductCard data={item} index={index} />
-        ))}
+        {data?.length > 0 ? (
+          <>
+            {data?.map((item, index) => (
+              <ProductCard data={item} index={index} />
+            ))}
+          </>
+        ) : (
+          <div className="d-flex w-100 justify-content-center align-items-center">
+            Data Not Found
+          </div>
+        )}
       </ContainerProduct>
     </Container>
   );
