@@ -18,6 +18,8 @@ import {
 } from "./pages";
 import Dashboard from "./pages/Admin/Dashboard";
 import AddProduct from "./pages/Admin/KelolaProduct/AddProduct";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
   return (

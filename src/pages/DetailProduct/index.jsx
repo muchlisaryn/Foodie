@@ -10,13 +10,11 @@ import { useState } from "react";
 import { formatRupiah } from "../../utils";
 
 export default function DetailProduct() {
+  const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
   const [quantity, setQuantity] = useState(undefined);
   const currentPrice = data?.price * quantity;
   const { id } = useParams();
-  const dispatch = useDispatch();
-
-  console.log(data);
 
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));

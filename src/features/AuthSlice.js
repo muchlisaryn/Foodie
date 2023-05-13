@@ -21,8 +21,8 @@ export const login = createAsyncThunk("auth/login", async (props) => {
       }
     );
     return response.data;
-  } catch (e) {
-    throw e;
+  } catch (error) {
+    return error.response.data;
   }
 });
 
@@ -38,8 +38,8 @@ export const logout = createAsyncThunk("auth/logout", async (token) => {
       }
     );
     return response.data;
-  } catch (e) {
-    throw e;
+  } catch (error) {
+    return error.response.data;
   }
 });
 

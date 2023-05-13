@@ -46,7 +46,7 @@ export const fetchDetailProduct = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw error;
+      console.log("ini errror", error);
     }
   }
 );

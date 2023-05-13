@@ -9,6 +9,8 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
 
 export default function Login() {
+  const loading = useSelector((state) => state?.auth?.pending);
+  console.log(loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
@@ -28,11 +30,16 @@ export default function Login() {
 
     const auth = await dispatch(login({ email, password }));
     const authResult = await unwrapResult(auth);
-    console.log("===> ", authResult);
+    if (authResult.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: authResult.message,
+      });
+    }
     if (authResult.token) {
       const action = await dispatch(getToken(authResult?.token));
       const result = await unwrapResult(action);
-      console.log("=======>", result);
       if (result.role) {
         if (result.role === "admin") {
           navigate("/admin/kelola-product");
@@ -81,7 +88,7 @@ export default function Login() {
                 disabled={disabled}
                 onClick={auth}
               >
-                Login
+                {loading ? "Loading..." : "Login"}
               </Button>
             </div>
           </div>

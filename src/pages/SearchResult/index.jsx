@@ -17,10 +17,10 @@ export default function SearchResult() {
   const searchParams = params.get("q");
   const tags = useSelector((data) => data.tag.tag);
   const data = useSelector((state) => state.product.products);
-  const [value, setValue] = useState(searchParams);
+  const [value, setValue] = useState(searchParams ? searchParams : "");
   const [tag, setTag] = useState([]);
 
-  console.log("ini tag", tag);
+  console.log("ini data", data);
 
   const searchProduct = (e) => {
     e.preventDefault();

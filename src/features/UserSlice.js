@@ -45,8 +45,8 @@ export const registerUser = createAsyncThunk("user/register", async (props) => {
       }
     );
     return response.data;
-  } catch (e) {
-    throw e;
+  } catch (error) {
+    return error?.response?.data;
   }
 });
 
