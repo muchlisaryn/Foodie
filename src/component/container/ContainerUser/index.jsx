@@ -1,21 +1,20 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import Container from "../Container";
 import "./style.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout } from "../../../features/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
 
 export default function ContainerUser({ children }) {
-  const token = useSelector((state) => state?.auth?.auth);
+  const token = localStorage.getItem("auth");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const signOut = async () => {
     const logoutAction = await dispatch(logout(token));
     const result = await unwrapResult(logoutAction);
-    console.log(result);
-    if (result?.error) {
+    if (result.error) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -23,9 +22,8 @@ export default function ContainerUser({ children }) {
       });
     } else {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: result.message,
+        icon: "success",
+        title: result.message,
       });
       navigate("/");
     }

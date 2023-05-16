@@ -3,6 +3,7 @@ import {
   AddUser,
   Alamat,
   Biodata,
+  Cart,
   Category,
   DetailProduct,
   Error,
@@ -18,8 +19,6 @@ import {
 } from "./pages";
 import Dashboard from "./pages/Admin/Dashboard";
 import AddProduct from "./pages/Admin/KelolaProduct/AddProduct";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
 
 function App() {
   return (
@@ -33,6 +32,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="search" element={<SearchResult />} />
           <Route path="product/:id" element={<DetailProduct />} />
+          <Route path="cart" element={<Cart />} />
         </Route>
 
         <Route path="/user/">

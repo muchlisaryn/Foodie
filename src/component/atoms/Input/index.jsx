@@ -13,6 +13,7 @@ export default function Input({
   accept,
   name,
   style,
+  label,
 }) {
   if (type === "number") {
     return (
@@ -65,6 +66,23 @@ export default function Input({
           value={value}
         />
       </form>
+    );
+  }
+
+  if (type === "checkbox") {
+    return (
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value={value}
+          onChange={onChange}
+          id="flexCheckDefault"
+        />
+        <label className="form-check-label" for="flexCheckDefault">
+          {label}
+        </label>
+      </div>
     );
   }
 

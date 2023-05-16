@@ -18,6 +18,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
 
 export default function AddProduct() {
+  const token = localStorage.getItem("auth");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((data) => data.category.categories);
@@ -32,8 +33,6 @@ export default function AddProduct() {
   const [photo, setPhoto] = useState("");
   const [discount, setDiscount] = useState("");
 
-  console.log(tag);
-
   const selectTags = (e) => {
     if (e.target.value !== tag.find((item) => item === e.target.value)) {
       setTag([...tag, e.target.value]);
@@ -41,7 +40,6 @@ export default function AddProduct() {
   };
 
   const deleteTag = (select) => {
-    console.log(tag.indexOf(select));
     setTag(
       tag
         .splice(0, tag.indexOf(select))
@@ -94,6 +92,7 @@ export default function AddProduct() {
           category: categories,
           tags: tag,
           discount,
+          token,
         })
       );
       const result = unwrapResult(createProduct);

@@ -46,7 +46,7 @@ export const fetchDetailProduct = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      console.log("ini errror", error);
+      throw error;
     }
   }
 );
@@ -54,8 +54,9 @@ export const fetchDetailProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (props) => {
-    const { photo, name, description, price, category, tags, discount } = props;
-    console.log("ini tags", tags);
+    const { photo, name, description, price, category, tags, discount, token } =
+      props;
+
     let formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
@@ -71,6 +72,7 @@ export const addProduct = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: token,
           },
         }
       );

@@ -15,6 +15,7 @@ import Pemesanan from "./User/Pemesanan";
 import Login from "./Login";
 import Register from "./Register";
 import Error from "./Error";
+import Cart from "./Cart";
 
 export {
   Home,
@@ -34,4 +35,5 @@ export {
   Login,
   Register,
   Error,
+  Cart,
 };

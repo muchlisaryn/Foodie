@@ -15,7 +15,7 @@ import { formatRupiah } from "../../../utils";
 export default function KelolaProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const loading = true;
+
   const loading = useSelector((state) => state.product.pending);
   const data = useSelector((state) => state.product.products);
 

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Button, Container, Quantity } from "../../component";
+import { Button, Container, Navbar, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,28 +8,28 @@ import { AiTwotoneStar } from "react-icons/ai";
 import Breadcrumb from "../../component/atoms/Breadcrumb";
 import { useState } from "react";
 import { formatRupiah } from "../../utils";
+import Swal from "sweetalert2";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { addCart } from "../../features/CartSlice";
 
 export default function DetailProduct() {
+  const { id } = useParams();
+
   const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
-  const [quantity, setQuantity] = useState(undefined);
-  const currentPrice = data?.price * quantity;
-  const { id } = useParams();
+  const [quantity, setQuantity] = useState(1);
+
+  const price = data?.price;
+  const currentPrice = price * quantity;
 
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
-  }, [dispatch, id]);
-
-  useEffect(() => {
-    if (quantity === undefined) {
-      setQuantity(1);
-    }
-  }, [quantity]);
+  }, [dispatch]);
 
   const dataBreadCrumb = [
     {
       name: "Home",
-      url: "/",
+      url: "/search",
     },
     {
       name: "Detail Product",
@@ -37,8 +37,18 @@ export default function DetailProduct() {
     },
   ];
 
+  const addToCart = async (items) => {
+    const add = await dispatch(
+      addCart({ items, qty: quantity, price: currentPrice })
+    );
+    const result = await unwrapResult(add);
+    if (result) {
+      Swal.fire("Success!", "Berhasil Menambahkan ke Keranjang", "success");
+    }
+  };
+
   return (
-    <Container>
+    <Navbar>
       <Breadcrumb list={dataBreadCrumb} />
       <div className="detail-product d-flex justify-content-between ">
         <div className="w-75 d-flex">
@@ -56,9 +66,7 @@ export default function DetailProduct() {
                 <div className="ms-2">(6 Rating)</div>
               </div>
             </div>
-            <div className="price fw-bold py-3">
-              {formatRupiah(data?.price)}
-            </div>
+            <div className="price fw-bold py-3"></div>
             <div>{data?.description}</div>
             <div className="mt-5">
               <div className="detail fw-bold mb-2">Detail</div>
@@ -69,7 +77,7 @@ export default function DetailProduct() {
               <div className="d-flex">
                 <div>Tags :</div>
                 <div className="d-flex ms-2 value">
-                  {data?.tags.map((item) => (
+                  {data?.tags?.map((item) => (
                     <div>{item?.name} </div>
                   ))}
                 </div>
@@ -96,7 +104,9 @@ export default function DetailProduct() {
               </div>
               <div className="h-50 d-flex align-items-end">
                 <div className="w-100">
-                  <Button type="btn-add">Keranjang</Button>
+                  <Button type="btn-add" onClick={() => addToCart(data)}>
+                    Keranjang
+                  </Button>
                   <Button type="button-secondary" className="mt-2">
                     Beli Langsung
                   </Button>
@@ -106,6 +116,6 @@ export default function DetailProduct() {
           </div>
         </div>
       </div>
-    </Container>
+    </Navbar>
   );
 }

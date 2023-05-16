@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ContainerProduct, ProductCard, Container } from "../../component";
+import { ContainerProduct, ProductCard, Navbar } from "../../component";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +23,7 @@ export default function Home() {
   }, [dispatch]);
 
   return (
-    <Container value={query} setValue={setQuery} onSubmit={submitSearch}>
+    <Navbar value={query} setValue={setQuery} onSubmit={submitSearch}>
       <div
         id="carouselExampleIndicators"
         className="carousel slide"
@@ -108,6 +108,6 @@ export default function Home() {
           <ProductCard data={item} index={index} />
         ))}
       </ContainerProduct>
-    </Container>
+    </Navbar>
   );
 }

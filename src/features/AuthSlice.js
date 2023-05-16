@@ -6,7 +6,6 @@ const initialState = {
   success: false,
   errorMessage: "",
   user: {},
-  auth: localStorage.getItem("auth"),
   role: {},
 };
 
