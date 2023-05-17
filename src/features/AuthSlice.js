@@ -73,7 +73,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.success = true;
-        state.user = localStorage.setItem("auth", action.payload.token);
+        localStorage.setItem("auth", action.payload.token);
+        localStorage.setItem("user", action.payload.user._id);
         state.pending = false;
         state.errorMessage = "";
       })
@@ -108,6 +109,7 @@ const authSlice = createSlice({
         state.success = true;
         state.pending = false;
         localStorage.removeItem("auth");
+        localStorage.removeItem("user");
         state.role = {};
         state.user = {};
         state.errorMessage = "";

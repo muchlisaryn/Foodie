@@ -22,7 +22,7 @@ export default function Home() {
     dispatch(
       queryProduct(`${process.env.REACT_APP_URL_API}/products?limit=10`)
     );
-    dispatch(getCart({ auth }));
+    dispatch(getCart(auth));
   }, [dispatch]);
 
   return (

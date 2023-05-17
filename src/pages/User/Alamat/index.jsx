@@ -1,10 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import { Button, ContainerUser } from "../../../component";
 import "./style.scss";
 
 export default function Alamat() {
+  const navigate = useNavigate();
+
   return (
     <ContainerUser>
-      <Button type="btn-add" className="btn-sm">
+      <Button
+        type="btn-add"
+        className="btn-sm"
+        onClick={() => navigate("/user/alamat/add-alamat")}
+      >
         Tambah Alamat
       </Button>
       <div className="mt-2">

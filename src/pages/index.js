@@ -16,6 +16,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Error from "./Error";
 import Cart from "./Cart";
+import AddAlamat from "./User/Alamat/AddAlamat";
 
 export {
   Home,
@@ -36,4 +37,5 @@ export {
   Register,
   Error,
   Cart,
+  AddAlamat,
 };

@@ -5,6 +5,8 @@ export default function Select({
   className,
   value,
   defaultValue,
+  disabled,
+  id,
 }) {
   if (type === "select id") {
     return (
@@ -13,9 +15,17 @@ export default function Select({
         onChange={onChange}
         className={`form-select w-100 ${className}`}
         value={value}
+        defaultValue={"DEFAULT"}
+        disabled={disabled}
+        id={id}
       >
+        <option value="DEFAULT" disabled>
+          {defaultValue}
+        </option>
         {data?.map((item) => (
-          <option value={item._id}>{item.name}</option>
+          <option key={item?.id} id={item?.id} value={item?.id}>
+            {item.nama}
+          </option>
         ))}
       </select>
     );

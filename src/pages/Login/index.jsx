@@ -30,6 +30,7 @@ export default function Login() {
 
     const auth = await dispatch(login({ email, password }));
     const authResult = await unwrapResult(auth);
+    console.log(authResult);
     if (authResult.error) {
       Swal.fire({
         icon: "error",

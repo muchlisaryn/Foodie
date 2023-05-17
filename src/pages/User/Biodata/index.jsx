@@ -1,7 +1,10 @@
+import { useDispatch } from "react-redux";
 import { ContainerUser } from "../../../component";
 import "./style.scss";
 
 export default function Biodata() {
+  const dispatch = useDispatch();
+
   const FormBiodata = ({ title, value, onClick }) => {
     return (
       <div className="d-flex mb-2">
@@ -19,13 +22,6 @@ export default function Biodata() {
   return (
     <ContainerUser>
       <div className="biodata mt-2">
-        <div className="photo-profile">
-          <img
-            src="https://assets.ayobandung.com/crop/0x0:0x0/750x500/webp/photo/2023/01/12/1119792131.jpg"
-            alt="foto profile"
-          />
-          <input className="select-photo" type="file" />
-        </div>
         <div className="w-75 bio">
           <div className="fw-bold mb-2">Ubah Biodata Diri</div>
           <FormBiodata title="First Name" value="Muchlis" />

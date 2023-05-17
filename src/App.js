@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
+  AddAlamat,
   AddUser,
   Alamat,
   Biodata,
@@ -37,7 +38,10 @@ function App() {
 
         <Route path="/user/">
           <Route path="biodata" element={<Biodata />} />
-          <Route path="alamat" element={<Alamat />} />
+          <Route path="alamat/">
+            <Route path="" element={<Alamat />} />
+            <Route path="add-alamat" element={<AddAlamat />} />
+          </Route>
           <Route path="pemesanan" element={<Pemesanan />} />
         </Route>
 
