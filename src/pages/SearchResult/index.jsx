@@ -10,6 +10,7 @@ import { fetchTag } from "../../features/TagSlice";
 import { useState } from "react";
 import "./style.scss";
 import { queryProduct } from "../../features/ProductSlice";
+import { searchIlustration } from "../../assets";
 
 export default function SearchResult() {
   const dispatch = useDispatch();
@@ -87,8 +88,13 @@ export default function SearchResult() {
             ))}
           </>
         ) : (
-          <div className="d-flex w-100 justify-content-center align-items-center">
-            Data Not Found
+          <div className="search d-flex w-100 mt-5 justify-content-center align-items-center">
+            <div>
+              <img src={searchIlustration} alt="search" />
+              <div className="mt-4 text-center">
+                <span className="fw-bold">Sorry,</span> Data Not Found!
+              </div>
+            </div>
           </div>
         )}
       </ContainerProduct>

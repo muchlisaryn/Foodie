@@ -8,11 +8,8 @@ const initialState = {
   cart: [],
 };
 
-const token = localStorage.getItem("auth");
-console.log(token);
-
 export const addCart = createAsyncThunk("cart/addCart", async (props) => {
-  const { items, qty, price } = props;
+  const { items, qty, price, auth } = props;
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_URL_API}/carts`,
@@ -23,7 +20,7 @@ export const addCart = createAsyncThunk("cart/addCart", async (props) => {
       },
       {
         headers: {
-          Authorization: token,
+          Authorization: auth,
         },
       }
     );
@@ -33,7 +30,7 @@ export const addCart = createAsyncThunk("cart/addCart", async (props) => {
   }
 });
 
-export const getCart = createAsyncThunk("cart/getCart", async () => {
+export const getCart = createAsyncThunk("cart/getCart", async (token) => {
   try {
     const response = await axios.get(`${process.env.REACT_APP_URL_API}/carts`, {
       headers: {
@@ -46,7 +43,8 @@ export const getCart = createAsyncThunk("cart/getCart", async () => {
   }
 });
 
-export const deleteCart = createAsyncThunk("cart/deleteCart", async (id) => {
+export const deleteCart = createAsyncThunk("cart/deleteCart", async (props) => {
+  const { id, token } = props;
   try {
     const response = await axios.delete(
       `${process.env.REACT_APP_URL_API}/carts/${id}`,
@@ -82,9 +80,10 @@ const cartSlice = createSlice({
         state.success = false;
         state.errorMessage = action.error.message;
       })
-      .addCase(addCart.fulfilled, (state) => {
+      .addCase(addCart.fulfilled, (state, action) => {
         state.success = true;
         state.pending = false;
+        state.cart.push(action.payload);
         state.errorMessage = "";
       })
       .addCase(getCart.pending, (state) => {

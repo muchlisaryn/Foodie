@@ -14,7 +14,7 @@ import { addCart } from "../../features/CartSlice";
 
 export default function DetailProduct() {
   const { id } = useParams();
-
+  const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
   const [quantity, setQuantity] = useState(1);
@@ -39,7 +39,7 @@ export default function DetailProduct() {
 
   const addToCart = async (items) => {
     const add = await dispatch(
-      addCart({ items, qty: quantity, price: currentPrice })
+      addCart({ items, qty: quantity, price: currentPrice, auth })
     );
     const result = await unwrapResult(add);
     if (result) {

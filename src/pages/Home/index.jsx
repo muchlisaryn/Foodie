@@ -4,8 +4,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { queryProduct } from "../../features/ProductSlice";
+import { getCart } from "../../features/CartSlice";
 
 export default function Home() {
+  const auth = localStorage.getItem("auth");
   const data = useSelector((state) => state?.product?.products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ export default function Home() {
     dispatch(
       queryProduct(`${process.env.REACT_APP_URL_API}/products?limit=10`)
     );
+    dispatch(getCart({ auth }));
   }, [dispatch]);
 
   return (
