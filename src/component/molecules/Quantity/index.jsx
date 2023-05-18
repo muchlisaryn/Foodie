@@ -2,7 +2,6 @@ import { useState } from "react";
 import Button from "../../atoms/Button";
 import "./style.scss";
 import { useEffect } from "react";
-import { HiPlusSm, HiMinusSm } from "react-icons/hi";
 
 export default function Quantity({ value, setValue }) {
   const [minDisable, setMinDisable] = useState(false);
@@ -31,7 +30,7 @@ export default function Quantity({ value, setValue }) {
         onClick={clickMin}
         disabled={minDisable}
       >
-        <HiMinusSm />
+        -
       </Button>
       <div className="text-center w-100">{value}</div>
       <Button
@@ -39,7 +38,7 @@ export default function Quantity({ value, setValue }) {
         className="w-25 btn-custom-right  d-flex align-items-center justify-content-center p-2 "
         onClick={clickPlus}
       >
-        <HiPlusSm />
+        +
       </Button>
     </div>
   );

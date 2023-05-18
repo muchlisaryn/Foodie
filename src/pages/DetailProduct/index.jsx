@@ -52,7 +52,7 @@ export default function DetailProduct() {
       <Breadcrumb list={dataBreadCrumb} />
       <div className="detail-product d-flex justify-content-between ">
         <div className="w-75 d-flex">
-          <div className="w-50 border">
+          <div className=" w-50 border">
             <img src={data?.image_url} className="w-100" alt="image" />
           </div>
           <div className="w-50 ms-2 ">
@@ -66,7 +66,7 @@ export default function DetailProduct() {
                 <div className="ms-2">(6 Rating)</div>
               </div>
             </div>
-            <div className="price fw-bold py-3"></div>
+            <div className="price fw-bold py-3">{data?.price}</div>
             <div>{data?.description}</div>
             <div className="mt-5">
               <div className="detail fw-bold mb-2">Detail</div>
@@ -74,11 +74,11 @@ export default function DetailProduct() {
                 <div>Category :</div>
                 <div className="ms-2 value">{data?.category?.name}</div>
               </div>
-              <div className="d-flex">
+              <div className="d-flex pt-1">
                 <div>Tags :</div>
-                <div className="d-flex ms-2 value">
+                <div className="d-flex ms-2 ">
                   {data?.tags?.map((item) => (
-                    <div>{item?.name} </div>
+                    <div className="tags rounded">{item?.name}</div>
                   ))}
                 </div>
               </div>

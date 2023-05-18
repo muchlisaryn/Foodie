@@ -15,4 +15,16 @@
     font-weight: 600;
     color: style.$primary-collor;
   }
+  .tags {
+    background-color: style.$primary-collor;
+    font-size: smaller;
+    margin-right: 5px;
+    padding: 1px 5px 0px 5px;
+    color: white;
+  }
+}
+
+.checkout {
+  background-color: style.$primary-collor;
+  border-radius: 20px;
 }

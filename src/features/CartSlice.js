@@ -43,6 +43,24 @@ export const getCart = createAsyncThunk("cart/getCart", async (token) => {
   }
 });
 
+export const updateCart = createAsyncThunk("cart/updateCart", async (props) => {
+  const { token, items } = props;
+  try {
+    const response = await axios.put(
+      `${process.env.REACT_APP_URL_API}/carts`,
+      { items },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    console.log("data ubah", response.data);
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const deleteCart = createAsyncThunk("cart/deleteCart", async (props) => {
   const { id, token } = props;
   try {

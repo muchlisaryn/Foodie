@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, Input, Navbar, Quantity } from "../../component";
 import { formatRupiah } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import "./style.scss";
 import { AiFillDelete } from "react-icons/ai";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { searchIlustration } from "../../assets";
 
 export default function Cart() {
@@ -15,6 +15,13 @@ export default function Cart() {
   const data = useSelector((state) => state.cart.cart);
   const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
+
+  const totalPrice = () => {
+    const product = data?.map((item) => item.product.price * item.qty);
+    return product.reduce(
+      (accumulator, currentValue) => accumulator + currentValue
+    );
+  };
 
   useEffect(() => {
     dispatch(getCart(auth));
@@ -33,7 +40,9 @@ export default function Cart() {
       if (result.isConfirmed) {
         const deleteAction = dispatch(deleteCart({ id, token: auth }));
         const result = unwrapResult(deleteAction);
-        Swal.fire("Deleted!", "Your cart has been deleted.", "success");
+        if (result) {
+          Swal.fire("Deleted!", "Your cart has been deleted.", "success");
+        }
       }
     });
   };
@@ -41,23 +50,24 @@ export default function Cart() {
   return (
     <Navbar>
       {data.length > 0 ? (
-        <>
+        <div className="mb-5">
           {data?.map((item) => (
             <div className="cart mb-2">
               <div className="card-cart border rounded d-flex justify-content-between align-items-center p-3">
-                <div>
-                  <Input type="checkbox" />
-                </div>
-                <div className="img-cart">
-                  <img
-                    src={item?.product?.image_url}
-                    className="rounded w-100 "
-                    alt="..."
-                  />
-                </div>
-                <div>{item?.product?.name}</div>
+                <NavLink to={`/product/${data?._id}`}>
+                  <div className="img-cart">
+                    <img
+                      src={item?.product?.image_url}
+                      className="rounded w-100 "
+                      alt="..."
+                    />
+                  </div>
+                </NavLink>
+                <NavLink to={`/product/${data?._id}`} className="title">
+                  <div>{item?.product?.name}</div>
+                </NavLink>
                 <div>{formatRupiah(item?.product?.price * item?.qty)}</div>
-                <div>
+                <div className="qty">
                   <Quantity value={item?.qty} />
                 </div>
                 <Button
@@ -69,7 +79,7 @@ export default function Cart() {
               </div>
             </div>
           ))}
-        </>
+        </div>
       ) : (
         <div className="d-flex justify-content-center align-items-center">
           <div className="mt-5">
@@ -87,6 +97,16 @@ export default function Cart() {
           </div>
         </div>
       )}
+      <div className="fixed-bottom">
+        <div className="d-flex justify-content-center">
+          <div className="checkout border w-75 py-4 px-4 mb-2">
+            <div className="d-flex justify-content-between align-items-center  text-light">
+              <div>Total : {formatRupiah(totalPrice())}</div>
+              <Button className="bg-light">Checkout</Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </Navbar>
   );
 }
