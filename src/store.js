@@ -7,6 +7,7 @@ import productReducer from "./features/ProductSlice";
 import authReducer from "./features/AuthSlice";
 import cartReducer from "./features/CartSlice";
 import DaerahReducer from "./features/DaerahSlice";
+import AddressReducer from "./features/AddressSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     auth: authReducer,
     cart: cartReducer,
     daerah: DaerahReducer,
+    address: AddressReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

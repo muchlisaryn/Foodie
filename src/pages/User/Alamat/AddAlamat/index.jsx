@@ -1,81 +1,187 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ContainerUser, Input, Select } from "../../../../component";
+import {
+  Button,
+  ContainerUser,
+  Input,
+  LabelPages,
+  Select,
+} from "../../../../component";
 import { useEffect } from "react";
 import {
+  detailKabupaten,
+  detailKecamatan,
+  detailKelurahan,
+  detailProvinsi,
   fetchKabupaten,
+  fetchKecamatan,
+  fetchKelurahan,
   fetchProvinsi,
 } from "../../../../features/DaerahSlice";
 import { useState } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
+import "./style.scss";
+import { useNavigate } from "react-router-dom";
+import { addAddress } from "../../../../features/AddressSlice";
 
 export default function AddAlamat() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("auth");
+
   const dataProvince = useSelector((state) => state.daerah.province);
   const dataKabupaten = useSelector((state) => state.daerah.kabupaten);
-  const [provinsi, setProvinsi] = useState([]);
+  const dataKecamatan = useSelector((state) => state.daerah.kecamatan);
+  const dataKelurahan = useSelector((state) => state.daerah.kelurahan);
 
-  console.log("data ==>", dataKabupaten);
+  const [nama, setNama] = useState("");
+  const [noTelephone, setNoTelephone] = useState();
+  const [provinsi, setProvinsi] = useState();
+  const [kabupaten, setKabupaten] = useState();
+  const [kecamatan, setKecamatan] = useState();
+  const [kelurahan, setKelurahan] = useState();
+  const [detail, setDetail] = useState("");
 
-  const dispatch = useDispatch();
+  console.log("kelurahan", kelurahan);
 
   const onProvince = async (e) => {
-    setProvinsi(e.target.value);
+    const getProvince = await dispatch(detailProvinsi({ id: e.target.value }));
+    const resultProvince = await unwrapResult(getProvince);
+    console.log(resultProvince);
+    if (resultProvince) {
+      setProvinsi(resultProvince.nama);
+    }
+    dispatch(fetchKabupaten({ id: e.target.value }));
+  };
+
+  const onCity = async (e) => {
+    const getCity = await dispatch(detailKabupaten({ id: e.target.value }));
+    const resultCity = await unwrapResult(getCity);
+    if (resultCity) {
+      setKabupaten(resultCity.nama);
+    }
+    dispatch(fetchKecamatan({ id: e.target.value }));
+  };
+
+  const onKecamatan = async (e) => {
+    const getKecamatan = await dispatch(
+      detailKecamatan({ id: e.target.value })
+    );
+    const resultKecamatan = await unwrapResult(getKecamatan);
+
+    if (resultKecamatan) {
+      setKecamatan(resultKecamatan.nama);
+    }
+    dispatch(fetchKelurahan({ id: resultKecamatan.id }));
+  };
+
+  const onKelurahan = async (e) => {
+    const getKelurahan = await dispatch(
+      detailKelurahan({ id: e.target.value })
+    );
+    const resultKelurahan = await unwrapResult(getKelurahan);
+    if (resultKelurahan) {
+      setKelurahan(resultKelurahan.nama);
+    }
+  };
+
+  const sendAddress = async () => {
+    const addressAction = await dispatch(
+      addAddress({
+        name: nama,
+        no_telephone: noTelephone,
+        kelurahan,
+        kecamatan,
+        kabupaten,
+        provinsi,
+        detail,
+        token,
+      })
+    );
+    const result = await unwrapResult(addressAction);
+    if (result) {
+      navigate("/user/alamat");
+    }
   };
 
   useEffect(() => {
     dispatch(fetchProvinsi());
-
-    if (provinsi.length > 0) {
-      dispatch(fetchKabupaten({ id: provinsi }));
-    }
   }, [dispatch]);
 
   return (
     <ContainerUser>
-      <div>
-        <div>Tambah Alamat</div>
+      <div className="add-address">
+        <LabelPages type="back" label="Tambah Alamat" to="/user/alamat" />
         <div className="mt-2">
-          <div className="d-flex">
-            <div>nama</div>
-            <Input type="text" />
+          <div className="d-flex mb-2 ">
+            <div className="label">Nama</div>
+            <Input
+              type="text"
+              className="form-control-sm"
+              onChange={(e) => setNama(e.target.value)}
+              value={nama}
+            />
           </div>
-          <div className="d-flex">
-            <div>Nomor Telephone</div>
-            <Input type="text" />
+          <div className="d-flex mb-2">
+            <div className="label">Nomor Telephone</div>
+            <Input
+              type="number"
+              className="form-control-sm"
+              onChange={(e) => setNoTelephone(e.target.value)}
+              value={noTelephone}
+            />
           </div>
-          <div className="d-flex">
-            <div>Provinsi</div>
+          <div className="d-flex mb-2">
+            <div className="label">Provinsi</div>
             <Select
               type="select id"
-              defaultValue="Pilih Province"
+              defaultValue="Pilih Provinsi"
               data={dataProvince}
               onChange={onProvince}
             />
           </div>
-          <div className="d-flex">
-            <div>Kabupaten</div>
+          <div className="d-flex mb-2">
+            <div className="label">Kota</div>
             <Select
               type="select id"
-              defaultValue="Pilih Kabupaten"
+              defaultValue="Pilih Kota"
               data={dataKabupaten}
               disabled={provinsi?.length ? false : true}
+              onChange={onCity}
+            />
+          </div>
+          <div className="d-flex mb-2">
+            <div className="label">Kecamatan</div>
+            <Select
+              type="select id"
+              defaultValue="Pilih Kecamatan"
+              data={dataKecamatan}
+              disabled={kabupaten?.length ? false : true}
+              onChange={onKecamatan}
+            />
+          </div>
+          <div className="d-flex mb-2">
+            <div className="label">Kelurahan</div>
+            <Select
+              type="select id"
+              defaultValue="Pilih Kelurahan"
+              data={dataKelurahan}
+              disabled={kecamatan?.length ? false : true}
+              onChange={onKelurahan}
             />
           </div>
           <div className="d-flex">
-            <div>Kelurahan</div>
-            <Input type="text" />
+            <div className="label">Detail</div>
+            <Input
+              type="textarea"
+              onChange={(e) => setDetail(e.target.value)}
+              value={detail}
+            />
           </div>
-          <div className="d-flex">
-            <div>Kecamatan</div>
-            <Input type="text" />
-          </div>
-          <div className="d-flex">
-            <div>Kabupaten</div>
-            <Input type="text" />
-          </div>
-
-          <div className="d-flex">
-            <div>detail</div>
-            <Input type="textarea" />
-          </div>
+        </div>
+        <div className=" mt-3">
+          <Button type="btn-add" onClick={sendAddress}>
+            Tambah Alamat
+          </Button>
         </div>
       </div>
     </ContainerUser>

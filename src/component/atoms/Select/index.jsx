@@ -13,7 +13,7 @@ export default function Select({
       <select
         aria-label="Default select example"
         onChange={onChange}
-        className={`form-select w-100 ${className}`}
+        className={`form-select form-select-sm w-100 ${className}`}
         value={value}
         defaultValue={"DEFAULT"}
         disabled={disabled}

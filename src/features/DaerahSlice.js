@@ -25,6 +25,20 @@ export const fetchProvinsi = createAsyncThunk(
   }
 );
 
+export const detailProvinsi = createAsyncThunk(
+  "dearah/detailProvince",
+  async ({ id }) => {
+    try {
+      const response = await axios.get(
+        `https://dev.farizdotid.com/api/daerahindonesia/provinsi/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchKabupaten = createAsyncThunk(
   "daerah/fetchKabupaten",
   async ({ id }) => {
@@ -39,6 +53,20 @@ export const fetchKabupaten = createAsyncThunk(
   }
 );
 
+export const detailKabupaten = createAsyncThunk(
+  "daerah/detailKabupaten",
+  async ({ id }) => {
+    try {
+      const response = await axios.get(
+        `https://dev.farizdotid.com/api/daerahindonesia/kota/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 export const fetchKecamatan = createAsyncThunk(
   "daerah/fetchKecamatan",
   async ({ id }) => {
@@ -46,7 +74,21 @@ export const fetchKecamatan = createAsyncThunk(
       const response = await axios.get(
         `https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota=${id}`
       );
-      return response;
+      return response.data.kecamatan;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const detailKecamatan = createAsyncThunk(
+  "daerah/detailKecamatan",
+  async ({ id }) => {
+    try {
+      const response = await axios.get(
+        `https://dev.farizdotid.com/api/daerahindonesia/kecamatan/${id}`
+      );
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -60,7 +102,21 @@ export const fetchKelurahan = createAsyncThunk(
       const response = await axios.get(
         `https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan=${id}`
       );
-      return response;
+      return response.data.kelurahan;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const detailKelurahan = createAsyncThunk(
+  "kelurahan/detailKelurahan",
+  async ({ id }) => {
+    try {
+      const response = await axios.get(
+        `https://dev.farizdotid.com/api/daerahindonesia/kelurahan/${id}`
+      );
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -87,6 +143,54 @@ const daerahSlice = createSlice({
         state.success = true;
         state.pending = false;
         state.province = action.payload;
+        state.errorMessage = "";
+      })
+      .addCase(fetchKabupaten.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(fetchKabupaten.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(fetchKabupaten.fulfilled, (state, action) => {
+        state.success = true;
+        state.pending = false;
+        state.kabupaten = action.payload;
+        state.errorMessage = "";
+      })
+      .addCase(fetchKecamatan.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(fetchKecamatan.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(fetchKecamatan.fulfilled, (state, action) => {
+        state.success = true;
+        state.pending = false;
+        state.kecamatan = action.payload;
+        state.errorMessage = "";
+      })
+      .addCase(fetchKelurahan.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(fetchKelurahan.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(fetchKelurahan.fulfilled, (state, action) => {
+        state.success = true;
+        state.pending = false;
+        state.kelurahan = action.payload;
         state.errorMessage = "";
       });
   },
