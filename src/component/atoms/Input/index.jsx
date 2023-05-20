@@ -15,6 +15,7 @@ export default function Input({
   style,
   label,
   checked,
+  id,
 }) {
   if (type === "number") {
     return (
@@ -105,17 +106,14 @@ export default function Input({
 
   if (type === "radio") {
     return (
-      <form onSubmit={onSubmit}>
-        <input
-          className="form-check-input"
-          type="radio"
-          name="flexRadioDefault"
-          id="flexRadioDefault1"
-          value={value}
-          onChange={onChange}
-          checked={checked}
-        />
-      </form>
+      <input
+        className="form-check-input"
+        type="radio"
+        name={name}
+        id={id}
+        value={value}
+        onChange={onChange}
+      />
     );
   }
 

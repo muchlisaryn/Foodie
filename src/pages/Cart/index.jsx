@@ -125,7 +125,10 @@ export default function Cart() {
                 className="bg-light text-black"
                 onClick={() =>
                   data?.length
-                    ? navigate("/checkout")
+                    ? navigate("/checkout", {
+                        state: data,
+                        replace: false,
+                      })
                     : alert("keranjang anda kosong")
                 }
               >

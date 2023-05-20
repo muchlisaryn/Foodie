@@ -10,13 +10,14 @@ import { useState } from "react";
 import { formatRupiah } from "../../utils";
 import Swal from "sweetalert2";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { addCart } from "../../features/CartSlice";
+import { addCart, getCart } from "../../features/CartSlice";
 
 export default function DetailProduct() {
   const { id } = useParams();
   const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
+  const cart = useSelector((state) => state.cart.cart);
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
 
@@ -25,6 +26,7 @@ export default function DetailProduct() {
 
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
+    dispatch(getCart(auth));
   }, [dispatch, id]);
 
   const dataBreadCrumb = [
@@ -40,18 +42,7 @@ export default function DetailProduct() {
 
   const addToCart = async (items) => {
     if (auth) {
-      const add = await dispatch(
-        addCart({ items, qty: quantity, price: currentPrice, auth })
-      );
-      const result = await unwrapResult(add);
-      console.log(result);
-      if (!result) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Produk ini sudah ada di keranjang anda",
-        });
-      }
+      dispatch(addCart({ items, qty: quantity, price: currentPrice, auth }));
       Swal.fire("Success!", "Berhasil Menambahkan ke Keranjang", "success");
     } else {
       navigate("/login");

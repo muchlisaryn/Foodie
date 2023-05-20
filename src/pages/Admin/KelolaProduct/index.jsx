@@ -33,7 +33,7 @@ export default function KelolaProduct() {
         updateProduct({ id, status: !status })
       );
       const result = unwrapResult(actionResult);
-      console.log(result);
+
       if (result.error) {
         alert(result.message);
       }
