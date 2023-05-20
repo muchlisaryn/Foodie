@@ -2,9 +2,12 @@ import { useState } from "react";
 import Button from "../../atoms/Button";
 import "./style.scss";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Quantity({ value, setValue }) {
+export default function Quantity({ value, setValue, plusQty, minQty }) {
   const [minDisable, setMinDisable] = useState(false);
+  const navigate = useNavigate();
+  const auth = localStorage.getItem("auth");
 
   useEffect(() => {
     if (value === 1 || value === undefined) {
@@ -27,7 +30,7 @@ export default function Quantity({ value, setValue }) {
       <Button
         type="custom"
         className="w-25 btn-custom-left d-flex align-items-center justify-content-center p-2"
-        onClick={clickMin}
+        onClick={auth ? (minQty ? minQty : clickMin) : () => navigate("/login")}
         disabled={minDisable}
       >
         -
@@ -36,7 +39,9 @@ export default function Quantity({ value, setValue }) {
       <Button
         type="custom"
         className="w-25 btn-custom-right  d-flex align-items-center justify-content-center p-2 "
-        onClick={clickPlus}
+        onClick={
+          auth ? (plusQty ? plusQty : clickPlus) : () => navigate("/login")
+        }
       >
         +
       </Button>

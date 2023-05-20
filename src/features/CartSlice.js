@@ -26,7 +26,7 @@ export const addCart = createAsyncThunk("cart/addCart", async (props) => {
     );
     return response.data;
   } catch (error) {
-    return error.response.data;
+    throw error;
   }
 });
 
@@ -44,20 +44,20 @@ export const getCart = createAsyncThunk("cart/getCart", async (token) => {
 });
 
 export const updateCart = createAsyncThunk("cart/updateCart", async (props) => {
-  const { token, items } = props;
+  const { token, qty, id } = props;
   try {
     const response = await axios.put(
-      `${process.env.REACT_APP_URL_API}/carts`,
-      { items },
+      `${process.env.REACT_APP_URL_API}/carts/${id}`,
+      { qty },
       {
         headers: {
           Authorization: token,
         },
       }
     );
-    console.log("data ubah", response.data);
+    return response.data;
   } catch (error) {
-    throw error;
+    throw error.response;
   }
 });
 
@@ -81,11 +81,7 @@ export const deleteCart = createAsyncThunk("cart/deleteCart", async (props) => {
 const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {
-    // addCart: (state, action) => {
-    //   localStorage.setItem("cart", JSON.stringify(state.action));
-    // },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(addCart.pending, (state) => {
@@ -135,6 +131,27 @@ const cartSlice = createSlice({
         state.cart = state.cart.filter(
           (product) => product._id !== action.payload._id
         );
+        state.pending = false;
+        state.errorMessage = "";
+      })
+      .addCase(updateCart.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(updateCart.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(updateCart.fulfilled, (state, action) => {
+        state.success = true;
+        const { qty, total, id } = action.payload;
+        const findCart = state.cart.find((data) => data._id === id);
+        if (findCart) {
+          findCart.qty = qty;
+          findCart.total = total;
+        }
         state.pending = false;
         state.errorMessage = "";
       });

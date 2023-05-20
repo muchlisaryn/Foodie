@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Input, Navbar, Quantity } from "../../component";
 import { formatRupiah } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCart, getCart } from "../../features/CartSlice";
+import { deleteCart, getCart, updateCart } from "../../features/CartSlice";
 import "./style.scss";
 import { AiFillDelete } from "react-icons/ai";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -16,9 +16,19 @@ export default function Cart() {
   const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
 
+  const plusQty = (quantity, id) => {
+    const qty = (quantity += 1);
+    dispatch(updateCart({ qty, token: auth, id }));
+  };
+
+  const minQty = (quantity, id) => {
+    const qty = (quantity -= 1);
+    dispatch(updateCart({ qty, token: auth, id }));
+  };
+
   const totalPrice = () => {
-    const product = data?.map((item) => item.product.price * item.qty);
-    return product.reduce(
+    const product = data?.map((item) => item?.total);
+    return product?.reduce(
       (accumulator, currentValue) => accumulator + currentValue
     );
   };
@@ -54,7 +64,7 @@ export default function Cart() {
           {data?.map((item) => (
             <div className="cart mb-2">
               <div className="card-cart border rounded d-flex justify-content-between align-items-center p-3">
-                <NavLink to={`/product/${data?._id}`}>
+                <NavLink to={`/product/${item?._id}`}>
                   <div className="img-cart">
                     <img
                       src={item?.product?.image_url}
@@ -63,12 +73,16 @@ export default function Cart() {
                     />
                   </div>
                 </NavLink>
-                <NavLink to={`/product/${data?._id}`} className="title">
+                <NavLink to={`/product/${item?._id}`} className="title">
                   <div>{item?.product?.name}</div>
                 </NavLink>
-                <div>{formatRupiah(item?.product?.price * item?.qty)}</div>
+                <div>{formatRupiah(parseInt(item?.total))}</div>
                 <div className="qty">
-                  <Quantity value={item?.qty} />
+                  <Quantity
+                    value={item?.qty}
+                    plusQty={() => plusQty(item?.qty, item?._id)}
+                    minQty={() => minQty(item?.qty, item?._id)}
+                  />
                 </div>
                 <Button
                   className="bg-danger text-white"
@@ -101,8 +115,22 @@ export default function Cart() {
         <div className="d-flex justify-content-center">
           <div className="checkout border w-75 py-4 px-4 mb-2">
             <div className="d-flex justify-content-between align-items-center  text-light">
-              <div>Total : {formatRupiah(totalPrice())}</div>
-              <Button className="bg-light">Checkout</Button>
+              <div>
+                Total :{" "}
+                {data.length > 0
+                  ? formatRupiah(parseInt(totalPrice()))
+                  : formatRupiah(0)}
+              </div>
+              <Button
+                className="bg-light text-black"
+                onClick={() =>
+                  data?.length
+                    ? navigate("/checkout")
+                    : alert("keranjang anda kosong")
+                }
+              >
+                Checkout
+              </Button>
             </div>
           </div>
         </div>

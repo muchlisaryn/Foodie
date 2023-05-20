@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Container, Navbar, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
@@ -17,6 +17,7 @@ export default function DetailProduct() {
   const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
 
   const price = data?.price;
@@ -24,7 +25,7 @@ export default function DetailProduct() {
 
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const dataBreadCrumb = [
     {
@@ -38,12 +39,22 @@ export default function DetailProduct() {
   ];
 
   const addToCart = async (items) => {
-    const add = await dispatch(
-      addCart({ items, qty: quantity, price: currentPrice, auth })
-    );
-    const result = await unwrapResult(add);
-    if (result) {
+    if (auth) {
+      const add = await dispatch(
+        addCart({ items, qty: quantity, price: currentPrice, auth })
+      );
+      const result = await unwrapResult(add);
+      console.log(result);
+      if (!result) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Produk ini sudah ada di keranjang anda",
+        });
+      }
       Swal.fire("Success!", "Berhasil Menambahkan ke Keranjang", "success");
+    } else {
+      navigate("/login");
     }
   };
 

@@ -6,6 +6,7 @@ import {
   Biodata,
   Cart,
   Category,
+  Checkout,
   DetailProduct,
   Error,
   Home,
@@ -34,6 +35,7 @@ function App() {
           <Route path="search" element={<SearchResult />} />
           <Route path="product/:id" element={<DetailProduct />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
         </Route>
 
         <Route path="/user/">

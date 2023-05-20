@@ -14,6 +14,7 @@ export default function Input({
   name,
   style,
   label,
+  checked,
 }) {
   if (type === "number") {
     return (
@@ -97,6 +98,22 @@ export default function Input({
           aria-label="Upload"
           accept={accept}
           onChange={onChange}
+        />
+      </form>
+    );
+  }
+
+  if (type === "radio") {
+    return (
+      <form onSubmit={onSubmit}>
+        <input
+          className="form-check-input"
+          type="radio"
+          name="flexRadioDefault"
+          id="flexRadioDefault1"
+          value={value}
+          onChange={onChange}
+          checked={checked}
         />
       </form>
     );

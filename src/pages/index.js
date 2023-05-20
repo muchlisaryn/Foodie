@@ -17,6 +17,7 @@ import Register from "./Register";
 import Error from "./Error";
 import Cart from "./Cart";
 import AddAlamat from "./User/Alamat/AddAlamat";
+import Checkout from "./Checkout";
 
 export {
   Home,
@@ -38,4 +39,5 @@ export {
   Error,
   Cart,
   AddAlamat,
+  Checkout,
 };
