@@ -5,23 +5,53 @@ import Logo from "../../atoms/Logo";
 import { HiOutlineShoppingCart } from "react-icons/hi";
 import "./styles.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { avatarDefault } from "../../../assets";
 import { getOneUser } from "../../../features/UserSlice";
-import Skeleton from "../../atoms/Skeleton";
+import { AiFillSetting } from "react-icons/ai";
+import { IoLogOut } from "react-icons/io5";
+import Swal from "sweetalert2";
+import { logout } from "../../../features/AuthSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Navbar({ onSubmit, value, setValue, children }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
   const user = useSelector((state) => state.users.user);
-  const loading = useSelector((state) => state.users.pending);
+  const [showDropdowns, setShowDropdowns] = useState(false);
   const auth = localStorage.getItem("auth");
   const id = localStorage.getItem("user");
 
   useEffect(() => {
     dispatch(getOneUser({ id }));
-  }, [dispatch]);
+  }, [dispatch, id]);
+
+  const clickDropDowns = () => {
+    if (showDropdowns) {
+      setShowDropdowns(false);
+    } else {
+      setShowDropdowns(true);
+    }
+  };
+
+  const signOut = async () => {
+    const logoutAction = await dispatch(logout(auth));
+    const result = await unwrapResult(logoutAction);
+    if (result.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: result?.message,
+      });
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: result.message,
+      });
+      navigate("/");
+    }
+  };
 
   return (
     <>
@@ -50,12 +80,34 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
                   </div>
                 </NavLink>
                 <div className="mx-2"></div>
-                <NavLink to="/user/biodata" className="avatar ">
-                  <div className="d-flex align-items-center border-start ps-2 ">
-                    <img src={avatarDefault} alt="avatar" />
-                    <div className="ms-2">{user?.first_name}</div>
+                <div className="avatar" onClick={clickDropDowns}>
+                  <div className="position-relative">
+                    <div className="d-flex align-items-center border-start ps-2 ">
+                      <img src={avatarDefault} alt="avatar" />
+                      <div className="ms-2">{user?.first_name}</div>
+                    </div>
+                    {showDropdowns && (
+                      <div className="position-absolute mt-2 ms-1">
+                        <div className="Dropdowns rounded border">
+                          <div
+                            className="d-flex align-items-center dropdowns-item  border-bottom p-2 px-3"
+                            onClick={() => navigate("/user/biodata")}
+                          >
+                            <AiFillSetting />
+                            <span className="ms-1">Settings</span>
+                          </div>
+                          <div
+                            className="d-flex align-items-center dropdowns-item p-2 px-3"
+                            onClick={signOut}
+                          >
+                            <IoLogOut />
+                            <span className="ms-1">Logout</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </NavLink>
+                </div>
               </>
             ) : (
               <Button type="button-primary" onClick={() => navigate("/login")}>

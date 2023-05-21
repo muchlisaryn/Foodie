@@ -1,4 +1,5 @@
-const formatRupiah = (angka) => {
+const formatRupiah = (data) => {
+  const angka = parseInt(data);
   let number_string = angka?.toString(),
     split = number_string.split(","),
     sisa = split[0].length % 3,
@@ -10,7 +11,7 @@ const formatRupiah = (angka) => {
     rupiah += separator + ribuan.join(".");
   }
 
-  rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+  rupiah = split[1] !== undefined ? rupiah + "," + split[1] : rupiah;
   return "Rp. " + rupiah;
 };
 

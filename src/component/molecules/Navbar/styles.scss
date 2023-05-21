@@ -16,8 +16,17 @@ nav {
   }
 
   .avatar {
-    text-decoration: none;
     color: black;
+    cursor: pointer;
+    .Dropdowns {
+      background-color: white;
+      font-size: small;
+      .dropdowns-item {
+        &:hover {
+          color: style.$primary-collor;
+        }
+      }
+    }
     img {
       width: 25px;
       height: 25px;

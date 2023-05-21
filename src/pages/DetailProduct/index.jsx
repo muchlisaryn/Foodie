@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Container, Navbar, Quantity } from "../../component";
+import { Button, Navbar, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,6 @@ import Breadcrumb from "../../component/atoms/Breadcrumb";
 import { useState } from "react";
 import { formatRupiah } from "../../utils";
 import Swal from "sweetalert2";
-import { unwrapResult } from "@reduxjs/toolkit";
 import { addCart, getCart } from "../../features/CartSlice";
 
 export default function DetailProduct() {
@@ -17,7 +16,6 @@ export default function DetailProduct() {
   const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
-  const cart = useSelector((state) => state.cart.cart);
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
 
@@ -27,7 +25,7 @@ export default function DetailProduct() {
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
     dispatch(getCart(auth));
-  }, [dispatch, id]);
+  }, [dispatch, id, auth]);
 
   const dataBreadCrumb = [
     {
@@ -55,7 +53,7 @@ export default function DetailProduct() {
       <div className="detail-product d-flex justify-content-between ">
         <div className="w-75 d-flex">
           <div className=" w-50 border">
-            <img src={data?.image_url} className="w-100" alt="image" />
+            <img src={data?.image_url} className="w-100" alt="product" />
           </div>
           <div className="w-50 ms-2 ">
             <div className="title fw-bold text-break">{data?.name}</div>
@@ -68,7 +66,9 @@ export default function DetailProduct() {
                 <div className="ms-2">(6 Rating)</div>
               </div>
             </div>
-            <div className="price fw-bold py-3">{data?.price}</div>
+            <div className="price fw-bold py-3">
+              {formatRupiah(data?.price)}
+            </div>
             <div>{data?.description}</div>
             <div className="mt-5">
               <div className="detail fw-bold mb-2">Detail</div>

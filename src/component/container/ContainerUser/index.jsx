@@ -1,33 +1,9 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Container from "../Container";
 import "./style.scss";
-import { useDispatch } from "react-redux";
-import { logout } from "../../../features/AuthSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
-import Swal from "sweetalert2";
 
 export default function ContainerUser({ children }) {
   const token = localStorage.getItem("auth");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const signOut = async () => {
-    const logoutAction = await dispatch(logout(token));
-    const result = await unwrapResult(logoutAction);
-    if (result.error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: result?.message,
-      });
-    } else {
-      Swal.fire({
-        icon: "success",
-        title: result.message,
-      });
-      navigate("/");
-    }
-  };
 
   const styleNavActive = ({ isActive }) => {
     return {
@@ -62,9 +38,6 @@ export default function ContainerUser({ children }) {
                 className="menu-item"
               >
                 <div className=" rounded p-2">Pemesanan</div>
-              </NavLink>
-              <NavLink className="menu-item" onClick={signOut}>
-                <div className=" rounded p-2">Logout</div>
               </NavLink>
             </div>
           </div>

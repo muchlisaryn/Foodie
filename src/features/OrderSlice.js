@@ -24,7 +24,7 @@ export const order = createAsyncThunk("order/orders", async (props) => {
     );
     return response.data;
   } catch (error) {
-    throw error;
+    console.log(error.response);
   }
 });
 
