@@ -10,6 +10,7 @@ import {
   DetailProduct,
   Error,
   Home,
+  Invoice,
   KelolaPemesanan,
   KelolaProduct,
   KelolaUser,
@@ -36,6 +37,7 @@ function App() {
           <Route path="product/:id" element={<DetailProduct />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
+          <Route path="invoice" element={<Invoice />} />
         </Route>
 
         <Route path="/user/">

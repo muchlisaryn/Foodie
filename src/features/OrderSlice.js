@@ -4,7 +4,7 @@ import axios from "axios";
 const initialState = {
   pending: false,
   success: false,
-  errorMessage: "",
+  error: false,
   order: {},
   orders: {},
   invoice: {},
@@ -24,7 +24,7 @@ export const order = createAsyncThunk("order/orders", async (props) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error.response);
+    return error.response;
   }
 });
 
@@ -32,7 +32,7 @@ export const getOrder = createAsyncThunk(
   "order/getOrders",
   async ({ token }) => {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         `${process.env.REACT_APP_URL_API}/orders`,
         {
           headers: {
@@ -42,7 +42,7 @@ export const getOrder = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      throw error;
+      console.log(error.response);
     }
   }
 );
@@ -61,7 +61,7 @@ const orderSlice = createSlice({
       .addCase(order.rejected, (state, action) => {
         state.pending = false;
         state.success = false;
-        state.errorMessage = action.error.message;
+        state.error = true;
       })
       .addCase(order.fulfilled, (state, action) => {
         state.success = true;
@@ -74,16 +74,16 @@ const orderSlice = createSlice({
         state.success = false;
         state.errorMessage = "";
       })
-      .addCase(getOrder.rejected, (state, action) => {
+      .addCase(getOrder.rejected, (state) => {
+        state.error = true;
         state.pending = false;
         state.success = false;
-        state.errorMessage = action.error.message;
       })
       .addCase(getOrder.fulfilled, (state, action) => {
         state.success = true;
         state.orders = action.payload;
         state.pending = false;
-        state.errorMessage = "";
+        state.error = false;
       });
   },
 });

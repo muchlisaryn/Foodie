@@ -18,6 +18,7 @@ import Error from "./Error";
 import Cart from "./Cart";
 import AddAlamat from "./User/Alamat/AddAlamat";
 import Checkout from "./Checkout";
+import Invoice from "./Invoice";
 
 export {
   Home,
@@ -40,4 +41,5 @@ export {
   Cart,
   AddAlamat,
   Checkout,
+  Invoice,
 };

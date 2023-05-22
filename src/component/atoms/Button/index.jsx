@@ -60,7 +60,11 @@ export default function Button({
   }
 
   return (
-    <button onClick={onClick} className={`btn ${className}`}>
+    <button
+      onClick={onClick}
+      className={`btn ${className}`}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

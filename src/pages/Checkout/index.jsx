@@ -9,32 +9,53 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { formatRupiah } from "../../utils";
 import { order } from "../../features/OrderSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Checkout() {
   const dataAddress = useSelector((state) => state.address.address);
   const token = localStorage.getItem("auth");
-  const [address, setAddress] = useState({});
+  const [address, setAddress] = useState();
+  const [disabledButton, setDisabledButton] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state;
 
+  //menjumlahkan total pemesanan yang ada di keranjang
   const getTotal = data
     ?.map((item) => item.total)
     .reduce((acc, cur) => acc + cur);
 
+  //ongkir
   const Ongkir = 20000;
 
-  const sendOrder = () => {
-    dispatch(
+  //send data order ke server
+  const sendOrder = async () => {
+    const acationOrder = await dispatch(
       order({
         token,
         delivery_fee: Ongkir,
-        delivery_address: address._id,
+        delivery_address: address?._id,
       })
     );
+    const result = await unwrapResult(acationOrder);
+    console.log("result ==>", result);
+    if (result._id) {
+      navigate("/invoice", {
+        state: result,
+      });
+    } else {
+      navigate("*", {
+        state: {
+          error: "Checkout Failed",
+          message:
+            "Something went wrong with your request. Please try again later",
+        },
+      });
+    }
   };
 
+  //tombol back untuk kembali ke halaman home
   const backButton = () => {
     Swal.fire({
       title: "Are you sure you want to cancel this order?",
@@ -45,15 +66,26 @@ export default function Checkout() {
       confirmButtonText: "Yes, cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate("/");
+        navigate(-1);
       }
     });
   };
 
+  //request data alamat user ke server
   useEffect(() => {
     dispatch(fetchAddress({ token }));
   }, [dispatch, token]);
 
+  //hooks untuk tombol checkout
+  useEffect(() => {
+    if (address === undefined) {
+      setDisabledButton(true);
+    } else {
+      setDisabledButton(false);
+    }
+  }, [address]);
+
+  //menyimpan alamat ke local state address
   const selectAddress = (item) => {
     setAddress(item);
   };
@@ -62,7 +94,7 @@ export default function Checkout() {
     <Navbar>
       <div>
         <LabelPages type="back" label="Checkout" onClick={backButton} />
-        {address._id ? (
+        {address?._id ? (
           <div className="border  rounded bg-success text-light p-2 px-4 mb-2">
             <div className="d-flex align-items-center">
               <BsFillPatchCheckFill />
@@ -89,7 +121,7 @@ export default function Checkout() {
           </thead>
           <tbody>
             {dataAddress?.map((item) => (
-              <tr className={address._id === item?._id ? "table-success" : ""}>
+              <tr className={address?._id === item?._id ? "table-success" : ""}>
                 <th className="text-center">
                   <Input
                     type="radio"
@@ -147,11 +179,14 @@ export default function Checkout() {
             <div>total</div>
             <div>{formatRupiah(parseInt(getTotal + Ongkir))}</div>
           </div>
-          <div className="mt-3 ">
-            <Button className="bg-success text-light" onClick={sendOrder}>
-              Checkout
-            </Button>
-          </div>
+
+          <Button
+            className="bg-success text-light my-3 w-100 "
+            onClick={sendOrder}
+            disabled={disabledButton}
+          >
+            Checkout
+          </Button>
         </div>
       </div>
     </Navbar>

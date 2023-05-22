@@ -16,16 +16,19 @@ export default function Cart() {
   const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
 
+  //send request edit qty + 1 ke server
   const plusQty = (quantity, id) => {
     const qty = (quantity += 1);
     dispatch(updateCart({ qty, token: auth, id }));
   };
 
+  //send request edit qty - 1 ke server
   const minQty = (quantity, id) => {
     const qty = (quantity -= 1);
     dispatch(updateCart({ qty, token: auth, id }));
   };
 
+  //menghitung total harga di cart
   const totalPrice = () => {
     const product = data?.map((item) => item?.total);
     return product?.reduce(
@@ -33,10 +36,12 @@ export default function Cart() {
     );
   };
 
+  //request mendapatkan data cart berdasarkan auth atau user yang sedang login
   useEffect(() => {
     dispatch(getCart(auth));
   }, [dispatch]);
 
+  //menghapus item di keranjang dengan mengirimkan parameter id
   const deleteItem = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -127,9 +132,8 @@ export default function Cart() {
                   data?.length
                     ? navigate("/checkout", {
                         state: data,
-                        replace: false,
                       })
-                    : alert("keranjang anda kosong")
+                    : alert("keranjang masih anda kosong")
                 }
               >
                 Checkout
