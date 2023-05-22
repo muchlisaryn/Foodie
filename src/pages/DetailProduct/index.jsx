@@ -10,6 +10,7 @@ import { useState } from "react";
 import { formatRupiah } from "../../utils";
 import Swal from "sweetalert2";
 import { addCart, getCart } from "../../features/CartSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function DetailProduct() {
   const { id } = useParams();
@@ -18,15 +19,16 @@ export default function DetailProduct() {
   const data = useSelector((state) => state.product.detail);
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
-
   const price = data?.price;
   const currentPrice = price * quantity;
 
+  //get cart & get detail product by id
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
     dispatch(getCart(auth));
   }, [dispatch, id, auth]);
 
+  //list breadcrumb
   const dataBreadCrumb = [
     {
       name: "Home",
@@ -38,10 +40,19 @@ export default function DetailProduct() {
     },
   ];
 
+  //add product to cart
   const addToCart = async (items) => {
     if (auth) {
-      dispatch(addCart({ items, qty: quantity, price: currentPrice, auth }));
-      Swal.fire("Success!", "Berhasil Menambahkan ke Keranjang", "success");
+      const actionAddCart = await dispatch(
+        addCart({ items, qty: quantity, price: currentPrice, auth })
+      );
+      const result = await unwrapResult(actionAddCart);
+      console.log(result);
+      if (result.error) {
+        alert(result.message);
+      } else {
+        Swal.fire("Success!", "Berhasil Menambahkan ke Keranjang", "success");
+      }
     } else {
       navigate("/login");
     }
@@ -50,14 +61,14 @@ export default function DetailProduct() {
   return (
     <Navbar>
       <Breadcrumb list={dataBreadCrumb} />
-      <div className="detail-product d-flex justify-content-between ">
-        <div className="w-75 d-flex">
-          <div className=" w-50 border">
-            <img src={data?.image_url} className="w-100" alt="product" />
+      <div className="detail-product d-flex flex-column flex-lg-row justify-content-between ">
+        <div className="d-flex flex-column flex-md-row ">
+          <div>
+            <img src={data?.image_url} className="rounded" alt="product" />
           </div>
-          <div className="w-50 ms-2 ">
+          <div className="d-flex flex-column justify-content-between my-2 my-md-0 ms-0 ms-md-3">
             <div className="title fw-bold text-break">{data?.name}</div>
-            <div className="d-flex mt-2">
+            <div className="d-flex">
               <div>Terjual {data?.sold}</div>
               <div className="border-end mx-2"></div>
               <div className="d-flex align-items-center">
@@ -87,7 +98,7 @@ export default function DetailProduct() {
             </div>
           </div>
         </div>
-        <div className="w-25">
+        <div className="w-lg-25 my-3 mt-lg-0">
           <div className="border h-75 rounded  p-2">
             <div className="h-100">
               <div className="h-50 ">

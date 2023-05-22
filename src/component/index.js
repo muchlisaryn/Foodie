@@ -3,7 +3,6 @@ import Button from "./atoms/Button";
 import ProductCard from "./molecules/ProductCard";
 import ContainerProduct from "./container/ContainerProduct";
 import Container from "./container/Container";
-import ContainerUser from "./container/ContainerUser";
 import Header from "./molecules/Header";
 import Sidebar from "./molecules/Sidebar";
 import LabelPages from "./molecules/LabelPages";
@@ -12,6 +11,7 @@ import Input from "./atoms/Input";
 import Skeleton from "./atoms/Skeleton";
 import Switcher from "./atoms/Switcher";
 import Quantity from "./molecules/Quantity";
+import Widgets from "./molecules/Widgets";
 
 export {
   Navbar,
@@ -20,7 +20,6 @@ export {
   ContainerProduct,
   Header,
   Container,
-  ContainerUser,
   Sidebar,
   LabelPages,
   Select,
@@ -28,4 +27,5 @@ export {
   Skeleton,
   Switcher,
   Quantity,
+  Widgets,
 };

@@ -6,7 +6,7 @@ const initialState = {
   success: false,
   error: false,
   order: {},
-  orders: {},
+  orders: [],
   invoice: {},
 };
 
@@ -34,6 +34,25 @@ export const getOrder = createAsyncThunk(
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_URL_API}/orders`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+);
+
+export const getInvoice = createAsyncThunk(
+  "order/getInvoice",
+  async ({ token, order_id }) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_API}/invoice/${order_id}`,
         {
           headers: {
             Authorization: token,
@@ -82,6 +101,22 @@ const orderSlice = createSlice({
       .addCase(getOrder.fulfilled, (state, action) => {
         state.success = true;
         state.orders = action.payload;
+        state.pending = false;
+        state.error = false;
+      })
+      .addCase(getInvoice.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(getInvoice.rejected, (state) => {
+        state.error = true;
+        state.pending = false;
+        state.success = false;
+      })
+      .addCase(getInvoice.fulfilled, (state, action) => {
+        state.success = true;
+        state.invoice = action.payload;
         state.pending = false;
         state.error = false;
       });

@@ -13,6 +13,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Checkout() {
   const dataAddress = useSelector((state) => state.address.address);
+  const loading = useSelector((state) => state.address.pending);
   const token = localStorage.getItem("auth");
   const [address, setAddress] = useState();
   const [disabledButton, setDisabledButton] = useState(true);
@@ -41,9 +42,7 @@ export default function Checkout() {
     const result = await unwrapResult(acationOrder);
     console.log("result ==>", result);
     if (result._id) {
-      navigate("/invoice", {
-        state: result,
-      });
+      navigate(`/invoice/${result._id}`);
     } else {
       navigate("*", {
         state: {
@@ -185,7 +184,7 @@ export default function Checkout() {
             onClick={sendOrder}
             disabled={disabledButton}
           >
-            Checkout
+            {loading ? "Loading..." : "Checkout"}
           </Button>
         </div>
       </div>

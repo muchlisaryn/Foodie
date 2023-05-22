@@ -37,7 +37,7 @@ function App() {
           <Route path="product/:id" element={<DetailProduct />} />
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
-          <Route path="invoice" element={<Invoice />} />
+          <Route path="invoice/:order_id" element={<Invoice />} />
         </Route>
 
         <Route path="/user/">

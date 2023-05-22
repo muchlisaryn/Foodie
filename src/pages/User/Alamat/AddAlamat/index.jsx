@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
-  ContainerUser,
+  Navbar,
   Input,
   LabelPages,
   Select,
+  Widgets,
 } from "../../../../component";
 import { useEffect } from "react";
 import {
@@ -99,7 +100,7 @@ export default function AddAlamat() {
     );
     const result = await unwrapResult(addressAction);
     if (result) {
-      navigate("/user/alamat");
+      navigate(-1);
     }
   };
 
@@ -108,82 +109,84 @@ export default function AddAlamat() {
   }, [dispatch]);
 
   return (
-    <ContainerUser>
-      <div className="add-address">
-        <LabelPages type="back" label="Tambah Alamat" to="/user/alamat" />
-        <div className="mt-2">
-          <div className="d-flex mb-2 ">
-            <div className="label">Nama</div>
-            <Input
-              type="text"
-              className="form-control-sm"
-              onChange={(e) => setNama(e.target.value)}
-              value={nama}
-            />
+    <Navbar>
+      <Widgets>
+        <div className="add-address">
+          <LabelPages type="back" label="Tambah Alamat" to="/user/alamat" />
+          <div className="mt-2">
+            <div className="d-flex mb-2 ">
+              <div className="label">Nama</div>
+              <Input
+                type="text"
+                className="form-control-sm"
+                onChange={(e) => setNama(e.target.value)}
+                value={nama}
+              />
+            </div>
+            <div className="d-flex mb-2">
+              <div className="label">Nomor Telephone</div>
+              <Input
+                type="number"
+                className="form-control-sm"
+                onChange={(e) => setNoTelephone(e.target.value)}
+                value={noTelephone}
+              />
+            </div>
+            <div className="d-flex mb-2">
+              <div className="label">Provinsi</div>
+              <Select
+                type="select id"
+                defaultValue="Pilih Provinsi"
+                data={dataProvince}
+                onChange={onProvince}
+              />
+            </div>
+            <div className="d-flex mb-2">
+              <div className="label">Kota</div>
+              <Select
+                type="select id"
+                defaultValue="Pilih Kota"
+                data={dataKabupaten}
+                disabled={provinsi?.length ? false : true}
+                onChange={onCity}
+              />
+            </div>
+            <div className="d-flex mb-2">
+              <div className="label">Kecamatan</div>
+              <Select
+                type="select id"
+                defaultValue="Pilih Kecamatan"
+                data={dataKecamatan}
+                disabled={kabupaten?.length ? false : true}
+                onChange={onKecamatan}
+              />
+            </div>
+            <div className="d-flex mb-2">
+              <div className="label">Kelurahan</div>
+              <Select
+                type="select id"
+                defaultValue="Pilih Kelurahan"
+                data={dataKelurahan}
+                disabled={kecamatan?.length ? false : true}
+                onChange={onKelurahan}
+              />
+            </div>
+            <div className="d-flex">
+              <div className="label">Detail</div>
+              <Input
+                type="textarea"
+                onChange={(e) => setDetail(e.target.value)}
+                value={detail}
+              />
+            </div>
           </div>
-          <div className="d-flex mb-2">
-            <div className="label">Nomor Telephone</div>
-            <Input
-              type="number"
-              className="form-control-sm"
-              onChange={(e) => setNoTelephone(e.target.value)}
-              value={noTelephone}
-            />
-          </div>
-          <div className="d-flex mb-2">
-            <div className="label">Provinsi</div>
-            <Select
-              type="select id"
-              defaultValue="Pilih Provinsi"
-              data={dataProvince}
-              onChange={onProvince}
-            />
-          </div>
-          <div className="d-flex mb-2">
-            <div className="label">Kota</div>
-            <Select
-              type="select id"
-              defaultValue="Pilih Kota"
-              data={dataKabupaten}
-              disabled={provinsi?.length ? false : true}
-              onChange={onCity}
-            />
-          </div>
-          <div className="d-flex mb-2">
-            <div className="label">Kecamatan</div>
-            <Select
-              type="select id"
-              defaultValue="Pilih Kecamatan"
-              data={dataKecamatan}
-              disabled={kabupaten?.length ? false : true}
-              onChange={onKecamatan}
-            />
-          </div>
-          <div className="d-flex mb-2">
-            <div className="label">Kelurahan</div>
-            <Select
-              type="select id"
-              defaultValue="Pilih Kelurahan"
-              data={dataKelurahan}
-              disabled={kecamatan?.length ? false : true}
-              onChange={onKelurahan}
-            />
-          </div>
-          <div className="d-flex">
-            <div className="label">Detail</div>
-            <Input
-              type="textarea"
-              onChange={(e) => setDetail(e.target.value)}
-              value={detail}
-            />
+          <div className=" mt-3">
+            <Button type="btn-add" onClick={sendAddress}>
+              Tambah Alamat
+            </Button>
           </div>
         </div>
-        <div className=" mt-3">
-          <Button type="btn-add" onClick={sendAddress}>
-            Tambah Alamat
-          </Button>
-        </div>
-      </div>
-    </ContainerUser>
+      </Widgets>
+    </Navbar>
   );
 }

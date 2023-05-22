@@ -39,7 +39,7 @@ export const getCart = createAsyncThunk("cart/getCart", async (token) => {
     });
     return response.data;
   } catch (error) {
-    throw error;
+    console.log(error.response);
   }
 });
 

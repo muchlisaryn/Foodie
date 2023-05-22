@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { ContainerUser } from "../../../component";
+import { Navbar, Widgets } from "../../../component";
 import { useEffect } from "react";
 import { getOrder } from "../../../features/OrderSlice";
+import "./style.scss";
+import { formatRupiah } from "../../../utils";
 
 export default function Pemesanan() {
   const dispatch = useDispatch();
@@ -10,13 +12,49 @@ export default function Pemesanan() {
 
   useEffect(() => {
     dispatch(getOrder({ token: auth }));
-  }, [dispatch]);
+  }, [dispatch, auth]);
 
   console.log(data);
 
   return (
-    <ContainerUser>
-      <div>ss</div>
-    </ContainerUser>
+    <Navbar>
+      <Widgets>
+        <div className="list-transactions mb-2">Daftar Transaksi</div>
+        {data?.map((item) => (
+          <div className="list border rounded p-3 mb-2" key={item?._id}>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex">
+                <img
+                  src={item?.order_items[0].image}
+                  alt="product"
+                  style={{ width: "80px", height: "80px" }}
+                  className="rounded"
+                />
+                <div className="ms-1 d-flex flex-column justify-content-between">
+                  <div>
+                    <div className="fw-bold">{item?.order_items[0].name}</div>
+                    <div className="desc opacity-75">
+                      {item?.order_items[0].qty} Product x{" "}
+                      {formatRupiah(item?.order_items[0].price)}
+                    </div>
+                  </div>
+                  {item?.items_count > 1 && (
+                    <div className="desc opacity-50  ">
+                      +{item?.items_count} Product Lainya
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="border-start">
+                <div className="p-3">
+                  <div>Total Belanja</div>
+                  <div className="fw-bold">{formatRupiah(item?.total)}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </Widgets>
+    </Navbar>
   );
 }
