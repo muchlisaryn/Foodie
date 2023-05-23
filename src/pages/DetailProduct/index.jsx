@@ -35,7 +35,7 @@ export default function DetailProduct() {
       url: "/search",
     },
     {
-      name: "Detail Product",
+      name: data?.name,
       url: `/product/${id}`,
     },
   ];

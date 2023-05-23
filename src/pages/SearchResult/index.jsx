@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-  Container,
-  ContainerProduct,
-  ProductCard,
-  Select,
-} from "../../component";
+import { ContainerProduct, Navbar, ProductCard, Select } from "../../component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTag } from "../../features/TagSlice";
 import { useState } from "react";
@@ -20,8 +15,6 @@ export default function SearchResult() {
   const data = useSelector((state) => state.product.products);
   const [value, setValue] = useState(searchParams ? searchParams : "");
   const [tag, setTag] = useState([]);
-
-  console.log("ini data", data);
 
   const searchProduct = (e) => {
     e.preventDefault();
@@ -64,7 +57,7 @@ export default function SearchResult() {
   }, [dispatch]);
 
   return (
-    <Container setValue={setValue} value={value} onSubmit={searchProduct}>
+    <Navbar setValue={setValue} value={value} onSubmit={searchProduct}>
       <div className="search-result d-flex align-items-center mb-2">
         <div>
           <Select data={tags} onChange={selectTag} defaultValue="Filter Tags" />
@@ -98,6 +91,6 @@ export default function SearchResult() {
           </div>
         )}
       </ContainerProduct>
-    </Container>
+    </Navbar>
   );
 }

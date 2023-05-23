@@ -20,46 +20,31 @@ export default function AddUser() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectRole, setSelectRole] = useState("user");
 
-  const register = async ({ first_name, last_name, email, password, role }) => {
-    try {
-      const actionResult = await dispatch(
-        registerUser({ first_name, last_name, email, password, role })
-      );
-      const result = unwrapResult(actionResult);
-      console.log(result);
-      if (result.error) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: result.message,
-        });
-      } else {
-        navigate("/admin/kelola-user");
-        Swal.fire("Success!", "Berhasil Menambahkan User", "success");
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.message,
-      });
-    }
-  };
-
-  const tambahUser = () => {
-    if (password !== confirmPassword) {
-      alert("Confirm password tidak sama");
-    } else {
-      register({
+  //send new data user to server
+  const register = async () => {
+    const actionResult = await dispatch(
+      registerUser({
         first_name: firstName,
         last_name: lastName,
         email,
         password,
         role: selectRole,
+      })
+    );
+    const result = unwrapResult(actionResult);
+    if (result.error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: result.message,
       });
+    } else {
+      navigate("/admin/kelola-user");
+      Swal.fire("Success!", "Berhasil Menambahkan User", "success");
     }
   };
 
+  //effect for disable button
   useEffect(() => {
     if (
       firstName === "" ||
@@ -73,6 +58,7 @@ export default function AddUser() {
     }
   }, [firstName, lastName, email, password, confirmPassword]);
 
+  //role user
   const role = [
     {
       id: 1,
@@ -154,7 +140,7 @@ export default function AddUser() {
             <Button
               type="btn-add"
               className="bg-success text-light"
-              onClick={tambahUser}
+              onClick={register}
               disabled={disabled}
             >
               Tambah User

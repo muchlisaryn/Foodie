@@ -23,22 +23,26 @@ export default function AddProduct() {
   const dispatch = useDispatch();
   const data = useSelector((data) => data.category.categories);
   const dataTags = useSelector((data) => data.tag.tag);
+  const loading = useSelector((state) => state.product.pending);
+
   const [btnDisable, setBtnDisable] = useState(false);
   const [name, setName] = useState("");
   const [categories, setCategories] = useState("");
   const [tag, setTag] = useState([]);
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
+  const [price, setPrice] = useState();
+  const [stock, setStock] = useState();
   const [photo, setPhoto] = useState("");
   const [discount, setDiscount] = useState("");
 
+  //onChange field tags
   const selectTags = (e) => {
     if (e.target.value !== tag.find((item) => item === e.target.value)) {
       setTag([...tag, e.target.value]);
     }
   };
 
+  //delete tags
   const deleteTag = (select) => {
     setTag(
       tag
@@ -47,6 +51,7 @@ export default function AddProduct() {
     );
   };
 
+  //onChange upload photo Product
   const handleChangePhoto = (e) => {
     if (
       e?.target?.files[0].type === "image/jpg" ||
@@ -65,13 +70,20 @@ export default function AddProduct() {
     }
   };
 
+  //request data tag and category to server
+  useEffect(() => {
+    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
+    dispatch(fetchCategory());
+  }, [dispatch]);
+
+  //create efffect for disabled button
   useEffect(() => {
     if (
       name === "" ||
       categories === "" ||
       tag === [] ||
       description === "" ||
-      price === 0
+      price === undefined
     ) {
       setBtnDisable(true);
     } else {
@@ -79,35 +91,40 @@ export default function AddProduct() {
     }
   }, [name, categories, tag, description, price, stock, btnDisable]);
 
+  //send new data product to server
   const submitProduct = async () => {
     if (name > 40) {
       alert("please input name product max 40 character");
     } else {
-      const createProduct = await dispatch(
-        addProduct({
-          photo,
-          name,
-          description,
-          price,
-          category: categories,
-          tags: tag,
-          discount,
-          token,
-        })
-      );
-      const result = unwrapResult(createProduct);
-      if (result) {
-        navigate("/admin/kelola-product");
-        Swal.fire("Success!", "Berhasil Menambahkan Product", "success");
+      try {
+        const createProduct = await dispatch(
+          addProduct({
+            photo,
+            name,
+            description,
+            price,
+            category: categories,
+            tags: tag,
+            discount,
+            token,
+          })
+        );
+        const result = unwrapResult(createProduct);
+        if (result) {
+          navigate("/admin/kelola-product");
+          Swal.fire("Success!", "Berhasil Menambahkan Product", "success");
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Gagal Menambahkan Product",
+        });
       }
     }
   };
 
-  useEffect(() => {
-    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
-    dispatch(fetchCategory());
-  }, [dispatch]);
-
+  //component label
   const Label = ({ label, required }) => {
     return (
       <>
@@ -122,12 +139,7 @@ export default function AddProduct() {
 
   return (
     <ContainerAdmin>
-      <LabelPages
-        type="back"
-        label="Tambah Product"
-        to="/admin/kelola-product"
-      />
-
+      <LabelPages type="back" label="Tambah Product" to={-1} />
       <div className="p-3 border rounded">
         <div className="mb-3 fw-bold">Informasi Product</div>
         <div className="form-input d-flex mb-2">
@@ -262,25 +274,12 @@ export default function AddProduct() {
             </div>
           </div>
         </div>
-        <div className="form-input d-flex mb-2">
-          <Label label="Stock" required />
-          <div className="w-100">
-            <div>
-              <Input
-                type="number"
-                className="form-select-sm"
-                onChange={(e) => setStock(e.target.value)}
-                value={stock}
-              />
-            </div>
-          </div>
-        </div>
       </div>
 
       <div className="d-flex justify-content-end mt-2">
         <div>
           <Button type="btn-add" disabled={btnDisable} onClick={submitProduct}>
-            Tambah Product
+            {loading ? "Loading..." : " Tambah Product"}
           </Button>
         </div>
       </div>

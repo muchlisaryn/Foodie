@@ -22,14 +22,17 @@ export default function Alamat() {
   return (
     <Navbar>
       <Widgets>
-        <div className="w-25">
-          <Button
-            type="btn-add"
-            className="btn-sm"
-            onClick={() => navigate("/user/alamat/add-alamat")}
-          >
-            Tambah Alamat
-          </Button>
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="fw-bold">Alamat</div>
+          <div>
+            <Button
+              type="btn-add"
+              className="btn-sm"
+              onClick={() => navigate("/alamat/add-alamat")}
+            >
+              Tambah Alamat
+            </Button>
+          </div>
         </div>
         <div className="mt-2">
           {data.length > 0 ? (

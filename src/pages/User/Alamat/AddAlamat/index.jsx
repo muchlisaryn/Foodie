@@ -112,7 +112,7 @@ export default function AddAlamat() {
     <Navbar>
       <Widgets>
         <div className="add-address">
-          <LabelPages type="back" label="Tambah Alamat" to="/user/alamat" />
+          <LabelPages type="back" label="Tambah Alamat" to={-1} />
           <div className="mt-2">
             <div className="d-flex mb-2 ">
               <div className="label">Nama</div>

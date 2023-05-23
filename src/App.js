@@ -38,15 +38,14 @@ function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="checkout" element={<Checkout />} />
           <Route path="invoice/:order_id" element={<Invoice />} />
-        </Route>
-
-        <Route path="/user/">
-          <Route path="biodata" element={<Biodata />} />
+          <Route path="user" element={<Biodata />} />
           <Route path="alamat/">
             <Route path="" element={<Alamat />} />
             <Route path="add-alamat" element={<AddAlamat />} />
           </Route>
-          <Route path="pemesanan" element={<Pemesanan />} />
+          <Route path="pemesanan/">
+            <Route path="" element={<Pemesanan />} />
+          </Route>
         </Route>
 
         <Route path="/admin/">

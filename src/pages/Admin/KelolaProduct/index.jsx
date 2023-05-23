@@ -11,34 +11,66 @@ import {
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import { formatRupiah } from "../../../utils";
+import Swal from "sweetalert2";
 
 export default function KelolaProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("auth");
   const loading = useSelector((state) => state.product.pending);
   const data = useSelector((state) => state.product.products);
 
+  //delete product by id
   const deleteData = (id) => {
-    dispatch(deleteProduct({ id }));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const actionResult = await dispatch(deleteProduct({ id, token }));
+          const result = unwrapResult(actionResult);
+          if (result) {
+            Swal.fire("Deleted!", "Berhasil Menghapus Product.", "success");
+          }
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal Menghapus Product",
+          });
+        }
+      }
+    });
   };
 
+  //request data get product to server
   useEffect(() => {
     dispatch(fetchProduct());
   }, [dispatch]);
 
+  //update status product active or non active
   const switchStatus = async ({ id, status }) => {
     try {
       const actionResult = await dispatch(
-        updateProduct({ id, status: !status })
+        updateProduct({ id, status: !status, token })
       );
       const result = unwrapResult(actionResult);
-
+      console.log(result);
       if (result.error) {
         alert(result.message);
       }
     } catch (error) {
-      alert("berhasil");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Gagal Merubah data product",
+      });
     }
   };
 

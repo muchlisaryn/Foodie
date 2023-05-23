@@ -1,3 +1,5 @@
 .menu-item {
   text-decoration: none;
+  transition: width 1s;
+  -webkit-transition: width 1s;
 }

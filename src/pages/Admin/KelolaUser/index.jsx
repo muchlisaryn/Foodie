@@ -4,17 +4,47 @@ import ContainerAdmin from "../../../component/container/ContainerAdmin";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, fetchUser } from "../../../features/UserSlice";
+import Swal from "sweetalert2";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function KelolaUser() {
   const dispatch = useDispatch();
-  const loading = useSelector((list) => list.users.pending);
-  const data = useSelector((list) => list.users.users);
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("auth");
+  const loading = useSelector((state) => state.users.pending);
+  const data = useSelector((state) => state.users.users);
+
+  //request to server delete data user by id
   const deleteData = (id) => {
-    dispatch(deleteUser({ id }));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const actionResult = await dispatch(deleteUser({ id, token }));
+          const result = unwrapResult(actionResult);
+          if (result) {
+            Swal.fire("Deleted!", "Berhasil Menghapus User.", "success");
+          }
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal Menghapus User",
+          });
+        }
+      }
+    });
   };
 
+  //request get data user to server
   useEffect(() => {
     dispatch(fetchUser());
   }, [dispatch]);

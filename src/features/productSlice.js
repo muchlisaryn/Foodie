@@ -86,12 +86,25 @@ export const addProduct = createAsyncThunk(
 export const updateProduct = createAsyncThunk(
   "product/updateProduct",
   async (props) => {
-    const { id, name, description, price, discount, status, category } = props;
-
     try {
+      const {
+        id,
+        name,
+        description,
+        price,
+        discount,
+        status,
+        category,
+        token,
+      } = props;
       const response = await axios.put(
         `${process.env.REACT_APP_URL_API}/products/${id}`,
-        { name, description, price, discount, status, category }
+        { name, description, price, discount, status, category },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       return response.data;
     } catch (error) {
@@ -103,10 +116,15 @@ export const updateProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
   "product/deleteProduct",
   async (props) => {
-    const { id } = props;
+    const { id, token } = props;
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_URL_API}/products/${id}`
+        `${process.env.REACT_APP_URL_API}/products/${id}`,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
       return response.data;
     } catch (error) {

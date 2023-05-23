@@ -10,13 +10,6 @@ export default function Home() {
   const auth = localStorage.getItem("auth");
   const data = useSelector((state) => state?.product?.products);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [query, setQuery] = useState("");
-
-  const submitSearch = (e) => {
-    e.preventDefault();
-    navigate(`/search?q=${query}`);
-  };
 
   useEffect(() => {
     dispatch(
@@ -26,7 +19,7 @@ export default function Home() {
   }, [dispatch]);
 
   return (
-    <Navbar value={query} setValue={setQuery} onSubmit={submitSearch}>
+    <Navbar>
       <div
         id="carouselExampleIndicators"
         className="carousel slide"

@@ -20,13 +20,16 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
   const cart = useSelector((state) => state.cart.cart);
   const user = useSelector((state) => state.users.user);
   const [showDropdowns, setShowDropdowns] = useState(false);
+  const [query, setQuery] = useState("");
   const auth = localStorage.getItem("auth");
   const id = localStorage.getItem("user");
 
+  //get user profile name by id
   useEffect(() => {
     dispatch(getOneUser({ id }));
   }, [dispatch, id]);
 
+  //show or off dropdowns
   const clickDropDowns = () => {
     if (showDropdowns) {
       setShowDropdowns(false);
@@ -35,6 +38,7 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
     }
   };
 
+  //action siginout
   const signOut = async () => {
     const logoutAction = await dispatch(logout(auth));
     const result = await unwrapResult(logoutAction);
@@ -53,6 +57,12 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
     }
   };
 
+  //function search product
+  const onSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?q=${query}`);
+  };
+
   return (
     <>
       <nav class="navbar  border-bottom fixed-top">
@@ -63,9 +73,11 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
           <Input
             placeholder="Search...."
             type="search"
-            onSubmit={onSubmit}
-            onChange={(e) => setValue(e.target.value)}
-            value={value}
+            onSubmit={onSubmit ? onSubmit : onSearch}
+            onChange={(e) =>
+              setValue ? setValue(e.target.value) : setQuery(e.target.value)
+            }
+            value={value ? value : query}
             className="search"
           />
           <div className="d-flex align-items-center ">
@@ -91,7 +103,7 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
                         <div className="Dropdowns rounded border">
                           <div
                             className="d-flex align-items-center dropdowns-item  border-bottom p-2 px-3"
-                            onClick={() => navigate("/user/biodata")}
+                            onClick={() => navigate(`/user?id=${id}`)}
                           >
                             <AiFillSetting />
                             <span className="ms-1">Settings</span>
@@ -117,7 +129,7 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
           </div>
         </div>
       </nav>
-      <div className="container">{children}</div>
+      <div className="container pages">{children}</div>
     </>
   );
 }
