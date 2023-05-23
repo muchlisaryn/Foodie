@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -9,9 +10,18 @@ const initialState = {
   totalResult: 0,
 };
 
-export const fetchTag = createAsyncThunk("tag/fetchTag", async (url) => {
+export const queryTag = createAsyncThunk("tag/queryTag", async (url) => {
   try {
     const response = await axios.get(url);
+    return response.data.data;
+  } catch (e) {
+    throw e;
+  }
+});
+
+export const fetchTag = createAsyncThunk("tag/fetchTag", async (url) => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_URL_API}/tag`);
     return response.data.data;
   } catch (e) {
     throw e;
@@ -21,9 +31,17 @@ export const fetchTag = createAsyncThunk("tag/fetchTag", async (url) => {
 export const addTag = createAsyncThunk("tag/addTag", async (props) => {
   const { name } = props;
   try {
-    const response = await axios.post(`${process.env.REACT_APP_URL_API}/tag`, {
-      name,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_URL_API}/tag`,
+      {
+        name,
+      },
+      {
+        headers: {
+          Authorization: token(),
+        },
+      }
+    );
     return response.data;
   } catch (e) {
     throw e;
@@ -34,7 +52,12 @@ export const deleteTag = createAsyncThunk("tag/deleteTag", async (props) => {
   const { id } = props;
   try {
     const response = await axios.delete(
-      `${process.env.REACT_APP_URL_API}/tag/${id}`
+      `${process.env.REACT_APP_URL_API}/tag/${id}`,
+      {
+        headers: {
+          Authorization: token(),
+        },
+      }
     );
     return response.data;
   } catch (e) {
@@ -49,6 +72,11 @@ export const updateTag = createAsyncThunk("tag/upadteTag", async (props) => {
       `${process.env.REACT_APP_URL_API}/tag/${id}`,
       {
         name,
+      },
+      {
+        headers: {
+          Authorization: token(),
+        },
       }
     );
     return response.data;
@@ -74,6 +102,22 @@ const tagSlice = createSlice({
         state.errorMessage = action.error.message;
       })
       .addCase(fetchTag.fulfilled, (state, action) => {
+        state.success = true;
+        state.tag = action.payload;
+        state.pending = false;
+        state.errorMessage = "";
+      })
+      .addCase(queryTag.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(queryTag.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(queryTag.fulfilled, (state, action) => {
         state.success = true;
         state.tag = action.payload;
         state.pending = false;

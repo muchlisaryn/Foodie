@@ -11,6 +11,7 @@ import Skeleton from "./atoms/Skeleton";
 import Switcher from "./atoms/Switcher";
 import Quantity from "./molecules/Quantity";
 import Widgets from "./molecules/Widgets";
+import { Toast } from "bootstrap";
 
 export {
   Navbar,
@@ -26,4 +27,5 @@ export {
   Switcher,
   Quantity,
   Widgets,
+  Toast,
 };

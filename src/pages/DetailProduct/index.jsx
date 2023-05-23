@@ -11,10 +11,10 @@ import { formatRupiah } from "../../utils";
 import Swal from "sweetalert2";
 import { addCart, getCart } from "../../features/CartSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { token } from "../../utils";
 
 export default function DetailProduct() {
   const { id } = useParams();
-  const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.product.detail);
   const navigate = useNavigate();
@@ -25,8 +25,8 @@ export default function DetailProduct() {
   //get cart & get detail product by id
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
-    dispatch(getCart(auth));
-  }, [dispatch, id, auth]);
+    dispatch(getCart());
+  }, [dispatch, id]);
 
   //list breadcrumb
   const dataBreadCrumb = [
@@ -40,18 +40,36 @@ export default function DetailProduct() {
     },
   ];
 
+  //function toast SwalAllert2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
   //add product to cart
   const addToCart = async (items) => {
-    if (auth) {
+    if (token) {
       const actionAddCart = await dispatch(
-        addCart({ items, qty: quantity, price: currentPrice, auth })
+        addCart({ items, qty: quantity, price: currentPrice })
       );
       const result = await unwrapResult(actionAddCart);
-      console.log(result);
       if (result.error) {
-        alert(result.message);
+        Toast.fire({
+          icon: "error",
+          title: result?.message,
+        });
       } else {
-        Swal.fire("Success!", "Berhasil Menambahkan ke Keranjang", "success");
+        Toast.fire({
+          icon: "success",
+          title: "Product Berhasil dimasukan kedalam keranjang",
+        });
       }
     } else {
       navigate("/login");

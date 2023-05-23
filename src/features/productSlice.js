@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -54,8 +55,7 @@ export const fetchDetailProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "product/addProduct",
   async (props) => {
-    const { photo, name, description, price, category, tags, discount, token } =
-      props;
+    const { photo, name, description, price, category, tags, discount } = props;
 
     let formData = new FormData();
     formData.append("name", name);
@@ -72,7 +72,7 @@ export const addProduct = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );
@@ -87,22 +87,14 @@ export const updateProduct = createAsyncThunk(
   "product/updateProduct",
   async (props) => {
     try {
-      const {
-        id,
-        name,
-        description,
-        price,
-        discount,
-        status,
-        category,
-        token,
-      } = props;
+      const { id, name, description, price, discount, status, category } =
+        props;
       const response = await axios.put(
         `${process.env.REACT_APP_URL_API}/products/${id}`,
         { name, description, price, discount, status, category },
         {
           headers: {
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );
@@ -116,13 +108,13 @@ export const updateProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
   "product/deleteProduct",
   async (props) => {
-    const { id, token } = props;
+    const { id } = props;
     try {
       const response = await axios.delete(
         `${process.env.REACT_APP_URL_API}/products/${id}`,
         {
           headers: {
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );

@@ -1,8 +1,9 @@
-
-import ContainerAdmin from "../../../component/container/ContainerAdmin";
-
+import { Sidebar } from "../../../component";
 
 export default function Dashboard() {
-  
-  return <ContainerAdmin></ContainerAdmin>;
+  return (
+    <Sidebar>
+      <div>Dashboard</div>
+    </Sidebar>
+  );
 }

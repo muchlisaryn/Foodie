@@ -70,10 +70,24 @@ export default function Checkout() {
     });
   };
 
-  //request data alamat user ke server
+  /*ketika alamat user masih kosong maka akan di redirect ke halaman alamat
+  terlebih dahulu untuk membuat alamat
+ */
   useEffect(() => {
-    dispatch(fetchAddress({ token }));
-  }, [dispatch, token]);
+    const getAddress = async () => {
+      const action = await dispatch(fetchAddress({ token }));
+      const result = await unwrapResult(action);
+      if (result.length === 0) {
+        navigate("/alamat");
+        Swal.fire(
+          "Alamat Anda Masih Kosong!",
+          "Silahkan Tambahkan Alamat Terlebih Dahulu",
+          "warning"
+        );
+      }
+    };
+    getAddress();
+  }, [dispatch, token, navigate]);
 
   //hooks untuk tombol checkout
   useEffect(() => {

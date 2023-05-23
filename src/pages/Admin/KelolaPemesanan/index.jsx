@@ -1,12 +1,11 @@
-import { Button, LabelPages } from "../../../component";
-import ContainerAdmin from "../../../component/container/ContainerAdmin";
+import { Button, LabelPages, Sidebar } from "../../../component";
 
 export default function KelolaPemesanan() {
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages label="Kelola Pemesanan">
         <Button className="btn-success">Tambah</Button>
       </LabelPages>
-    </ContainerAdmin>
+    </Sidebar>
   );
 }

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import Swal from "sweetalert2";
-import { LabelPages, Button, Skeleton } from "../../../../component";
+import { LabelPages, Button, Skeleton, Sidebar } from "../../../../component";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCategory,
@@ -16,8 +15,8 @@ export default function Category() {
   const data = useSelector((data) => data.category.categories);
   const loading = useSelector((data) => data.category.pending);
 
+  //function request to server delete category by id
   const deleteData = (id) => {
-    console.log("id", id);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -45,6 +44,7 @@ export default function Category() {
     });
   };
 
+  //function request send new data category to server
   const tambah = () => {
     Swal.fire({
       title: `Tambah Category`,
@@ -73,6 +73,7 @@ export default function Category() {
     });
   };
 
+  //function send edit  data  category to server
   const edit = ({ id, name }) => {
     Swal.fire({
       title: `Edit Category "${name}"`,
@@ -101,12 +102,13 @@ export default function Category() {
     });
   };
 
+  //request get data category to server
   useEffect(() => {
     dispatch(fetchCategory());
   }, [dispatch]);
 
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages label="Konfigurasi Category">
         <div>
           <Button type="btn-add" onClick={tambah}>
@@ -166,6 +168,6 @@ export default function Category() {
           ))}
         </tbody>
       </table>
-    </ContainerAdmin>
+    </Sidebar>
   );
 }

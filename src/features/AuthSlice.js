@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -25,14 +26,14 @@ export const login = createAsyncThunk("auth/login", async (props) => {
   }
 });
 
-export const logout = createAsyncThunk("auth/logout", async (token) => {
+export const logout = createAsyncThunk("auth/logout", async () => {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_URL_AUTH}/logout`,
-      token,
+      token(),
       {
         headers: {
-          Authorization: token,
+          Authorization: token(),
         },
       }
     );
@@ -42,11 +43,11 @@ export const logout = createAsyncThunk("auth/logout", async (token) => {
   }
 });
 
-export const getToken = createAsyncThunk("auth/getToken", async (token) => {
+export const getToken = createAsyncThunk("auth/getToken", async () => {
   try {
     const response = await axios.get(`${process.env.REACT_APP_URL_AUTH}/me`, {
       headers: {
-        Authorization: token,
+        Authorization: token(),
       },
     });
     return response.data;

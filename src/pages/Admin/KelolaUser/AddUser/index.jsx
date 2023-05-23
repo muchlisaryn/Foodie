@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { Button, Input, LabelPages, Select } from "../../../../component";
-import ContainerAdmin from "../../../../component/container/ContainerAdmin";
+import {
+  Button,
+  Input,
+  LabelPages,
+  Select,
+  Sidebar,
+} from "../../../../component";
 import "./style.scss";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../../../features/UserSlice";
@@ -71,7 +76,7 @@ export default function AddUser() {
   ];
 
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages type="back" label="Add User" to="/admin/kelola-user" />
       <div className="add-user p-3 border rounded">
         <div className="form-input d-flex align-items-center pb-2">
@@ -148,6 +153,6 @@ export default function AddUser() {
           </div>
         </div>
       </div>
-    </ContainerAdmin>
+    </Sidebar>
   );
 }

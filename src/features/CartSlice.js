@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -9,7 +10,7 @@ const initialState = {
 };
 
 export const addCart = createAsyncThunk("cart/addCart", async (props) => {
-  const { items, qty, price, auth } = props;
+  const { items, qty, price } = props;
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_URL_API}/carts`,
@@ -20,7 +21,7 @@ export const addCart = createAsyncThunk("cart/addCart", async (props) => {
       },
       {
         headers: {
-          Authorization: auth,
+          Authorization: token(),
         },
       }
     );
@@ -30,11 +31,11 @@ export const addCart = createAsyncThunk("cart/addCart", async (props) => {
   }
 });
 
-export const getCart = createAsyncThunk("cart/getCart", async (token) => {
+export const getCart = createAsyncThunk("cart/getCart", async () => {
   try {
     const response = await axios.get(`${process.env.REACT_APP_URL_API}/carts`, {
       headers: {
-        Authorization: token,
+        Authorization: token(),
       },
     });
     return response.data;
@@ -44,14 +45,14 @@ export const getCart = createAsyncThunk("cart/getCart", async (token) => {
 });
 
 export const updateCart = createAsyncThunk("cart/updateCart", async (props) => {
-  const { token, qty, id } = props;
+  const { qty, id } = props;
   try {
     const response = await axios.put(
       `${process.env.REACT_APP_URL_API}/carts/${id}`,
       { qty },
       {
         headers: {
-          Authorization: token,
+          Authorization: token(),
         },
       }
     );
@@ -62,13 +63,13 @@ export const updateCart = createAsyncThunk("cart/updateCart", async (props) => {
 });
 
 export const deleteCart = createAsyncThunk("cart/deleteCart", async (props) => {
-  const { id, token } = props;
+  const { id } = props;
   try {
     const response = await axios.delete(
       `${process.env.REACT_APP_URL_API}/carts/${id}`,
       {
         headers: {
-          Authorization: token,
+          Authorization: token(),
         },
       }
     );

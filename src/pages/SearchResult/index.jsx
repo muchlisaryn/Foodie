@@ -53,7 +53,7 @@ export default function SearchResult() {
   }, [dispatch, value, tag]);
 
   useEffect(() => {
-    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
+    dispatch(fetchTag());
   }, [dispatch]);
 
   return (

@@ -1,3 +1,9 @@
+import { Sidebar } from "../../../../component";
+
 export default function EditProduct() {
-  return <div>Edit Product</div>;
+  return (
+    <Sidebar>
+      <div>Edit Product</div>
+    </Sidebar>
+  );
 }

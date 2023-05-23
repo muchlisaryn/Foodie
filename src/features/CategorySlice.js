@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -32,6 +33,11 @@ export const addCategory = createAsyncThunk(
         `${process.env.REACT_APP_URL_API}/category`,
         {
           name,
+        },
+        {
+          headers: {
+            Authorization: token(),
+          },
         }
       );
       return response.data;
@@ -47,7 +53,12 @@ export const deleteCategory = createAsyncThunk(
     const { id } = props;
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_URL_API}/category/${id}`
+        `${process.env.REACT_APP_URL_API}/category/${id}`,
+        {
+          headers: {
+            Authorization: token(),
+          },
+        }
       );
       return response.data;
     } catch (e) {
@@ -65,6 +76,11 @@ export const updateCategory = createAsyncThunk(
         `${process.env.REACT_APP_URL_API}/category/${id}`,
         {
           name,
+        },
+        {
+          headers: {
+            Authorization: token(),
+          },
         }
       );
       return response.data;

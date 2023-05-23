@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, LabelPages, Skeleton } from "../../../component";
-import ContainerAdmin from "../../../component/container/ContainerAdmin";
+import { Button, LabelPages, Sidebar, Skeleton } from "../../../component";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, fetchUser } from "../../../features/UserSlice";
@@ -11,7 +10,6 @@ export default function KelolaUser() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("auth");
   const loading = useSelector((state) => state.users.pending);
   const data = useSelector((state) => state.users.users);
 
@@ -28,7 +26,7 @@ export default function KelolaUser() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const actionResult = await dispatch(deleteUser({ id, token }));
+          const actionResult = await dispatch(deleteUser({ id }));
           const result = unwrapResult(actionResult);
           if (result) {
             Swal.fire("Deleted!", "Berhasil Menghapus User.", "success");
@@ -50,14 +48,17 @@ export default function KelolaUser() {
   }, [dispatch]);
 
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages label="Kelola User">
-        <Button
-          className="btn-success"
-          onClick={() => navigate("/admin/kelola-user/add-user")}
-        >
-          Tambah
-        </Button>
+        <div>
+          <Button
+            type="btn-add"
+            className="btn-sm"
+            onClick={() => navigate("/admin/kelola-user/add-user")}
+          >
+            Tambah
+          </Button>
+        </div>
       </LabelPages>
       <table className="table  table-borderless border">
         <thead>
@@ -112,6 +113,6 @@ export default function KelolaUser() {
           ))}
         </tbody>
       </table>
-    </ContainerAdmin>
+    </Sidebar>
   );
 }

@@ -15,4 +15,8 @@ const formatRupiah = (data) => {
   return "Rp. " + rupiah;
 };
 
-export { formatRupiah };
+const token = () => {
+  return localStorage.getItem("auth") || null;
+};
+
+export { formatRupiah, token };

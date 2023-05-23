@@ -4,9 +4,9 @@ import {
   Input,
   LabelPages,
   Select,
+  Sidebar,
   Switcher,
 } from "../../../../component";
-import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategory } from "../../../../features/CategorySlice";
 import { useState } from "react";
@@ -34,6 +34,12 @@ export default function AddProduct() {
   const [stock, setStock] = useState();
   const [photo, setPhoto] = useState("");
   const [discount, setDiscount] = useState("");
+
+  //request data tag and category to server
+  useEffect(() => {
+    dispatch(fetchTag());
+    dispatch(fetchCategory());
+  }, [dispatch]);
 
   //onChange field tags
   const selectTags = (e) => {
@@ -69,12 +75,6 @@ export default function AddProduct() {
       alert("Please input Image format PNG / JPG / JPEG");
     }
   };
-
-  //request data tag and category to server
-  useEffect(() => {
-    dispatch(fetchTag(`${process.env.REACT_APP_URL_API}/tag`));
-    dispatch(fetchCategory());
-  }, [dispatch]);
 
   //create efffect for disabled button
   useEffect(() => {
@@ -138,7 +138,7 @@ export default function AddProduct() {
   };
 
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages type="back" label="Tambah Product" to={-1} />
       <div className="p-3 border rounded">
         <div className="mb-3 fw-bold">Informasi Product</div>
@@ -283,6 +283,6 @@ export default function AddProduct() {
           </Button>
         </div>
       </div>
-    </ContainerAdmin>
+    </Sidebar>
   );
 }

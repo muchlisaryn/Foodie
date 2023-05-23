@@ -1,5 +1,10 @@
-import { Button, LabelPages, Skeleton, Switcher } from "../../../component";
-import ContainerAdmin from "../../../component/container/ContainerAdmin";
+import {
+  Button,
+  LabelPages,
+  Sidebar,
+  Skeleton,
+  Switcher,
+} from "../../../component";
 import { useEffect } from "react";
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +21,7 @@ import Swal from "sweetalert2";
 export default function KelolaProduct() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = localStorage.getItem("auth");
+
   const loading = useSelector((state) => state.product.pending);
   const data = useSelector((state) => state.product.products);
 
@@ -33,7 +38,7 @@ export default function KelolaProduct() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const actionResult = await dispatch(deleteProduct({ id, token }));
+          const actionResult = await dispatch(deleteProduct({ id }));
           const result = unwrapResult(actionResult);
           if (result) {
             Swal.fire("Deleted!", "Berhasil Menghapus Product.", "success");
@@ -54,16 +59,34 @@ export default function KelolaProduct() {
     dispatch(fetchProduct());
   }, [dispatch]);
 
+  //function toast SwalAllert2
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
   //update status product active or non active
   const switchStatus = async ({ id, status }) => {
     try {
       const actionResult = await dispatch(
-        updateProduct({ id, status: !status, token })
+        updateProduct({ id, status: !status })
       );
-      const result = unwrapResult(actionResult);
+      const result = await unwrapResult(actionResult);
       console.log(result);
-      if (result.error) {
-        alert(result.message);
+      if (result) {
+        Toast.fire({
+          icon: "success",
+          title: `${result.name} berhasil di${
+            result.status ? "aktifkan" : "nonaktifkan"
+          }`,
+        });
       }
     } catch (error) {
       Swal.fire({
@@ -75,7 +98,7 @@ export default function KelolaProduct() {
   };
 
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages label="Kelola Product">
         <div>
           <Button
@@ -189,6 +212,6 @@ export default function KelolaProduct() {
           )}
         </tbody>
       </table>
-    </ContainerAdmin>
+    </Sidebar>
   );
 }

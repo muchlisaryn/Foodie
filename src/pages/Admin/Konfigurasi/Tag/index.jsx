@@ -1,13 +1,18 @@
-import { Button, Skeleton, Input, LabelPages } from "../../../../component";
+import {
+  Button,
+  Skeleton,
+  Input,
+  LabelPages,
+  Sidebar,
+} from "../../../../component";
 import "./style.scss";
-import ContainerAdmin from "../../../../component/container/ContainerAdmin";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTag,
   deleteTag,
-  fetchTag,
+  queryTag,
   updateTag,
 } from "../../../../features/TagSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -16,19 +21,46 @@ export default function Tag() {
   const dispatch = useDispatch();
   const tags = useSelector((data) => data.tag.tag);
   const loading = useSelector((data) => data.tag.pending);
-  const [valueSearch, setValueSearch] = useState("");
+  const [query, setQuery] = useState("");
   const [limit, setLimit] = useState();
   const [skip, setSkip] = useState();
 
+  //function request delete data tag by id to server
   const deleteData = (id) => {
-    dispatch(deleteTag({ id }));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const actionResult = await dispatch(deleteTag({ id }));
+          const result = unwrapResult(actionResult);
+          if (result) {
+            Swal.fire("Deleted!", "Tag Berhasil Dihapus", "success");
+          }
+        } catch (err) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Gagal Menghapus Tag",
+          });
+        }
+      }
+    });
   };
 
+  //onSubmit search tag
   const search = (e) => {
     e.preventDefault();
-    dispatch(fetchTag(`${process.env.REACT_APP_URL}/tag?q=${valueSearch}`));
+    dispatch(queryTag(`${process.env.REACT_APP_URL}/tag?q=${query}`));
   };
 
+  //function request new data tag to server
   const tambah = () => {
     Swal.fire({
       title: `Tambah Tag`,
@@ -58,6 +90,7 @@ export default function Tag() {
     });
   };
 
+  //function request edit data tag to server
   const edit = ({ id, name }) => {
     Swal.fire({
       title: `Edit Tag "${name}"`,
@@ -72,7 +105,6 @@ export default function Tag() {
         try {
           const actionResult = await dispatch(updateTag({ id, name }));
           const result = unwrapResult(actionResult);
-
           if (result) {
             Swal.fire("Success!", "Berhasil Merubah Tag", "success");
           }
@@ -87,23 +119,22 @@ export default function Tag() {
     });
   };
 
+  //request get data tag to server
   useEffect(() => {
-    if (valueSearch === "") {
-      dispatch(
-        fetchTag(
-          `${process.env.REACT_APP_URL_API}/tag?q=${valueSearch}&limit=${limit}&skip=${skip}`
-        )
-      );
-    }
-  }, [dispatch, valueSearch, limit, skip]);
+    dispatch(
+      queryTag(
+        `${process.env.REACT_APP_URL_API}/tag?q=${query}&limit=${limit}&skip=${skip}`
+      )
+    );
+  }, [dispatch, query, limit, skip]);
 
   return (
-    <ContainerAdmin>
+    <Sidebar>
       <LabelPages label="Konfigurasi Tag">
         <div className="d-flex">
           <Input
             placeholder="Search Tag.."
-            onChage={(e) => setValueSearch(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             onSubmit={search}
           />
           <div className="border-end mx-3"></div>
@@ -116,14 +147,12 @@ export default function Tag() {
       <table className="table  table-borderless border">
         <thead>
           <tr>
-            <th scope="col">
-              {loading ? <Skeleton height={22} width={20} /> : "No"}
-            </th>
+            <th scope="col">No</th>
             <th scope="col " className="w-100">
-              {loading ? <Skeleton height={22} /> : "Name tag"}
+              Name Tag
             </th>
             <th scope="col" className="text-center">
-              {loading ? <Skeleton height={22} /> : "Action"}
+              Action
             </th>
           </tr>
         </thead>
@@ -164,6 +193,11 @@ export default function Tag() {
           ))}
         </tbody>
       </table>
-    </ContainerAdmin>
+      {tags?.length === 0 && (
+        <div className="d-flex justify-content-center">
+          Data "{query}" Not Found
+        </div>
+      )}
+    </Sidebar>
   );
 }

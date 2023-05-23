@@ -5,12 +5,12 @@ import { formatRupiah } from "../../../utils";
 import Skeleton from "../../atoms/Skeleton";
 import { useSelector } from "react-redux";
 
-export default function ProductCard({ data, index }) {
+export default function ProductCard({ data }) {
   const loading = useSelector((state) => state.product?.pending);
 
   return (
     <NavLink to={`/product/${data?._id}`} className="product-card ">
-      <div className="col" key={++index}>
+      <div className="col">
         <div className="mb-2 border rounded">
           {loading ? (
             <Skeleton height={100} />

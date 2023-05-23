@@ -7,15 +7,15 @@ import { queryProduct } from "../../features/ProductSlice";
 import { getCart } from "../../features/CartSlice";
 
 export default function Home() {
-  const auth = localStorage.getItem("auth");
   const data = useSelector((state) => state?.product?.products);
   const dispatch = useDispatch();
 
+  //request get data product and cart to server
   useEffect(() => {
     dispatch(
       queryProduct(`${process.env.REACT_APP_URL_API}/products?limit=10`)
     );
-    dispatch(getCart(auth));
+    dispatch(getCart());
   }, [dispatch]);
 
   return (
@@ -101,7 +101,7 @@ export default function Home() {
       </div>
       <ContainerProduct>
         {data?.map((item, index) => (
-          <ProductCard data={item} index={index} />
+          <ProductCard data={item} key={++index} />
         ))}
       </ContainerProduct>
     </Navbar>
