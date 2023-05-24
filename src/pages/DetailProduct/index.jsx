@@ -55,7 +55,7 @@ export default function DetailProduct() {
 
   //add product to cart
   const addToCart = async (items) => {
-    if (token) {
+    if (token()) {
       const actionAddCart = await dispatch(
         addCart({ items, qty: quantity, price: currentPrice })
       );

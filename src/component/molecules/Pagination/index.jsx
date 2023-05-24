@@ -1,7 +1,7 @@
 import ReactPagination from "https://cdn.skypack.dev/rc-pagination@3.1.15";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 import Button from "../../atoms/Button";
-import "./Pagination.css";
+import "./pagination.scss";
 
 export default function Pagination({
   setSize,

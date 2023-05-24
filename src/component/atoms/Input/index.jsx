@@ -122,7 +122,7 @@ export default function Input({
       <input
         type={type}
         placeholder={placeholder}
-        className={`form-control  ${className}`}
+        className={`form-control form-sm  ${className}`}
         onChange={onChange}
         value={value}
         onInput={onInput}
