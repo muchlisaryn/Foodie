@@ -16,7 +16,7 @@ export const queryProduct = createAsyncThunk(
   async (url) => {
     try {
       const response = await axios.get(url);
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw error;
     }

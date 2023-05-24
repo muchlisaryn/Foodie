@@ -14,7 +14,6 @@ import { unwrapResult } from "@reduxjs/toolkit";
 export default function Checkout() {
   const dataAddress = useSelector((state) => state.address.address);
   const loading = useSelector((state) => state.address.pending);
-  const token = localStorage.getItem("auth");
   const [address, setAddress] = useState();
   const [disabledButton, setDisabledButton] = useState(true);
   const dispatch = useDispatch();
@@ -28,19 +27,17 @@ export default function Checkout() {
     .reduce((acc, cur) => acc + cur);
 
   //ongkir
-  const Ongkir = 20000;
+  const ongkir = 20000;
 
   //send data order ke server
   const sendOrder = async () => {
     const acationOrder = await dispatch(
       order({
-        token,
-        delivery_fee: Ongkir,
+        delivery_fee: ongkir,
         delivery_address: address?._id,
       })
     );
     const result = await unwrapResult(acationOrder);
-    console.log("result ==>", result);
     if (result._id) {
       navigate(`/invoice/${result._id}`);
     } else {
@@ -70,12 +67,12 @@ export default function Checkout() {
     });
   };
 
-  /*ketika alamat user masih kosong maka akan di redirect ke halaman alamat
+  /*request data address user ke server , ketika alamat user masih kosong maka akan di redirect ke halaman alamat
   terlebih dahulu untuk membuat alamat
  */
   useEffect(() => {
     const getAddress = async () => {
-      const action = await dispatch(fetchAddress({ token }));
+      const action = await dispatch(fetchAddress());
       const result = await unwrapResult(action);
       if (result.length === 0) {
         navigate("/alamat");
@@ -87,7 +84,7 @@ export default function Checkout() {
       }
     };
     getAddress();
-  }, [dispatch, token, navigate]);
+  }, [dispatch, navigate]);
 
   //hooks untuk tombol checkout
   useEffect(() => {
@@ -185,12 +182,12 @@ export default function Checkout() {
             <div>{formatRupiah(parseInt(getTotal))}</div>
           </div>
           <div className="d-flex justify-content-between mt-1">
-            <div>Ongkir</div>
-            <div>{formatRupiah(Ongkir)}</div>
+            <div>ongkir</div>
+            <div>{formatRupiah(ongkir)}</div>
           </div>
           <div className="border-top d-flex justify-content-between mt-2 fw-bold">
             <div>total</div>
-            <div>{formatRupiah(parseInt(getTotal + Ongkir))}</div>
+            <div>{formatRupiah(parseInt(getTotal + ongkir))}</div>
           </div>
 
           <Button

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -10,13 +11,13 @@ const initialState = {
 
 export const fetchAddress = createAsyncThunk(
   "address/fetchAddress",
-  async ({ token }) => {
+  async () => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_URL_API}/delivery-addresses`,
         {
           headers: {
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );
@@ -39,7 +40,6 @@ export const addAddress = createAsyncThunk(
         kabupaten,
         provinsi,
         detail,
-        token,
       } = props;
       const response = await axios.post(
         `${process.env.REACT_APP_URL_API}/delivery-addresses`,
@@ -54,7 +54,7 @@ export const addAddress = createAsyncThunk(
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );
@@ -67,13 +67,13 @@ export const addAddress = createAsyncThunk(
 
 export const deleteAddress = createAsyncThunk(
   "address/deleteAddress",
-  async ({ id, token }) => {
+  async ({ id }) => {
     try {
       const response = await axios.delete(
         `${process.env.REACT_APP_URL_API}/delivery-addresses/${id}`,
         {
           headers: {
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );

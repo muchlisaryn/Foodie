@@ -75,7 +75,7 @@ export const deleteCart = createAsyncThunk("cart/deleteCart", async (props) => {
     );
     return response.data;
   } catch (error) {
-    return error.response.data;
+    throw error;
   }
 });
 

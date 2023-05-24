@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { token } from "../utils";
 import axios from "axios";
 
 const initialState = {
@@ -12,13 +13,13 @@ const initialState = {
 
 export const order = createAsyncThunk("order/orders", async (props) => {
   try {
-    const { delivery_fee, delivery_address, token } = props;
+    const { delivery_fee, delivery_address } = props;
     const response = await axios.post(
       `${process.env.REACT_APP_URL_API}/orders`,
       { delivery_fee, delivery_address },
       {
         headers: {
-          Authorization: token,
+          Authorization: token(),
         },
       }
     );
@@ -28,40 +29,37 @@ export const order = createAsyncThunk("order/orders", async (props) => {
   }
 });
 
-export const getOrder = createAsyncThunk(
-  "order/getOrders",
-  async ({ token }) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_URL_API}/orders`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      return response.data.data;
-    } catch (error) {
-      console.log(error.response);
-    }
+export const getOrder = createAsyncThunk("order/getOrders", async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}/orders`,
+      {
+        headers: {
+          Authorization: token(),
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    throw error;
   }
-);
+});
 
 export const getInvoice = createAsyncThunk(
   "order/getInvoice",
-  async ({ token, order_id }) => {
+  async ({ order_id }) => {
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_URL_API}/invoice/${order_id}`,
         {
           headers: {
-            Authorization: token,
+            Authorization: token(),
           },
         }
       );
       return response.data;
     } catch (error) {
-      console.log(error.response);
+      throw error;
     }
   }
 );

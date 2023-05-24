@@ -10,8 +10,7 @@ export default function Biodata() {
   const params = new URLSearchParams(document?.location?.search);
   const id = params.get("id");
 
-  console.log(data);
-
+  //request get data user by id to server
   useEffect(() => {
     dispatch(getOneUser({ id }));
   }, [dispatch, id]);

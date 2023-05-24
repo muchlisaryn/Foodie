@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Input } from "../../component";
+import { Button, Input, Navbar } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -10,13 +10,13 @@ import Swal from "sweetalert2";
 
 export default function Login() {
   const loading = useSelector((state) => state?.auth?.pending);
-  console.log(loading);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  //effect disable button sign
   useEffect(() => {
     if (email === "" || password === "") {
       setDisabled(true);
@@ -25,12 +25,13 @@ export default function Login() {
     }
   }, [disabled, email, password]);
 
+  //function sign
   const auth = async (e) => {
     e.preventDefault();
 
     const auth = await dispatch(login({ email, password }));
     const authResult = await unwrapResult(auth);
-    console.log(authResult);
+
     if (authResult.error) {
       Swal.fire({
         icon: "error",
@@ -59,49 +60,51 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full vh-100 d-flex align-items-center justify-content-center">
-      <div className="login h-75 p-3 border rounded ">
-        <div className="h-100 ">
-          <div className="h-25 d-flex align-items-center justify-content-center">
-            Masuk
-          </div>
-          <div className="d-flex h-50 align-items-center ">
-            <div className="w-100">
-              <div className="mb-2">
-                <div>Email</div>
-                <Input
-                  type="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                />
-              </div>
-              <div>
-                <div>Password</div>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              <Button
-                type="button-primary"
-                className="w-full mt-4"
-                disabled={disabled}
-                onClick={auth}
-              >
-                {loading ? "Loading..." : "Login"}
-              </Button>
+    <Navbar>
+      <div className="w-full d-flex mt-4 justify-content-center">
+        <div className="login h-75 p-3 border rounded ">
+          <div>
+            <div className="d-flex align-items-center justify-content-center py-3 fw-bold">
+              SIGN
             </div>
-          </div>
+            <div className="d-flex  align-items-center ">
+              <div className="w-100">
+                <div className="mb-2">
+                  <div>Email</div>
+                  <Input
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                  />
+                </div>
+                <div>
+                  <div>Password</div>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <Button
+                  type="button-primary"
+                  className="w-full mt-4"
+                  disabled={disabled}
+                  onClick={auth}
+                >
+                  {loading ? "Loading..." : "Login"}
+                </Button>
+              </div>
+            </div>
 
-          <div className="desc h-25 d-flex align-items-end justify-content-center">
-            Belum punya akun Foodie?{" "}
-            <NavLink className="ms-1" to="/register">
-              Daftar
-            </NavLink>
+            <div className="register d-flex align-items-end justify-content-center mt-3">
+              Belum punya akun Foodie?{" "}
+              <NavLink className="ms-1" to="/register">
+                Daftar
+              </NavLink>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Navbar>
   );
 }

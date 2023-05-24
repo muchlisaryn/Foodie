@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { ContainerProduct, Navbar, ProductCard, Select } from "../../component";
+import {
+  ContainerProduct,
+  Navbar,
+  Pagination,
+  ProductCard,
+  Select,
+} from "../../component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTag } from "../../features/TagSlice";
 import { useState } from "react";
@@ -12,17 +18,34 @@ export default function SearchResult() {
   const params = new URLSearchParams(document?.location.search);
   const searchParams = params.get("q");
   const tags = useSelector((data) => data.tag.tag);
-  const data = useSelector((state) => state.product.products);
-  const [value, setValue] = useState(searchParams ? searchParams : "");
+  const data = useSelector((state) => state.product.products.data);
+  const count = useSelector((state) => state.product.products.count);
+  const [value, setValue] = useState("");
   const [tag, setTag] = useState([]);
+  const [size, setSize] = useState(10);
+  const [current, setCurrent] = useState(1);
 
+  console.log("current ==>", current);
+  //request get data tag to server
+  useEffect(() => {
+    dispatch(fetchTag());
+  }, [dispatch]);
+
+  //onSubmit Search Product
   const searchProduct = (e) => {
     e.preventDefault();
     dispatch(
-      queryProduct(`${process.env.REACT_APP_URL_API}/products?q=${value}`)
+      queryProduct(
+        `${
+          process.env.REACT_APP_URL_API
+        }/products?q=${value}&status=true&tags=${[
+          tag,
+        ]}&limit=${size}&skip=${current}`
+      )
     );
   };
 
+  //filter product by tag
   const selectTag = (e) => {
     if (tag.length >= 3) {
       alert("filter tag max 3");
@@ -33,6 +56,7 @@ export default function SearchResult() {
     }
   };
 
+  //delete fiter tag
   const deleteTag = (select) => {
     console.log(tag.indexOf(select));
     setTag(
@@ -42,19 +66,16 @@ export default function SearchResult() {
     );
   };
 
+  //request data product to server by filter tag & search product
   useEffect(() => {
     dispatch(
       queryProduct(
-        `${
-          process.env.REACT_APP_URL_API
-        }/products?q=${value}&status=true&tags=${[tag]}`
+        `${process.env.REACT_APP_URL_API}/products?q=${
+          searchParams ? searchParams : value
+        }&status=true&tags=${[tag]}&limit=${size}&skip=${current}`
       )
     );
-  }, [dispatch, value, tag]);
-
-  useEffect(() => {
-    dispatch(fetchTag());
-  }, [dispatch]);
+  }, [dispatch, value, searchParams, tag, current, size]);
 
   return (
     <Navbar setValue={setValue} value={value} onSubmit={searchProduct}>
@@ -91,6 +112,14 @@ export default function SearchResult() {
           </div>
         )}
       </ContainerProduct>
+      <Pagination
+        setSize={setSize}
+        size={size}
+        current={current}
+        setCurrent={setCurrent}
+        product={data}
+        totalResult={count}
+      />
     </Navbar>
   );
 }

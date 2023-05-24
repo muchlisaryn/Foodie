@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Button, Input, Navbar, Quantity } from "../../component";
+import { useEffect } from "react";
+import { Button, Navbar, Quantity } from "../../component";
 import { formatRupiah } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCart, getCart, updateCart } from "../../features/CartSlice";
@@ -13,19 +13,18 @@ import { searchIlustration } from "../../assets";
 export default function Cart() {
   const navigate = useNavigate();
   const data = useSelector((state) => state.cart.cart);
-  const auth = localStorage.getItem("auth");
   const dispatch = useDispatch();
 
   //send request edit qty + 1 ke server
   const plusQty = (quantity, id) => {
     const qty = (quantity += 1);
-    dispatch(updateCart({ qty, token: auth, id }));
+    dispatch(updateCart({ qty, id }));
   };
 
   //send request edit qty - 1 ke server
   const minQty = (quantity, id) => {
     const qty = (quantity -= 1);
-    dispatch(updateCart({ qty, token: auth, id }));
+    dispatch(updateCart({ qty, id }));
   };
 
   //menghitung total harga di cart
@@ -38,7 +37,7 @@ export default function Cart() {
 
   //request mendapatkan data cart berdasarkan auth atau user yang sedang login
   useEffect(() => {
-    dispatch(getCart(auth));
+    dispatch(getCart());
   }, [dispatch]);
 
   //menghapus item di keranjang dengan mengirimkan parameter id
@@ -51,12 +50,17 @@ export default function Cart() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const deleteAction = dispatch(deleteCart({ id, token: auth }));
-        const result = unwrapResult(deleteAction);
-        if (result) {
-          Swal.fire("Deleted!", "Your cart has been deleted.", "success");
+        try {
+          const deleteAction = await dispatch(deleteCart({ id }));
+          const result = await unwrapResult(deleteAction);
+          if (result) {
+            Swal.fire("Deleted!", "Your cart has been deleted.", "success");
+          }
+        } catch (e) {
+          console.log(e);
+          Swal.fire("Opps", "Failed delete your cart", "error");
         }
       }
     });
@@ -64,8 +68,8 @@ export default function Cart() {
 
   return (
     <Navbar>
-      {data.length > 0 ? (
-        <div className="mb-5">
+      {data?.length > 0 ? (
+        <div style={{ marginBottom: 100 }}>
           {data?.map((item) => (
             <div className="cart mb-2">
               <div className="card-cart border rounded d-flex justify-content-between align-items-center p-3">
@@ -122,7 +126,7 @@ export default function Cart() {
             <div className="d-flex justify-content-between align-items-center  text-light">
               <div>
                 Total :{" "}
-                {data.length > 0
+                {data?.length > 0
                   ? formatRupiah(parseInt(totalPrice()))
                   : formatRupiah(0)}
               </div>

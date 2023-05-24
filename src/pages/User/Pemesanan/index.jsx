@@ -9,13 +9,11 @@ import { NavLink } from "react-router-dom";
 export default function Pemesanan() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.order.orders);
-  const auth = localStorage.getItem("auth");
 
+  //request get data order to server
   useEffect(() => {
-    dispatch(getOrder({ token: auth }));
-  }, [dispatch, auth]);
-
-  console.log(data);
+    dispatch(getOrder());
+  }, [dispatch]);
 
   return (
     <Navbar>

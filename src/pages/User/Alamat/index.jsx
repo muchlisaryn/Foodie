@@ -4,19 +4,43 @@ import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteAddress, fetchAddress } from "../../../features/AddressSlice";
+import Swal from "sweetalert2";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Alamat() {
   const data = useSelector((state) => state.address.address);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("auth");
 
+  //request get data address to server
   useEffect(() => {
-    dispatch(fetchAddress({ token }));
+    dispatch(fetchAddress());
   }, [dispatch]);
 
+  //request delete address by id to server
   const actionDelete = (id) => {
-    dispatch(deleteAddress({ id, token }));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const deleteAction = await dispatch(deleteAddress({ id }));
+          const result = await unwrapResult(deleteAction);
+          if (result) {
+            Swal.fire("Deleted!", "Your adress has been deleted.", "success");
+          }
+        } catch (e) {
+          console.log(e);
+          Swal.fire("Opps", "Failed delete your address", "error");
+        }
+      }
+    });
   };
 
   return (

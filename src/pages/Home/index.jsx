@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { ContainerProduct, ProductCard, Navbar } from "../../component";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { queryProduct } from "../../features/ProductSlice";
 import { getCart } from "../../features/CartSlice";
+import { poster1, poster2 } from "../../assets";
 
 export default function Home() {
-  const data = useSelector((state) => state?.product?.products);
+  const data = useSelector((state) => state?.product?.products.data);
   const dispatch = useDispatch();
 
   //request get data product and cart to server
@@ -40,33 +40,20 @@ export default function Home() {
             data-bs-slide-to="1"
             aria-label="Slide 2"
           ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
         </div>
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img
-              src="https://img.gesuri.id/img/content/2019/06/22/39351/pdi-perjuangan-jateng-megawati-harga-mati-jadi-ketua-umum-8O1ecLGxQm.jpg"
-              className="d-block w-100"
-              alt="..."
+              src={poster1}
+              className="d-block w-100 rounded"
+              alt="poster1"
             />
           </div>
           <div className="carousel-item">
             <img
-              src="https://pbs.twimg.com/media/EBDXuc3UEAYVx0Q.jpg:large"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src="https://pbs.twimg.com/media/EBDXuc3UEAYVx0Q.jpg:large"
-              className="d-block w-100"
-              alt="..."
+              src={poster2}
+              className="d-block w-100 rounded"
+              alt="poster2"
             />
           </div>
         </div>
@@ -97,8 +84,14 @@ export default function Home() {
       </div>
       <div className="d-flex justify-content-between my-3">
         <div>Product</div>
-        <NavLink to="/search">Lihat Semua</NavLink>
+        <NavLink
+          to="/search"
+          style={{ textDecoration: "none", color: "#fd4d05" }}
+        >
+          Lihat Semua
+        </NavLink>
       </div>
+
       <ContainerProduct>
         {data?.map((item, index) => (
           <ProductCard data={item} key={++index} />

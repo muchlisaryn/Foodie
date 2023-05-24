@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+@import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css);
+
+a {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    transition: 0.5s;
+    outline: none;
+  }
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 15px 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #475f7b;
+  background-color: #fff;
+  border: 1px solid #dfe3e7;
+  border-radius: 0.267rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:focus {
+    color: #475f7b;
+    background-color: #fff;
+    border-color: #f67d12;
+    outline: 0;
+    box-shadow: 0 3px 8px 0 rgb(0 0 0 / 10%);
+  }
+}

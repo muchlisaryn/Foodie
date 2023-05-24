@@ -1,4 +1,4 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Navbar } from "../../component";
 import { formatRupiah } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,14 +10,12 @@ export default function Invoice() {
   const invoice = useSelector((state) => state?.order.invoice);
   const dispatch = useDispatch();
   const { order_id } = useParams();
-  const token = localStorage.getItem("auth");
 
-  console.log("ini invoice ==>", invoice);
-
+  //request data cart & invoice to server
   useEffect(() => {
-    dispatch(getCart(token));
-    dispatch(getInvoice({ token, order_id }));
-  }, [dispatch]);
+    dispatch(getCart());
+    dispatch(getInvoice({ order_id }));
+  }, [dispatch, order_id]);
 
   return (
     <Navbar>
@@ -57,8 +55,8 @@ export default function Invoice() {
             </tr>
           </thead>
           <tbody>
-            {invoice?.order_items?.map((item) => (
-              <tr>
+            {invoice?.order_items?.map((item, index) => (
+              <tr key={++index}>
                 <td>{item?.name}</td>
                 <td>{item?.qty}</td>
                 <td className="text-end">{formatRupiah(item?.price)}</td>
