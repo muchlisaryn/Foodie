@@ -13,6 +13,7 @@ import "./style.scss";
 import { queryProduct } from "../../features/ProductSlice";
 import { searchIlustration } from "../../assets";
 import { useLocation } from "react-router-dom";
+import { AiFillCloseCircle } from "react-icons/ai";
 
 export default function SearchResult() {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ export default function SearchResult() {
   const count = useSelector((state) => state.product.products.count);
   const [value, setValue] = useState("");
   const [tag, setTag] = useState([]);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(18);
   const [current, setCurrent] = useState(1);
 
   console.log("current ==>", current);
@@ -81,51 +82,61 @@ export default function SearchResult() {
 
   return (
     <Navbar setValue={setValue} value={value} onSubmit={searchProduct}>
-      <div className="search-result d-flex align-items-center mb-2">
-        <div>
-          <Select data={tags} onChange={selectTag} defaultValue="Filter Tags" />
-        </div>
-        <div className="d-flex ms-2">
-          {tag?.map((list, index) => (
-            <div className="tag d-flex" key={++index}>
-              <div key={++index}>{list}</div>
-              <div onClick={() => deleteTag(list)} className="close">
-                x
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <ContainerProduct>
-        {data?.length > 0 ? (
-          <>
-            {data?.map((item, index) => (
-              <ProductCard
-                data={item}
-                index={index}
-                from={{ name: "search", url: location.pathname }}
+      <div className="search-result">
+        <div className="container">
+          <div className="filter-tag d-flex">
+            <div className="w-25">
+              <Select
+                data={tags}
+                onChange={selectTag}
+                defaultValue="Filter Tags"
               />
-            ))}
-          </>
-        ) : (
-          <div className="search d-flex w-100 mt-5 justify-content-center align-items-center">
-            <div>
-              <img src={searchIlustration} alt="search" />
-              <div className="mt-4 text-center">
-                <span className="fw-bold">Sorry,</span> Data Not Found!
-              </div>
+            </div>
+            <div className="d-flex justiy-content-center align-items-center ms-2">
+              {tag?.map((list, index) => (
+                <div className="tag d-flex px-2" key={++index}>
+                  <div key={++index}>{list}</div>
+                  <div onClick={() => deleteTag(list)} className="close ms-2">
+                    <AiFillCloseCircle />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        )}
-      </ContainerProduct>
-      <Pagination
-        setSize={setSize}
-        size={size}
-        current={current}
-        setCurrent={setCurrent}
-        product={data}
-        totalResult={count}
-      />
+          <ContainerProduct>
+            {data?.length > 0 ? (
+              <>
+                {data?.map((item, index) => (
+                  <ProductCard
+                    data={item}
+                    index={index}
+                    from={{ name: "search", url: location.pathname }}
+                  />
+                ))}
+              </>
+            ) : (
+              <div className="search-not-found d-flex flex-column justify-content-center align-items-center">
+                <div className="d-flex justify-content-center">
+                  <img src={searchIlustration} alt="search" />
+                </div>
+                <div className="mt-4 text-center">
+                  <span className="fw-bold">Sorry,</span> Data Not Found!
+                </div>
+              </div>
+            )}
+          </ContainerProduct>
+          {data?.length > 24 && (
+            <Pagination
+              setSize={setSize}
+              size={size}
+              current={current}
+              setCurrent={setCurrent}
+              product={data}
+              totalResult={count}
+            />
+          )}
+        </div>
+      </div>
     </Navbar>
   );
 }

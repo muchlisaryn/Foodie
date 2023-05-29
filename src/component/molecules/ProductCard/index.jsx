@@ -6,29 +6,28 @@ import Skeleton from "../../atoms/Skeleton";
 import { useSelector } from "react-redux";
 
 export default function ProductCard({ data, from }) {
-  const loading = useSelector((state) => state.product?.pending);
+  const loading = false;
+  // const loading = useSelector((state) => state.product?.pending);
 
   return (
-    <NavLink
-      to={`/product/${data?._id}`}
-      state={from}
-      className="product-card "
-    >
+    <NavLink to={`/product/${data?._id}`} state={from}>
       <div className="col">
-        <div className="mb-2 border rounded">
+        <div className="product-card mb-3 rounded border">
           {loading ? (
-            <Skeleton height={100} />
+            <div className="skeleton ">
+              <Skeleton height="100%" />
+            </div>
           ) : (
             <div className="position-relative">
               {data?.discount > 0 && (
-                <div className="discount position-absolute">
+                <div className="discount position-absolute ">
                   Discount {data?.discount} %
                 </div>
               )}
               <img src={data?.image_url} alt="product" />
             </div>
           )}
-          <div className="desc-product py-2 px-2">
+          <div className="desc-product d-flex flex-column justify-content-between  py-2 px-2">
             {loading ? (
               <Skeleton />
             ) : (

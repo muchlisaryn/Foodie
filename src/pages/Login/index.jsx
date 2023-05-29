@@ -15,6 +15,7 @@ export default function Login() {
   const [disabled, setDisabled] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   //effect disable button sign
   useEffect(() => {
@@ -33,15 +34,17 @@ export default function Login() {
     const authResult = await unwrapResult(auth);
 
     if (authResult.error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: authResult.message,
-      });
+      setErrorMessage(authResult.message);
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Oops...",
+      //   text: authResult.message,
+      // });
     }
     if (authResult.token) {
       const action = await dispatch(getToken(authResult?.token));
       const result = await unwrapResult(action);
+      console.log(result);
       if (result.role) {
         if (result.role === "admin") {
           navigate("/admin/kelola-product");
@@ -61,42 +64,46 @@ export default function Login() {
 
   return (
     <Navbar>
-      <div className="w-full d-flex mt-4 justify-content-center">
-        <div className="login h-75 p-3 border rounded ">
-          <div>
-            <div className="d-flex align-items-center justify-content-center py-3 fw-bold">
-              SIGN
-            </div>
-            <div className="d-flex  align-items-center ">
-              <div className="w-100">
-                <div className="mb-2">
-                  <div>Email</div>
-                  <Input
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                  />
+      <div className="d-flex justify-content-center align-items-center vh-100 w-full">
+        <div className="login border rounded">
+          <div className="w-100 h-100 d-flex flex-column justify-content-between p-3">
+            <div className="title d-flex flex-column align-items-center justify-content-between fw-bold">
+              <div className="h-100 d-flex align-items-center">SIGN</div>
+              {errorMessage.length > 0 && (
+                <div className="bg-danger p-2 text-light rounded w-100">
+                  {errorMessage}
                 </div>
-                <div>
-                  <div>Password</div>
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-                <Button
-                  type="button-primary"
-                  className="w-full mt-4"
-                  disabled={disabled}
-                  onClick={auth}
-                >
-                  {loading ? "Loading..." : "Login"}
-                </Button>
-              </div>
+              )}
             </div>
 
-            <div className="register d-flex align-items-end justify-content-center mt-3">
+            <div className="field d-flex flex-column justify-content-between align-items-center ">
+              <div className="w-100">
+                <div className="mt-2">Email</div>
+                <Input
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+              </div>
+              <div className="w-100">
+                <div>Password</div>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <Button
+                type="button-primary"
+                className="w-full "
+                disabled={disabled}
+                onClick={auth}
+              >
+                {loading ? "Loading..." : "Login"}
+              </Button>
+            </div>
+
+            <div className="register d-flex align-items-center justify-content-center">
               Belum punya akun Foodie?{" "}
               <NavLink className="ms-1" to="/register">
                 Daftar

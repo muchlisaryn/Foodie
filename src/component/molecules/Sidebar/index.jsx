@@ -59,9 +59,9 @@ export default function Sidebar({ children }) {
   return (
     <div>
       <div>
-        <nav class="navbar border-bottom fixed-top">
-          <div class="container-fluid mx-3">
-            <div class="navbar-brand">
+        <nav className="navbar border-bottom fixed-top">
+          <div className="container-fluid mx-3">
+            <div className="navbar-brand">
               <Logo />
             </div>
             <div>Hi! Admin Foodie</div>

@@ -44,7 +44,7 @@ export default function Invoice() {
           </div>
         </div>
 
-        <table class="table teble-sm  table-bordered">
+        <table className="table teble-sm  table-bordered">
           <thead>
             <tr>
               <th scope="col">Product</th>

@@ -13,6 +13,7 @@ import { IoLogOut } from "react-icons/io5";
 import Swal from "sweetalert2";
 import { logout } from "../../../features/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Footer from "../Footer";
 
 export default function Navbar({ onSubmit, value, setValue, children }) {
   const navigate = useNavigate();
@@ -65,9 +66,9 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
 
   return (
     <>
-      <nav class="navbar  border-bottom fixed-top">
-        <div class="container-fluid ">
-          <div class="navbar-brand">
+      <nav className="navbar  border-bottom fixed-top">
+        <div className="container-fluid ">
+          <div className="navbar-brand">
             <Logo />
           </div>
           <Input
@@ -129,7 +130,8 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
           </div>
         </div>
       </nav>
-      <div className="container pages">{children}</div>
+      <div className="content-pages">{children}</div>
+      <Footer />
     </>
   );
 }
