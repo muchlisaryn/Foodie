@@ -7,7 +7,7 @@ const initialState = {
   success: false,
   errorMessage: "",
   products: [],
-  detail: {},
+  detail: [],
   totalResult: 0,
 };
 

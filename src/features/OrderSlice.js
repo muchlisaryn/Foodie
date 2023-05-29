@@ -8,6 +8,7 @@ const initialState = {
   error: false,
   order: {},
   orders: [],
+  allOrders: [],
   invoice: {},
 };
 
@@ -26,6 +27,40 @@ export const order = createAsyncThunk("order/orders", async (props) => {
     return response.data;
   } catch (error) {
     return error.response;
+  }
+});
+
+export const getAllOrders = createAsyncThunk("order/getAllOrders", async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}/allOrders`,
+      {
+        headers: {
+          Authorization: token(),
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return error.response;
+  }
+});
+
+export const buyNow = createAsyncThunk("order/buyNow", async (props) => {
+  try {
+    const { items, delivery_fee, delivery_address } = props;
+    const response = await axios.post(
+      `${process.env.REACT_APP_URL_API}/orders/buy-now`,
+      { delivery_fee, delivery_address, items },
+      {
+        headers: {
+          Authorization: token(),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log("ini error", error.response);
   }
 });
 
@@ -64,6 +99,22 @@ export const getInvoice = createAsyncThunk(
   }
 );
 
+export const deleteOrder = createAsyncThunk("order/deleteOrder", async (id) => {
+  try {
+    const response = await axios.delete(
+      `${process.env.REACT_APP_URL_API}/orders/${id}`,
+      {
+        headers: {
+          Authorization: token(),
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    throw error;
+  }
+});
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -99,6 +150,40 @@ const orderSlice = createSlice({
       .addCase(getOrder.fulfilled, (state, action) => {
         state.success = true;
         state.orders = action.payload;
+        state.pending = false;
+        state.error = false;
+      })
+      .addCase(getAllOrders.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(getAllOrders.rejected, (state) => {
+        state.error = true;
+        state.pending = false;
+        state.success = false;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.success = true;
+        state.allOrders = action.payload;
+        state.pending = false;
+        state.error = false;
+      })
+      .addCase(deleteOrder.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(deleteOrder.rejected, (state) => {
+        state.error = true;
+        state.pending = false;
+        state.success = false;
+      })
+      .addCase(deleteOrder.fulfilled, (state, action) => {
+        state.success = true;
+        state.allOrders = state.allOrders.filter(
+          (item) => item._id !== action.payload._id
+        );
         state.pending = false;
         state.error = false;
       })

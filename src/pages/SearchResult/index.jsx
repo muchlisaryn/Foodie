@@ -12,11 +12,13 @@ import { useState } from "react";
 import "./style.scss";
 import { queryProduct } from "../../features/ProductSlice";
 import { searchIlustration } from "../../assets";
+import { useLocation } from "react-router-dom";
 
 export default function SearchResult() {
   const dispatch = useDispatch();
   const params = new URLSearchParams(document?.location.search);
   const searchParams = params.get("q");
+  const location = useLocation();
   const tags = useSelector((data) => data.tag.tag);
   const data = useSelector((state) => state.product.products.data);
   const count = useSelector((state) => state.product.products.count);
@@ -98,7 +100,11 @@ export default function SearchResult() {
         {data?.length > 0 ? (
           <>
             {data?.map((item, index) => (
-              <ProductCard data={item} index={index} />
+              <ProductCard
+                data={item}
+                index={index}
+                from={{ name: "search", url: location.pathname }}
+              />
             ))}
           </>
         ) : (

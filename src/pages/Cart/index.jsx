@@ -135,7 +135,10 @@ export default function Cart() {
                 onClick={() =>
                   data?.length
                     ? navigate("/checkout", {
-                        state: data,
+                        state: {
+                          data,
+                          from: "cart",
+                        },
                       })
                     : alert("keranjang masih anda kosong")
                 }

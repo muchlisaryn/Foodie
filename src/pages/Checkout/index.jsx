@@ -8,7 +8,7 @@ import "./styles.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { formatRupiah } from "../../utils";
-import { order } from "../../features/OrderSlice";
+import { buyNow, order } from "../../features/OrderSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Checkout() {
@@ -21,33 +21,75 @@ export default function Checkout() {
   const location = useLocation();
   const data = location.state;
 
-  //menjumlahkan total pemesanan yang ada di keranjang
-  const getTotal = data
-    ?.map((item) => item.total)
-    .reduce((acc, cur) => acc + cur);
+  console.log("data", data);
 
   //ongkir
   const ongkir = 20000;
 
+  //menjumlahkan total pemesanan
+  const subTotal = () => {
+    let total = 0;
+    if (data?.data) {
+      total = data.data.reduce((total, item) => total + item.total, 0);
+    } else {
+      total = data?.qty * data?.product?.current_price;
+    }
+    return total;
+  };
+
+  //menjumlahkan jumlah qty
+  const totalQty = () => {
+    let total = 0;
+    if (data?.data) {
+      total = data?.data.reduce((total, item) => total + item?.qty, 0);
+    } else {
+      total = data?.qty;
+    }
+    console.log(total);
+    return total;
+  };
+
   //send data order ke server
   const sendOrder = async () => {
-    const acationOrder = await dispatch(
-      order({
-        delivery_fee: ongkir,
-        delivery_address: address?._id,
-      })
-    );
-    const result = await unwrapResult(acationOrder);
-    if (result._id) {
-      navigate(`/invoice/${result._id}`);
+    if (data?.from === "cart") {
+      const acationOrder = await dispatch(
+        order({
+          delivery_fee: ongkir,
+          delivery_address: address?._id,
+        })
+      );
+      const result = await unwrapResult(acationOrder);
+      if (result._id) {
+        navigate(`/invoice/${result._id}`);
+      } else {
+        navigate("*", {
+          state: {
+            error: "Checkout Failed",
+            message:
+              "Something went wrong with your request. Please try again later",
+          },
+        });
+      }
     } else {
-      navigate("*", {
-        state: {
-          error: "Checkout Failed",
-          message:
-            "Something went wrong with your request. Please try again later",
-        },
-      });
+      const acationOrder = await dispatch(
+        buyNow({
+          items: data,
+          delivery_fee: ongkir,
+          delivery_address: address?._id,
+        })
+      );
+      const result = await unwrapResult(acationOrder);
+      if (result._id) {
+        navigate(`/invoice/${result._id}`);
+      } else {
+        navigate("*", {
+          state: {
+            error: "Checkout Failed",
+            message:
+              "Something went wrong with your request. Please try again later",
+          },
+        });
+      }
     }
   };
 
@@ -151,25 +193,45 @@ export default function Checkout() {
           <div className="border-bottom mb-2 pb-1 fw-bold">Detail Product</div>
           <table className="table table-borderless">
             <tbody>
-              {data?.map((item) => (
+              {data.data ? (
+                data.data.map((item) => (
+                  <tr>
+                    <td>
+                      <img
+                        src={item?.product?.image_url}
+                        alt="img"
+                        className="border"
+                      />
+                    </td>
+                    <td className="d-flex align-items-center">{`${
+                      item?.product.name
+                    }  (${item?.qty} x ${formatRupiah(
+                      parseInt(item?.product.price)
+                    )})`}</td>
+                    <td className="text-end fw-bold">
+                      {`${formatRupiah(parseInt(item?.total))}`}
+                    </td>
+                  </tr>
+                ))
+              ) : (
                 <tr>
                   <td>
                     <img
-                      src={item?.product?.image_url}
+                      src={data?.product?.image_url}
                       alt="img"
                       className="border"
                     />
                   </td>
                   <td className="d-flex align-items-center">{`${
-                    item?.product.name
-                  }  (${item?.qty} x ${formatRupiah(
-                    parseInt(item?.product.price)
+                    data?.product?.name
+                  }  (${data?.qty} x ${formatRupiah(
+                    parseInt(data?.product?.current_price)
                   )})`}</td>
                   <td className="text-end fw-bold">
-                    {`${formatRupiah(parseInt(item?.total))}`}
+                    {`${formatRupiah(parseInt(data?.total))}`}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
@@ -178,8 +240,10 @@ export default function Checkout() {
             Rincian Pembayaran
           </div>
           <div className="d-flex justify-content-between">
-            <div>Total Harga ({data?.length} product)</div>
-            <div>{formatRupiah(parseInt(getTotal))}</div>
+            <div>Total Harga ({totalQty()} product)</div>
+            <div>
+              {formatRupiah(parseInt(data.data ? subTotal() : data?.total))}
+            </div>
           </div>
           <div className="d-flex justify-content-between mt-1">
             <div>ongkir</div>
@@ -187,7 +251,7 @@ export default function Checkout() {
           </div>
           <div className="border-top d-flex justify-content-between mt-2 fw-bold">
             <div>total</div>
-            <div>{formatRupiah(parseInt(getTotal + ongkir))}</div>
+            <div>{formatRupiah(parseInt(subTotal() + ongkir))}</div>
           </div>
 
           <Button

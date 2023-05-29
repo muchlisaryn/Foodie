@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, Navbar, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
@@ -8,16 +8,18 @@ import { AiTwotoneStar } from "react-icons/ai";
 import Breadcrumb from "../../component/atoms/Breadcrumb";
 import { useState } from "react";
 import { formatRupiah } from "../../utils";
-import Swal from "sweetalert2";
 import { addCart, getCart } from "../../features/CartSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { token } from "../../utils";
+import { Toast } from "../../component/atoms/Toast";
 
 export default function DetailProduct() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.product.detail);
   const navigate = useNavigate();
+  const location = useLocation();
+  const data = useSelector((state) => state.product.detail);
+
   const [quantity, setQuantity] = useState(1);
   const price = data?.price;
   const currentPrice = price * quantity;
@@ -31,8 +33,8 @@ export default function DetailProduct() {
   //list breadcrumb
   const dataBreadCrumb = [
     {
-      name: "Home",
-      url: "/search",
+      name: location.state?.name,
+      url: location.state?.url,
     },
     {
       name: data?.name,
@@ -40,35 +42,29 @@ export default function DetailProduct() {
     },
   ];
 
-  //function toast SwalAllert2
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
-
   //add product to cart
   const addToCart = async (items) => {
     if (token()) {
-      const actionAddCart = await dispatch(
-        addCart({ items, qty: quantity, price: currentPrice })
-      );
-      const result = await unwrapResult(actionAddCart);
-      if (result.error) {
-        Toast.fire({
+      try {
+        const actionAddCart = await dispatch(
+          addCart({ items, qty: quantity, price: currentPrice })
+        );
+        const result = await unwrapResult(actionAddCart);
+        if (result) {
+          Toast({
+            icon: "success",
+            title: "Product Berhasil dimasukan kedalam keranjang",
+            timer: 1000,
+            position: "top",
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        Toast({
           icon: "error",
-          title: result?.message,
-        });
-      } else {
-        Toast.fire({
-          icon: "success",
-          title: "Product Berhasil dimasukan kedalam keranjang",
+          title: "Product ini sudah ada di keranjang anda",
+          timer: 3000,
+          position: "top",
         });
       }
     } else {
@@ -138,7 +134,20 @@ export default function DetailProduct() {
                   <Button type="btn-add" onClick={() => addToCart(data)}>
                     Keranjang
                   </Button>
-                  <Button type="button-secondary" className="mt-2">
+                  <Button
+                    type="button-secondary"
+                    className="mt-2"
+                    onClick={() =>
+                      navigate("/checkout", {
+                        state: {
+                          product: data,
+                          qty: quantity,
+                          total: parseInt(quantity * data?.current_price),
+                          from: "Buy Now",
+                        },
+                      })
+                    }
+                  >
                     Beli Langsung
                   </Button>
                 </div>

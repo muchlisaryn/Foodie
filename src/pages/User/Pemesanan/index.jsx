@@ -15,6 +15,8 @@ export default function Pemesanan() {
     dispatch(getOrder());
   }, [dispatch]);
 
+  console.log(data);
+
   return (
     <Navbar>
       <Widgets>
@@ -22,10 +24,11 @@ export default function Pemesanan() {
         {data?.length > 0 ? (
           <>
             {" "}
-            {data?.map((item) => (
+            {data?.map((item, index) => (
               <NavLink
                 style={{ textDecoration: "none", color: "black" }}
                 to={`/invoice/${item?._id}`}
+                key={++index}
               >
                 <div className="list border rounded p-3 mb-2" key={item?._id}>
                   <div className="d-flex justify-content-between align-items-center">
@@ -46,9 +49,9 @@ export default function Pemesanan() {
                             {formatRupiah(item?.order_items[0]?.price)}
                           </div>
                         </div>
-                        {item?.items_count > 1 && (
+                        {item?.order_items?.length > 1 && (
                           <div className="desc opacity-50  ">
-                            +{item?.items_count} Product Lainya
+                            +{item?.order_items?.length - 1} Product Lainya
                           </div>
                         )}
                       </div>
