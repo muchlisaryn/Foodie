@@ -1,4 +1,4 @@
-import { ContainerProduct, ProductCard, Navbar } from "../../component";
+import { Container } from "../../component";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ export default function Home() {
   }, [dispatch]);
 
   return (
-    <Navbar>
+    <Container>
       <div
         id="carouselExampleIndicators"
         className="carousel slide"
@@ -82,7 +82,7 @@ export default function Home() {
           <span className="visually-hidden">Next</span>
         </button>
       </div>
-      <div className="d-flex justify-content-between my-3">
+      <div className="d-flex justify-content-between ">
         <div>Product</div>
         <NavLink
           to="/search"
@@ -91,12 +91,6 @@ export default function Home() {
           Lihat Semua
         </NavLink>
       </div>
-
-      <ContainerProduct>
-        {data?.map((item, index) => (
-          <ProductCard data={item} key={++index} />
-        ))}
-      </ContainerProduct>
-    </Navbar>
+    </Container>
   );
 }

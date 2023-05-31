@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import {
+  Container,
   ContainerProduct,
-  Navbar,
   Pagination,
   ProductCard,
   Select,
@@ -23,7 +23,7 @@ export default function SearchResult() {
   const tags = useSelector((data) => data.tag.tag);
   const data = useSelector((state) => state.product.products.data);
   const count = useSelector((state) => state.product.products.count);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(searchParams ? searchParams : "");
   const [tag, setTag] = useState([]);
   const [size, setSize] = useState(18);
   const [current, setCurrent] = useState(1);
@@ -81,7 +81,7 @@ export default function SearchResult() {
   }, [dispatch, value, searchParams, tag, current, size]);
 
   return (
-    <Navbar setValue={setValue} value={value} onSubmit={searchProduct}>
+    <Container setValue={setValue} value={value} onSubmit={searchProduct}>
       <div className="search-result">
         <div className="container">
           <div className="filter-tag d-flex">
@@ -137,6 +137,6 @@ export default function SearchResult() {
           )}
         </div>
       </div>
-    </Navbar>
+    </Container>
   );
 }

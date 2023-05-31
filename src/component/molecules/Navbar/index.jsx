@@ -10,6 +10,7 @@ import { avatarDefault } from "../../../assets";
 import { getOneUser } from "../../../features/UserSlice";
 import { AiFillSetting } from "react-icons/ai";
 import { IoLogOut } from "react-icons/io5";
+import { BiLogIn } from "react-icons/bi";
 import Swal from "sweetalert2";
 import { logout } from "../../../features/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -67,7 +68,7 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
   return (
     <>
       <nav className="navbar  border-bottom fixed-top">
-        <div className="container-fluid ">
+        <div className="container-fluid mx-0 mx-md-3">
           <div className="navbar-brand">
             <Logo />
           </div>
@@ -124,14 +125,17 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
               </>
             ) : (
               <Button type="button-primary" onClick={() => navigate("/login")}>
-                Login
+                <div className="d-flex align-items-center">
+                  <BiLogIn />
+                  <div className="ms-2">Login</div>
+                </div>
               </Button>
             )}
           </div>
         </div>
       </nav>
-      <div className="content-pages">{children}</div>
-      <Footer />
+      {/* <div className="content-pages">{children}</div>
+      <Footer /> */}
     </>
   );
 }

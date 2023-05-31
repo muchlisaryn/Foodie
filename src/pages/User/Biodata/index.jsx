@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Widgets, Navbar } from "../../../component";
+import { Widgets, Container } from "../../../component";
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneUser } from "../../../features/UserSlice";
@@ -16,7 +16,7 @@ export default function Biodata() {
   }, [dispatch, id]);
 
   return (
-    <Navbar>
+    <Container>
       <Widgets>
         <div className="fw-bold">Biodata</div>
         <div className="mt-2">
@@ -30,6 +30,6 @@ export default function Biodata() {
           </div>
         </div>
       </Widgets>
-    </Navbar>
+    </Container>
   );
 }

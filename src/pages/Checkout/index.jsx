@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Input, LabelPages, Navbar } from "../../component";
+import { Button, Container, Input, LabelPages, Navbar } from "../../component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAddress } from "../../features/AddressSlice";
 import { useState } from "react";
@@ -143,126 +143,124 @@ export default function Checkout() {
   };
 
   return (
-    <Navbar>
-      <div>
-        <LabelPages type="back" label="Checkout" onClick={backButton} />
-        {address?._id ? (
-          <div className="border  rounded bg-success text-light p-2 px-4 mb-2">
-            <div className="d-flex align-items-center">
-              <BsFillPatchCheckFill />
-              <span className="ms-2"> address selected</span>
-            </div>
+    <Container>
+      <LabelPages type="back" label="Checkout" onClick={backButton} />
+      {address?._id ? (
+        <div className="border  rounded bg-success text-light p-2 px-4 mb-2">
+          <div className="d-flex align-items-center">
+            <BsFillPatchCheckFill />
+            <span className="ms-2"> address selected</span>
           </div>
-        ) : (
-          <div className="border  rounded bg-danger text-light p-2 px-4 mb-2">
-            <div className="d-flex align-items-center">
-              <BsFillInfoCircleFill />
-              <span className="ms-2">Please select one address</span>
-            </div>
+        </div>
+      ) : (
+        <div className="border  rounded bg-danger text-light p-2 px-4 mb-2">
+          <div className="d-flex align-items-center">
+            <BsFillInfoCircleFill />
+            <span className="ms-2">Please select one address</span>
           </div>
-        )}
-        <table className="border table table-sm">
-          <thead>
-            <tr>
-              <th scope="col" className="text-center">
-                Pilih
+        </div>
+      )}
+      <table className="border table table-sm">
+        <thead>
+          <tr>
+            <th scope="col" className="text-center">
+              Pilih
+            </th>
+            <th scope="col">Nama</th>
+            <th scope="col">Alamat</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dataAddress?.map((item) => (
+            <tr className={address?._id === item?._id ? "table-success" : ""}>
+              <th className="text-center">
+                <Input
+                  type="radio"
+                  onChange={() => selectAddress(item)}
+                  value={address}
+                  name="address"
+                  id={item?._id}
+                />
               </th>
-              <th scope="col">Nama</th>
-              <th scope="col">Alamat</th>
+              <td>{item?.name}</td>
+              <td className="w-50">{`${item?.detail} , Kecamatan ${item?.kecamatan}, Kelurahan ${item?.kelurahan}, ${item?.kabupaten}, ${item?.provinsi}`}</td>
             </tr>
-          </thead>
+          ))}
+        </tbody>
+      </table>
+      <div className="product-checkout">
+        <div className="border-bottom mb-2 pb-1 fw-bold">Detail Product</div>
+        <table className="table table-borderless">
           <tbody>
-            {dataAddress?.map((item) => (
-              <tr className={address?._id === item?._id ? "table-success" : ""}>
-                <th className="text-center">
-                  <Input
-                    type="radio"
-                    onChange={() => selectAddress(item)}
-                    value={address}
-                    name="address"
-                    id={item?._id}
-                  />
-                </th>
-                <td>{item?.name}</td>
-                <td className="w-50">{`${item?.detail} , Kecamatan ${item?.kecamatan}, Kelurahan ${item?.kelurahan}, ${item?.kabupaten}, ${item?.provinsi}`}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="product-checkout">
-          <div className="border-bottom mb-2 pb-1 fw-bold">Detail Product</div>
-          <table className="table table-borderless">
-            <tbody>
-              {data.data ? (
-                data.data.map((item) => (
-                  <tr>
-                    <td>
-                      <img
-                        src={item?.product?.image_url}
-                        alt="img"
-                        className="border"
-                      />
-                    </td>
-                    <td className="d-flex align-items-center">{`${
-                      item?.product.name
-                    }  (${item?.qty} x ${formatRupiah(
-                      parseInt(item?.product.price)
-                    )})`}</td>
-                    <td className="text-end fw-bold">
-                      {`${formatRupiah(parseInt(item?.total))}`}
-                    </td>
-                  </tr>
-                ))
-              ) : (
+            {data.data ? (
+              data.data.map((item) => (
                 <tr>
                   <td>
                     <img
-                      src={data?.product?.image_url}
+                      src={item?.product?.image_url}
                       alt="img"
                       className="border"
                     />
                   </td>
                   <td className="d-flex align-items-center">{`${
-                    data?.product?.name
-                  }  (${data?.qty} x ${formatRupiah(
-                    parseInt(data?.product?.current_price)
+                    item?.product.name
+                  }  (${item?.qty} x ${formatRupiah(
+                    parseInt(item?.product.price)
                   )})`}</td>
                   <td className="text-end fw-bold">
-                    {`${formatRupiah(parseInt(data?.total))}`}
+                    {`${formatRupiah(parseInt(item?.total))}`}
                   </td>
                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div>
-          <div className="border-bottom mb-2 pb-1 fw-bold">
-            Rincian Pembayaran
-          </div>
-          <div className="d-flex justify-content-between">
-            <div>Total Harga ({totalQty()} product)</div>
-            <div>
-              {formatRupiah(parseInt(data.data ? subTotal() : data?.total))}
-            </div>
-          </div>
-          <div className="d-flex justify-content-between mt-1">
-            <div>ongkir</div>
-            <div>{formatRupiah(ongkir)}</div>
-          </div>
-          <div className="border-top d-flex justify-content-between mt-2 fw-bold">
-            <div>total</div>
-            <div>{formatRupiah(parseInt(subTotal() + ongkir))}</div>
-          </div>
-
-          <Button
-            className="bg-success text-light my-3 w-100 "
-            onClick={sendOrder}
-            disabled={disabledButton}
-          >
-            {loading ? "Loading..." : "Checkout"}
-          </Button>
-        </div>
+              ))
+            ) : (
+              <tr>
+                <td>
+                  <img
+                    src={data?.product?.image_url}
+                    alt="img"
+                    className="border"
+                  />
+                </td>
+                <td className="d-flex align-items-center">{`${
+                  data?.product?.name
+                }  (${data?.qty} x ${formatRupiah(
+                  parseInt(data?.product?.current_price)
+                )})`}</td>
+                <td className="text-end fw-bold">
+                  {`${formatRupiah(parseInt(data?.total))}`}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-    </Navbar>
+      <div>
+        <div className="border-bottom mb-2 pb-1 fw-bold">
+          Rincian Pembayaran
+        </div>
+        <div className="d-flex justify-content-between">
+          <div>Total Harga ({totalQty()} product)</div>
+          <div>
+            {formatRupiah(parseInt(data.data ? subTotal() : data?.total))}
+          </div>
+        </div>
+        <div className="d-flex justify-content-between mt-1">
+          <div>ongkir</div>
+          <div>{formatRupiah(ongkir)}</div>
+        </div>
+        <div className="border-top d-flex justify-content-between mt-2 fw-bold">
+          <div>total</div>
+          <div>{formatRupiah(parseInt(subTotal() + ongkir))}</div>
+        </div>
+
+        <Button
+          className="bg-success text-light my-3 w-100 "
+          onClick={sendOrder}
+          disabled={disabledButton}
+        >
+          {loading ? "Loading..." : "Checkout"}
+        </Button>
+      </div>
+    </Container>
   );
 }

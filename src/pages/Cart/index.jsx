@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Navbar, Quantity } from "../../component";
+import { Button, Container, Navbar, Quantity } from "../../component";
 import { formatRupiah } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCart, getCart, updateCart } from "../../features/CartSlice";
@@ -67,7 +67,7 @@ export default function Cart() {
   };
 
   return (
-    <Navbar>
+    <Container>
       {data?.length > 0 ? (
         <div style={{ marginBottom: 100 }}>
           {data?.map((item) => (
@@ -104,8 +104,8 @@ export default function Cart() {
           ))}
         </div>
       ) : (
-        <div className="d-flex justify-content-center align-items-center">
-          <div className="mt-5">
+        <div className="cart-empty d-flex justify-content-center align-items-center">
+          <div className="">
             <img src={searchIlustration} alt="ilustrasi" width={200} />
             <div className="text-center mt-2">
               Your <span className="fw-bold">Cart</span> Is Empty
@@ -149,6 +149,6 @@ export default function Cart() {
           </div>
         </div>
       </div>
-    </Navbar>
+    </Container>
   );
 }

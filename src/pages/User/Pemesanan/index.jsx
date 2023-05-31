@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Navbar, Widgets } from "../../../component";
+import { Container, Navbar, Widgets } from "../../../component";
 import { useEffect } from "react";
 import { getOrder } from "../../../features/OrderSlice";
 import "./style.scss";
@@ -18,7 +18,7 @@ export default function Pemesanan() {
   console.log(data);
 
   return (
-    <Navbar>
+    <Container>
       <Widgets>
         <div className="list-transactions mb-2 fw-bold">Daftar Transaksi</div>
         {data?.length > 0 ? (
@@ -75,6 +75,6 @@ export default function Pemesanan() {
           </div>
         )}
       </Widgets>
-    </Navbar>
+    </Container>
   );
 }

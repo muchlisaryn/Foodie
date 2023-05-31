@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Button, Navbar, Quantity } from "../../component";
+import { Button, Container, Navbar, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -73,91 +73,89 @@ export default function DetailProduct() {
   };
 
   return (
-    <Navbar>
-      <div className="container">
-        <Breadcrumb list={dataBreadCrumb} />
-        <div className="detail-product d-flex flex-column flex-lg-row justify-content-between ">
-          <div className="d-flex flex-column flex-md-row ">
-            <div>
-              <img src={data?.image_url} className="rounded" alt="product" />
+    <Container>
+      <Breadcrumb list={dataBreadCrumb} />
+      <div className="detail-product d-flex flex-column flex-lg-row justify-content-between ">
+        <div className="d-flex flex-column flex-md-row ">
+          <div>
+            <img src={data?.image_url} className="rounded" alt="product" />
+          </div>
+          <div className="d-flex flex-column justify-content-between my-2 my-md-0 ms-0 ms-md-3">
+            <div className="title fw-bold text-break">{data?.name}</div>
+            <div className="d-flex">
+              <div>Terjual {data?.sold}</div>
+              <div className="border-end mx-2"></div>
+              <div className="d-flex align-items-center">
+                <AiTwotoneStar color="orange" />
+                <div className="ms-1">5</div>
+                <div className="ms-2">(6 Rating)</div>
+              </div>
             </div>
-            <div className="d-flex flex-column justify-content-between my-2 my-md-0 ms-0 ms-md-3">
-              <div className="title fw-bold text-break">{data?.name}</div>
+            <div className="price fw-bold py-3">
+              {formatRupiah(data?.price)}
+            </div>
+            <div>{data?.description}</div>
+            <div className="mt-5">
+              <div className="detail fw-bold mb-2">Detail</div>
               <div className="d-flex">
-                <div>Terjual {data?.sold}</div>
-                <div className="border-end mx-2"></div>
-                <div className="d-flex align-items-center">
-                  <AiTwotoneStar color="orange" />
-                  <div className="ms-1">5</div>
-                  <div className="ms-2">(6 Rating)</div>
-                </div>
+                <div>Category :</div>
+                <div className="ms-2 value">{data?.category?.name}</div>
               </div>
-              <div className="price fw-bold py-3">
-                {formatRupiah(data?.price)}
-              </div>
-              <div>{data?.description}</div>
-              <div className="mt-5">
-                <div className="detail fw-bold mb-2">Detail</div>
-                <div className="d-flex">
-                  <div>Category :</div>
-                  <div className="ms-2 value">{data?.category?.name}</div>
-                </div>
-                <div className="d-flex pt-1">
-                  <div>Tags :</div>
-                  <div className="d-flex ms-2 ">
-                    {data?.tags?.map((item) => (
-                      <div className="tags rounded">{item?.name}</div>
-                    ))}
-                  </div>
+              <div className="d-flex pt-1">
+                <div>Tags :</div>
+                <div className="d-flex ms-2 ">
+                  {data?.tags?.map((item) => (
+                    <div className="tags rounded">{item?.name}</div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-lg-25 my-3 mt-lg-0">
-            <div className="border h-75 rounded  p-2">
-              <div className="h-100">
-                <div className="h-50 ">
-                  <div>Atur Jumlah</div>
-                  <div className="d-flex align-items-center h-100">
-                    <div className="w-100">
-                      <Quantity value={quantity} setValue={setQuantity} />
-                      <div className="d-flex justify-content-between mt-3">
-                        <div>Subtotal</div>
-                        <div className="fw-bold">
-                          {formatRupiah(currentPrice)}
-                        </div>
+        </div>
+        <div className="w-lg-25 my-3 mt-lg-0">
+          <div className="border h-75 rounded  p-2">
+            <div className="h-100">
+              <div className="h-50 ">
+                <div>Atur Jumlah</div>
+                <div className="d-flex align-items-center h-100">
+                  <div className="w-100">
+                    <Quantity value={quantity} setValue={setQuantity} />
+                    <div className="d-flex justify-content-between mt-3">
+                      <div>Subtotal</div>
+                      <div className="fw-bold">
+                        {formatRupiah(currentPrice)}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="h-50 d-flex align-items-end">
-                  <div className="w-100">
-                    <Button type="btn-add" onClick={() => addToCart(data)}>
-                      Keranjang
-                    </Button>
-                    <Button
-                      type="button-secondary"
-                      className="mt-2"
-                      onClick={() =>
-                        navigate("/checkout", {
-                          state: {
-                            product: data,
-                            qty: quantity,
-                            total: parseInt(quantity * data?.current_price),
-                            from: "Buy Now",
-                          },
-                        })
-                      }
-                    >
-                      Beli Langsung
-                    </Button>
-                  </div>
+              </div>
+              <div className="h-50 d-flex align-items-end">
+                <div className="w-100">
+                  <Button type="btn-add" onClick={() => addToCart(data)}>
+                    Keranjang
+                  </Button>
+                  <Button
+                    type="button-secondary"
+                    className="mt-2"
+                    onClick={() =>
+                      navigate("/checkout", {
+                        state: {
+                          product: data,
+                          qty: quantity,
+                          total: parseInt(quantity * data?.current_price),
+                          from: "Buy Now",
+                        },
+                      })
+                    }
+                  >
+                    Beli Langsung
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </Navbar>
+    </Container>
   );
 }

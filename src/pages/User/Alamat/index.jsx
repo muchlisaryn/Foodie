@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Widgets, Navbar } from "../../../component";
+import { Button, Widgets, Container } from "../../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -44,7 +44,7 @@ export default function Alamat() {
   };
 
   return (
-    <Navbar>
+    <Container>
       <Widgets>
         <div className="d-flex justify-content-between align-items-center">
           <div className="fw-bold">Alamat</div>
@@ -93,6 +93,6 @@ export default function Alamat() {
           )}
         </div>
       </Widgets>
-    </Navbar>
+    </Container>
   );
 }

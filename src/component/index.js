@@ -12,6 +12,7 @@ import Switcher from "./atoms/Switcher";
 import Quantity from "./molecules/Quantity";
 import Widgets from "./molecules/Widgets";
 import Pagination from "./molecules/Pagination";
+import Container from "./container/Container";
 
 export {
   Navbar,
@@ -28,4 +29,5 @@ export {
   Quantity,
   Widgets,
   Pagination,
+  Container,
 };
