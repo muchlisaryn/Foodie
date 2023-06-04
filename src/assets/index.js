@@ -4,6 +4,9 @@ import searchIlustration from "./images/Search.svg";
 import notFoundIlustration from "./images/404.svg";
 import poster1 from "./images/poster1.jpg";
 import poster2 from "./images/poster2.png";
+import image3 from "./images/image-3.svg";
+import googlePlay from "./images/google-play.svg";
+import appStore from "./images/App-store.svg";
 
 export {
   LogoFoodie,
@@ -12,4 +15,7 @@ export {
   notFoundIlustration,
   poster1,
   poster2,
+  image3,
+  googlePlay,
+  appStore,
 };

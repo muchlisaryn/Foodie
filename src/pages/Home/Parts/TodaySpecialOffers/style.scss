@@ -1,0 +1,23 @@
+@use "../../../../index.scss" as style;
+
+.today-offers {
+  .card {
+    box-shadow: none;
+  }
+  .description {
+    width: 90%;
+  }
+
+  .text-orange {
+    color: style.$primary-collor;
+  }
+}
+
+@media (min-width: 768px) {
+}
+
+@media (min-width: 992px) {
+}
+
+@media (min-width: 1200px) {
+}
