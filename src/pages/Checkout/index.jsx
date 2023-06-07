@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Container, Input, LabelPages, Navbar } from "../../component";
+import { Button, Container, Input, LabelPages } from "../../component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAddress } from "../../features/AddressSlice";
 import { useState } from "react";
@@ -20,8 +20,6 @@ export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = location.state;
-
-  console.log("data", data);
 
   //ongkir
   const ongkir = 20000;

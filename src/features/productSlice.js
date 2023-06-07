@@ -7,6 +7,7 @@ const initialState = {
   success: false,
   errorMessage: "",
   products: [],
+  specialProducts: [],
   detail: [],
   totalResult: 0,
 };
@@ -31,6 +32,20 @@ export const fetchProduct = createAsyncThunk(
         `${process.env.REACT_APP_URL_API}/products`
       );
       return response.data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const getSpecialOffers = createAsyncThunk(
+  "product/getSpecialOffers",
+  async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_URL_API}/special-offer`
+      );
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -144,6 +159,22 @@ const productSlice = createSlice({
       .addCase(fetchProduct.fulfilled, (state, action) => {
         state.success = true;
         state.products = action.payload;
+        state.pending = false;
+        state.errorMessage = "";
+      })
+      .addCase(getSpecialOffers.pending, (state) => {
+        state.pending = true;
+        state.success = false;
+        state.errorMessage = "";
+      })
+      .addCase(getSpecialOffers.rejected, (state, action) => {
+        state.pending = false;
+        state.success = false;
+        state.errorMessage = action.error.message;
+      })
+      .addCase(getSpecialOffers.fulfilled, (state, action) => {
+        state.success = true;
+        state.specialProducts = action.payload;
         state.pending = false;
         state.errorMessage = "";
       })

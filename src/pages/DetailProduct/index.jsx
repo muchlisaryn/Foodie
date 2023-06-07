@@ -8,7 +8,7 @@ import { AiTwotoneStar } from "react-icons/ai";
 import Breadcrumb from "../../component/atoms/Breadcrumb";
 import { useState } from "react";
 import { formatRupiah } from "../../utils";
-import { addCart, getCart } from "../../features/CartSlice";
+import { addCart } from "../../features/CartSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { token } from "../../utils";
 import { Toast } from "../../component/atoms/Toast";
@@ -27,7 +27,6 @@ export default function DetailProduct() {
   //get cart & get detail product by id
   useEffect(() => {
     dispatch(fetchDetailProduct({ id }));
-    dispatch(getCart());
   }, [dispatch, id]);
 
   //list breadcrumb

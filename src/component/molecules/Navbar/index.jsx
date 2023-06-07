@@ -15,8 +15,9 @@ import Swal from "sweetalert2";
 import { logout } from "../../../features/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Footer from "../Footer";
+import { getCart } from "../../../features/CartSlice";
 
-export default function Navbar({ onSubmit, value, setValue, children }) {
+export default function Navbar({ onSubmit, value, setValue }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
@@ -26,9 +27,10 @@ export default function Navbar({ onSubmit, value, setValue, children }) {
   const auth = localStorage.getItem("auth");
   const id = localStorage.getItem("user");
 
-  //get user profile name by id
+  //get user profile name by id & getCart
   useEffect(() => {
     dispatch(getOneUser({ id }));
+    dispatch(getCart());
   }, [dispatch, id]);
 
   //show or off dropdowns
