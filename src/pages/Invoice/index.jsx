@@ -62,7 +62,7 @@ export default function Invoice() {
             </tr>
           ))}
           <tr>
-            <td colspan="2">
+            <td colSpan="2">
               Total Harga ({invoice.order_items?.length} Product){" "}
             </td>
             <td className="text-end fw-bold">
@@ -70,13 +70,13 @@ export default function Invoice() {
             </td>
           </tr>
           <tr>
-            <td colspan="2">Ongkir</td>
+            <td colSpan="2">Ongkir</td>
             <td className="text-end fw-bold">
               {formatRupiah(invoice?.delivery_fee)}
             </td>
           </tr>
           <tr className="table-active">
-            <td colspan="2" className="fw-bold">
+            <td colSpan="2" className="fw-bold">
               Total
             </td>
             <td className="text-end fw-bold">{formatRupiah(invoice?.total)}</td>

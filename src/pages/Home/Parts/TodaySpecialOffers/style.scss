@@ -3,6 +3,10 @@
 .today-offers {
   .card {
     box-shadow: none;
+
+    h4 {
+      color: style.$primary-collor;
+    }
   }
   .description {
     width: 90%;

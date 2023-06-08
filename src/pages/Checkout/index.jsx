@@ -170,7 +170,10 @@ export default function Checkout() {
         </thead>
         <tbody>
           {dataAddress?.map((item) => (
-            <tr className={address?._id === item?._id ? "table-success" : ""}>
+            <tr
+              className={address?._id === item?._id ? "table-success" : ""}
+              key={item._id}
+            >
               <th className="text-center">
                 <Input
                   type="radio"
@@ -192,7 +195,7 @@ export default function Checkout() {
           <tbody>
             {data.data ? (
               data.data.map((item) => (
-                <tr>
+                <tr key={item?.item_id}>
                   <td>
                     <img
                       src={item?.product?.image_url}

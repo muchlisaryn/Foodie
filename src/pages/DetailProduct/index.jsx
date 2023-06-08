@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Button, Container, Navbar, Quantity } from "../../component";
+import { Button, Container, Quantity } from "../../component";
 import "./style.scss";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,6 @@ export default function DetailProduct() {
   const navigate = useNavigate();
   const location = useLocation();
   const data = useSelector((state) => state.product.detail);
-
   const [quantity, setQuantity] = useState(1);
   const price = data?.price;
   const currentPrice = price * quantity;
@@ -104,7 +103,9 @@ export default function DetailProduct() {
                 <div>Tags :</div>
                 <div className="d-flex ms-2 ">
                   {data?.tags?.map((item) => (
-                    <div className="tags rounded">{item?.name}</div>
+                    <div className="tags rounded" key={item._id}>
+                      {item?.name}
+                    </div>
                   ))}
                 </div>
               </div>

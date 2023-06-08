@@ -63,7 +63,8 @@ export default function Login() {
   };
 
   return (
-    <Navbar>
+    <>
+      <Navbar />
       <div className="d-flex justify-content-center align-items-center vh-100 w-full">
         <div className="login border rounded">
           <div className="w-100 h-100 d-flex flex-column justify-content-between p-3">
@@ -112,6 +113,6 @@ export default function Login() {
           </div>
         </div>
       </div>
-    </Navbar>
+    </>
   );
 }

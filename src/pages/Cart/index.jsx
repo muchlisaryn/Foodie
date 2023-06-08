@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Container, Navbar, Quantity } from "../../component";
+import { Button, Container, Quantity } from "../../component";
 import { formatRupiah } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCart, getCart, updateCart } from "../../features/CartSlice";
@@ -71,9 +71,9 @@ export default function Cart() {
       {data?.length > 0 ? (
         <div style={{ marginBottom: 100 }}>
           {data?.map((item) => (
-            <div className="cart mb-2">
+            <div className="cart mb-2" key={item?._id}>
               <div className="card-cart border rounded d-flex justify-content-between align-items-center p-3">
-                <NavLink to={`/product/${item?._id}`}>
+                <NavLink to={`/product/${item?.product._id}`}>
                   <div className="img-cart">
                     <img
                       src={item?.product?.image_url}
@@ -82,7 +82,7 @@ export default function Cart() {
                     />
                   </div>
                 </NavLink>
-                <NavLink to={`/product/${item?._id}`} className="title">
+                <NavLink to={`/product/${item?.product._id}`} className="title">
                   <div>{item?.product?.name}</div>
                 </NavLink>
                 <div>{formatRupiah(parseInt(item?.total))}</div>
