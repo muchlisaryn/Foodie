@@ -36,7 +36,7 @@ export default function Button({
     return (
       <button
         onClick={onClick}
-        className={`btn btn-secondary  ${className}`}
+        className={`btn btn-secondary ${className}`}
         disabled={disabled}
       >
         {children}

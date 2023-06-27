@@ -1,14 +1,33 @@
 @use "../../../index.scss" as style;
 
 nav {
-  background-color: white;
-
   .navbar-brand {
-    width: 90px;
+    cursor: pointer;
+    width: 100px;
+
+    img {
+      width: 100px;
+    }
   }
 
   .search {
     width: 50%;
+
+    .nonActive {
+      input {
+        background: rgb(255, 255, 255, 0.25);
+        border: none;
+        outline: white;
+
+        &::placeholder {
+          color: white;
+        }
+
+        &:focus {
+          border: 1px solid white;
+        }
+      }
+    }
   }
 
   .badge {

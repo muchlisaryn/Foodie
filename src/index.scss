@@ -1,5 +1,6 @@
 $primary-collor: #fd4d05;
 $secondary-collor: #ca410b;
+$yellow: #ffeb7f;
 $grey: #aaaaaa;
 
 @mixin primary-button {
@@ -22,19 +23,19 @@ $grey: #aaaaaa;
 
 @mixin secondary-button {
   width: 100%;
-  background-color: white;
-  border: 1px solid $primary-collor;
-  color: $primary-collor;
+  background-color: $yellow;
+  border: none;
+  color: black;
 
   &:hover {
-    background-color: $primary-collor;
-    color: white;
+    background-color: #ffe75d;
+    color: black;
   }
 
   &:disabled {
     border: 1px solid $grey;
-    background-color: white;
-    color: $grey;
+    background-color: #ffe75d;
+    color: #e2dfca;
     cursor: not-allowed;
   }
 

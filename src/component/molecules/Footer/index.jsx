@@ -1,5 +1,5 @@
+import { LogoSecondary } from "../../../assets";
 import Input from "../../atoms/Input";
-import Logo from "../../atoms/Logo";
 import "./styles.scss";
 
 export default function Footer() {
@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="row row-cols-2  row-cols-md-5">
               <div className="col">
                 <div className="logo">
-                  <Logo />
+                  <img src={LogoSecondary} alt="logo secondary" />
                   <div className="mt-3">Jln. Cempaka Putih Barat 10520</div>
                 </div>
               </div>
@@ -24,7 +24,7 @@ export default function Footer() {
                   <div className="mb-1">Menu</div>
                 </div>
               </div>
-              <div className=" col ">
+              <div className=" col  ">
                 <div>
                   <div className="fw-bold fs-4 mb-3 pt-3 pt-md-0">Company</div>
                   <div className="mb-1">Why foodie?</div>
@@ -58,7 +58,6 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-      <div className="text-center py-3">Copyright Foodie 2023</div>
     </>
   );
 }

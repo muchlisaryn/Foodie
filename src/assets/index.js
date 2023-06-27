@@ -7,9 +7,12 @@ import poster2 from "./images/poster2.png";
 import image3 from "./images/image-3.svg";
 import googlePlay from "./images/google-play.svg";
 import appStore from "./images/App-store.svg";
+import LogoSecondary from "./images/Logo.png";
+import ilustrationHeader from "./images/header.png";
 
 export {
   LogoFoodie,
+  LogoSecondary,
   avatarDefault,
   searchIlustration,
   notFoundIlustration,
@@ -18,4 +21,5 @@ export {
   image3,
   googlePlay,
   appStore,
+  ilustrationHeader,
 };

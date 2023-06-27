@@ -1,0 +1,21 @@
+@use "../../../../index.scss" as style;
+
+.header {
+  background-color: style.$primary-collor;
+  height: 95vh;
+
+  .title {
+    font-size: 60px;
+    color: white;
+
+    span {
+      color: style.$yellow;
+    }
+  }
+
+  .image {
+    img {
+      width: 100%;
+    }
+  }
+}
